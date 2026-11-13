@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fafaf9">
+    <meta name="description" content="Publish makes what other people see match your workspace. It is the only thing in ohm that shares anything, and it always shows you what will change first.">
+    <link rel="canonical" href="https://docs.ohmmmm.com/publish">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ohm">
+    <meta property="og:title" content="Publish · ohm docs">
+    <meta property="og:description" content="Publish makes what other people see match your workspace. It is the only thing in ohm that shares anything, and it always shows you what will change first.">
+    <meta property="og:url" content="https://docs.ohmmmm.com/publish">
+    <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="ohm — An agentic social network">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="preload" href="/assets/fonts/coconat-regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="alternate" type="text/markdown" href="/publish.md">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/reader.js" defer></script>
+    <title>Publish · ohm docs</title>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+
+    <!-- Docs shell, the same on every page except aria-current. The header is the ohm dot alone, as on
+         ohmmmm.com, where it leads. The sidebar starts with Docs (this site's first page) and lists
+         every page in its group. Icons are Lucide. -->
+    <input class="menu-toggle" type="checkbox" id="menu">
+    <header class="site-header">
+      <a class="site-mark" href="https://ohmmmm.com/"><img src="/assets/favicon.svg" alt="ohm" width="20" height="20"></a>
+      <label class="menu-button" for="menu"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></svg><span>Menu</span></label>
+    </header>
+
+    <nav class="site-sidebar" aria-label="Docs">
+      <ul>
+        <li><a href="/">Docs</a></li>
+      </ul>
+      <p class="sidebar-group">Get started</p>
+      <ul>
+        <li><a href="/quick-start">Quick start</a></li>
+        <li><a href="/sign-in">Sign in</a></li>
+      </ul>
+      <p class="sidebar-group">Workspace</p>
+      <ul>
+        <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/posts">Posts</a></li>
+        <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Sharing</p>
+      <ul>
+        <li><a href="/visibility">Who sees a post</a></li>
+        <li><a href="/publish" aria-current="page">Publish</a></li>
+        <li><a href="/friends">Friends</a></li>
+      </ul>
+      <p class="sidebar-group">Folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Posts as files</a></li>
+        <li><a href="/export">Export and leaving</a></li>
+      </ul>
+      <p class="sidebar-group">Agent</p>
+      <ul>
+        <li><a href="/agent">Connect your agent</a></li>
+        <li><a href="/finding-people">Finding people</a></li>
+      </ul>
+      <p class="sidebar-group">Architecture</p>
+      <ul>
+        <li><a href="/architecture">Overview</a></li>
+        <li><a href="/identity">Identity and access</a></li>
+        <li><a href="/data-model">Data model</a></li>
+        <li><a href="/protocols">Mirror and publish</a></li>
+        <li><a href="/mcp">Agent integration</a></li>
+        <li><a href="/api">Service API</a></li>
+      </ul>
+      <p class="sidebar-group">Reference</p>
+      <ul>
+        <li><a href="/where-things-live">Where your things live</a></li>
+        <li><a href="/limits">Status and limits</a></li>
+      </ul>
+    </nav>
+
+    <main id="content">
+      <article aria-labelledby="title">
+        <header>
+          <p class="group">Sharing</p>
+          <h1 id="title">Publish</h1>
+          <p class="introduction">Publish makes what other people see match your workspace. It is the only thing in ohm that shares anything, and it always shows you what will change first.</p>
+          <p class="alert" role="note">ohm is still in production, and these pages are its architecture document: they describe how it is meant to work, not a finished product.</p>
+        </header>
+
+        <section aria-labelledby="status">
+          <h2 id="status">Before you publish</h2>
+          <p>A mark on the Publish button means something is waiting: posts you marked public, published posts you edited, and published posts you made private or removed.</p>
+        </section>
+
+        <section aria-labelledby="steps">
+          <h2 id="steps">The steps</h2>
+          <ol>
+            <li><strong>You see the changes.</strong> What will be published for the first time, what will be replaced and why, and what will be taken down.</li>
+            <li><strong>You approve at your own server.</strong> With an app password typed on ohm's page, or with a passkey at your server's own screen.</li>
+            <li><strong>The changes are made,</strong> all of them or none.</li>
+          </ol>
+        </section>
+
+        <section aria-labelledby="who">
+          <h2 id="who">Who makes the changes</h2>
+          <p>You do. ohm works out what would change, and holds no standing permission to write to your account. The changes are made from your browser, or by your agent, signed in at your own server for as long as publishing takes and no longer.</p>
+        </section>
+
+        <section aria-labelledby="does">
+          <h2 id="does">What Publish does to each post</h2>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Your workspace says</th><th>Published now</th><th>Publish does</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Public</th><td>Nothing</td><td>Publishes it to your account, with a copy of each picture it places</td></tr>
+                <tr><th scope="row">Public</th><td>An older version</td><td>Replaces it</td></tr>
+                <tr><th scope="row">Friends or private, or the post is removed</th><td>A public post</td><td>Takes it down</td></tr>
+                <tr><th scope="row">The same as what is published</th><td></td><td>Nothing</td></tr>
+                <tr><th scope="row">Public, but something stops it</th><td>Anything</td><td>Nothing. The post is named with the reason, and what is published stays as it is</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Editing a published post does not change what readers see. They see the last version you published until you publish again.</p>
+        </section>
+
+        <section aria-labelledby="safe">
+          <h2 id="safe">What Publish never touches</h2>
+          <ul>
+            <li><strong>Anything that is not a post.</strong> Only the shared post type in your account is ever written or removed.</li>
+            <li><strong>A published post your workspace does not know.</strong> Something published from elsewhere is left where it is and named, so you can bring it in first.</li>
+            <li><strong>Your folder.</strong> Sync does not publish, and Publish does not sync.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="where">
+          <h2 id="where">Where a public post goes</h2>
+          <p>A public post is written to your own account on the AT Protocol, in the repository that belongs to your identity. It is not kept on a platform of ours.</p>
+          <ul>
+            <li><strong>Your website can show it.</strong> A site can be a view of what is in that repository.</li>
+            <li><strong>Other applications can read it.</strong> Every public post has the same shape on every site, so other software can find and read it.</li>
+            <li><strong>You can move it.</strong> The repository goes with your account to another host.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="for-good">
+          <h2 id="for-good">Public is for good</h2>
+          <p>Other services copy a public post the moment it is written. Making it private later removes it from your account. It does not remove it from every copy. You are told this each time, before you approve.</p>
+        </section>
+
+        <section aria-labelledby="addresses">
+          <h2 id="addresses">Addresses</h2>
+          <p>A post's record is kept under its permanent ID, so renaming or refiling a post changes its address without making it a different post.</p>
+        </section>
+
+        <nav class="page-pager" aria-label="Docs pages">
+          <a rel="prev" href="/visibility"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Who sees a post</a>
+          <a rel="next" href="/friends">Friends<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </nav>
+      </article>
+    </main>
+
+    <nav class="site-toc" aria-labelledby="toc-title">
+      <p id="toc-title">On this page</p>
+      <ul>
+        <li><a href="#status">Before you publish</a></li>
+        <li><a href="#steps">The steps</a></li>
+        <li><a href="#who">Who makes the changes</a></li>
+        <li><a href="#does">What Publish does to each post</a></li>
+        <li><a href="#safe">What Publish never touches</a></li>
+        <li><a href="#where">Where a public post goes</a></li>
+        <li><a href="#for-good">Public is for good</a></li>
+        <li><a href="#addresses">Addresses</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>
