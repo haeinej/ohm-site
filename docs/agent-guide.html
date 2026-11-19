@@ -11,11 +11,16 @@
     <meta property="og:title" content="Agent working guide · ohm docs">
     <meta property="og:description" content="The entry contract for an agent working in ohm: establish the member, inspect the vault, act through versioned tools, and leave both human and agent documentation grounded in the final implementation.">
     <meta property="og:url" content="https://docs.ohmmmm.com/agent-guide">
-    <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
+    <meta property="og:image" content="https://docs.ohmmmm.com/assets/og-docs-v2.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="ohm — An agentic social network">
+    <meta property="og:image:alt" content="ohm docs — Your workspace, step by step">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Agent working guide · ohm docs">
+    <meta name="twitter:description" content="The entry contract for an agent working in ohm: establish the member, inspect the vault, act through versioned tools, and leave both human and agent documentation grounded in the final implementation.">
+    <meta name="twitter:image" content="https://docs.ohmmmm.com/assets/og-docs-v2.png">
+    <meta name="twitter:image:alt" content="ohm docs — Your workspace, step by step">
+    <meta property="og:image:type" content="image/png">
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
     <link rel="preload" href="/assets/fonts/coconat-regular.woff2" as="font" type="font/woff2" crossorigin>
@@ -220,7 +225,7 @@ npm test
 git diff --check</pre>
           <p>For the vault folder format and the index alone, <code>node --test test/node.test.mjs</code> and <code>node --experimental-sqlite --test test/indexer.test.mjs</code> run against real temporary folders. They do not prove a real Google Drive mount.</p>
           <p>The capability reference must match its registered tables. The docs build checks HTML page links and anchors; tests also check Markdown/LLM outbound fragments, static-page IDs, the six-route SEO contract, offline script routing and MCP initialization from an extracted package with only locked runtime dependencies. The broader tests exercise service boundaries, member isolation, versions and tool composition using local fixtures. Passing them is not evidence of a successful live member sign-in or deployment.</p>
-          <p>For a local public-site preview, run <code>npm run home:dev</code> or <code>npm run docs:dev</code> from the root (loopback ports 8790 and 8791). Run <code>npm run home:seo -- http://127.0.0.1:8790</code> against the home preview, not production, to check this checkout. <a href="https://github.com/haeinej/ohm-vault/blob/main/public/README.md">Public site ownership</a> explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.</p>
+          <p>For a local public-site preview, run <code>npm run home:dev</code> or <code>npm run docs:dev</code> from the root of haeinej/ohm-site (loopback ports 8790 and 8791). Run <code>npm run home:seo -- http://127.0.0.1:8790</code> against the home preview, not production, to check this checkout. <a href="https://github.com/haeinej/ohm-vault/blob/main/public/README.md">Public site ownership</a> explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.</p>
           <p>Use the bundled <code>document-work</code> skill for each coherent completed outcome. Update the canonical human guide with purpose, dependency reasons and recognizable first use; update this guide or the precise reference with contracts and recovery. Regenerate outputs from their source. Use synthetic examples and keep private member material out of public docs. Report implementation, local test evidence and live verification separately. <a href="/limits">Status and limits</a> records the remaining product boundaries.</p>
         </section>
 
