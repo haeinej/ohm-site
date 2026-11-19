@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="Public posts live in your AT Protocol repository. ohm keeps your working vault. Sync or export can keep a copy with you.">
+    <meta name="description" content="Public posts live in your AT Protocol repository. ohm keeps the working copy of your posts. A vault folder and your cortex are folders on your own computer, and sync or export can keep a copy of your posts with you.">
     <link rel="canonical" href="https://docs.ohmmmm.com/where-things-live">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Where your things live · ohm docs">
-    <meta property="og:description" content="Public posts live in your AT Protocol repository. ohm keeps your working vault. Sync or export can keep a copy with you.">
+    <meta property="og:description" content="Public posts live in your AT Protocol repository. ohm keeps the working copy of your posts. A vault folder and your cortex are folders on your own computer, and sync or export can keep a copy of your posts with you.">
     <meta property="og:url" content="https://docs.ohmmmm.com/where-things-live">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -90,7 +102,7 @@
         <header>
           <p class="group">Reference</p>
           <h1 id="title">Where your things live</h1>
-          <p class="introduction">Public posts live in your AT Protocol repository. ohm keeps your working vault. Sync or export can keep a copy with you.</p>
+          <p class="introduction">Public posts live in your AT Protocol repository. ohm keeps the working copy of your posts. A vault folder and your cortex are folders on your own computer, and sync or export can keep a copy of your posts with you.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
@@ -106,6 +118,30 @@
                 <tr><th scope="row">Your ohm account</th><td>Who you are when you sign in to ohm</td><td>Made with Google, Microsoft or Bluesky. It holds no posts</td></tr>
                 <tr><th scope="row">Your folder, once synced</th><td>Your posts as Markdown files</td><td>Yours, on your machine or in locally synced storage</td></tr>
                 <tr><th scope="row">Your vault on ohm</th><td>A working copy of every post</td><td>ohm holds it for you</td></tr>
+                <tr><th scope="row">A vault folder</th><td>Blocks, channels, sources and entities as Markdown files</td><td>Yours, on your machine. Indexing never sends it anywhere; only posts you sync reach ohm</td></tr>
+                <tr><th scope="row">The folders a vault reads</th><td>Your Google Drive, Obsidian or code folders, where they already are</td><td>Yours. The vault only reads them</td></tr>
+                <tr><th scope="row">Your cortex</th><td>What your agent knows about you, as a folder</td><td>Yours, on your machine. ohm never sees it</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="folders">
+          <h2 id="folders">Inside the folders</h2>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Path</th><th>What it holds</th><th>Can it be rebuilt</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row"><code>.vault/config.json</code></th><td>The folders the vault reads, and how much it keeps of each</td><td>No: you wrote it</td></tr>
+                <tr><th scope="row"><code>.vault/index.sqlite</code></th><td>Every block, channel, entity, source and connection the vault found, the words for search, each file's size, date and content address</td><td>Yes: delete it, and <code>vault index</code> makes it again</td></tr>
+                <tr><th scope="row"><code>.vault/cache/</code></th><td>Copies of files from folders set to keep them in full</td><td>Yes, while the originals are there</td></tr>
+                <tr><th scope="row"><code>_entities/</code>, <code>_sources/</code></th><td>Entities, and what you captured from outside</td><td>No: they are your content</td></tr>
+                <tr><th scope="row"><code>.cortex/journal.jsonl</code></th><td>Every change to your cortex, with who made it; notes, sessions, saves</td><td>No: it is the cortex's history</td></tr>
+                <tr><th scope="row"><code>.cortex/history/</code></th><td>Every earlier version of every part of your cortex</td><td>No</td></tr>
+                <tr><th scope="row"><code>.cortex/working/</code></th><td>Each agent's working memory</td><td>No</td></tr>
+                <tr><th scope="row"><code>agents/secrets/</code></th><td>Secrets, such as the token for the cortex over HTTP</td><td>No. Never read by the agent, never committed</td></tr>
               </tbody>
             </table>
           </div>
@@ -159,6 +195,7 @@
       <p id="toc-title">On this page</p>
       <ul>
         <li><a href="#places">The places</a></li>
+        <li><a href="#folders">Inside the folders</a></li>
         <li><a href="#by-visibility">By who can see the post</a></li>
         <li><a href="#reads">What ohm can read</a></li>
         <li><a href="#folder">With and without a folder</a></li>

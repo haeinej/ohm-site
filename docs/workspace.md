@@ -1,6 +1,6 @@
 # The workspace
 
-Your posts sit in a tree of labels beside the rail, and the post you open fills the rest.
+The workspace, at app.ohmmmm.com/vault, is where you write and file your posts in a browser. Your posts sit in a tree of labels beside the rail, and the post you open fills the rest.
 
 <a id="why"></a>
 
@@ -10,14 +10,16 @@ Use the workspace when you want to make or edit something: a draft, a photograph
 
 For a first visit, save one private post and reopen it. You do not need an agent or a public website to use the editor. [Quick start](https://docs.ohmmmm.com/quick-start.md)
 
+The workspace holds posts: blocks that carry who they are for, ready to publish when you choose. Blocks of other kinds, channels of your own, sources and entities are kept in a vault folder on your computer, not here yet. [Blocks and channels](https://docs.ohmmmm.com/blocks-and-channels.md)
+
 <a id="tree"></a>
 
 ## Your repository, in the side panel
 
 The side panel is everything you have, as folders that open and close.
 
-- A **label** is a section of your work, in your own words.
-- A **sublabel** is a group inside a label, such as a series or an album.
+- A **label** is a section of your work, in your own words. It is a post's home channel: the channel its address on your site comes from.
+- A **sublabel** is a group inside a label, such as a series or an album: a channel inside that channel.
 - **Posts** sit inside those, private, friends-only and public together. A small mark beside each says who it is for.
 
 A post you have not filed sits under `other`. [Labels](https://docs.ohmmmm.com/labels.md)
@@ -85,6 +87,18 @@ You, your agent and a sync can all change a post. Every save says which version 
 ## You
 
 Your picture is at the foot of the rail. Its menu takes your whole vault away as files, disconnects your account on the open network, and signs you out.
+
+<a id="coming"></a>
+
+## Coming to the workspace
+
+The next version of the workspace is designed, in a wireframe with sample data. **None of what follows is in the live editor yet.** It is described so you know where the words on these pages are heading.
+
+- **Channels as records.** Every channel of your own shows in the tree, and an empty one stays. A block is listed in every channel it is in, and each channel keeps its own order. Dragging a block moves it; holding ⌥ while dragging adds it to another channel as well.
+- **Connections.** Select words and choose Connect to make them a link to another block. Connect two whole blocks, with an optional line on why, or pull a line from a block's dot to another block. [Connections](https://docs.ohmmmm.com/connections.md#designed)
+- **A connections card** beside each block: the graph around it, the channels it sits in, and what connects to it and from it.
+- **The graph** of everything around you, with what your content shows in grey and what your cortex concluded in green. [The graph](https://docs.ohmmmm.com/graph.md#designed)
+- **Version history.** Every change, yours and your agents', with who made it; revert a change, restore a version, save a point. [History](https://docs.ohmmmm.com/history.md#designed)
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.

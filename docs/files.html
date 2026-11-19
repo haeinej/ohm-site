@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="In your folder, each post is one Markdown file. A label is a folder, a sublabel is a folder inside it, and everything else about the post is written at the top of the file.">
+    <meta name="description" content="In a vault folder, every block, channel and entity is a Markdown file, and a source is a small folder of its own. A post is a block with a visibility, in the folder of its label.">
     <link rel="canonical" href="https://docs.ohmmmm.com/files">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
-    <meta property="og:title" content="Posts as files · ohm docs">
-    <meta property="og:description" content="In your folder, each post is one Markdown file. A label is a folder, a sublabel is a folder inside it, and everything else about the post is written at the top of the file.">
+    <meta property="og:title" content="Your vault as files · ohm docs">
+    <meta property="og:description" content="In a vault folder, every block, channel and entity is a Markdown file, and a source is a small folder of its own. A post is a block with a visibility, in the folder of its label.">
     <meta property="og:url" content="https://docs.ohmmmm.com/files">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
     <link rel="alternate" type="text/markdown" href="/files.md">
     <link rel="stylesheet" href="/styles.css">
     <script src="/reader.js" defer></script>
-    <title>Posts as files · ohm docs</title>
+    <title>Your vault as files · ohm docs</title>
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files" aria-current="page">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files" aria-current="page">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -88,27 +100,32 @@
     <main id="content">
       <article aria-labelledby="title">
         <header>
-          <p class="group">Folder</p>
-          <h1 id="title">Posts as files</h1>
-          <p class="introduction">In your folder, each post is one Markdown file. A label is a folder, a sublabel is a folder inside it, and everything else about the post is written at the top of the file.</p>
+          <p class="group">Your folder</p>
+          <h1 id="title">Your vault as files</h1>
+          <p class="introduction">In a vault folder, every block, channel and entity is a Markdown file, and a source is a small folder of its own. A post is a block with a visibility, in the folder of its label.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
         <section aria-labelledby="folder">
           <h2 id="folder">The folder</h2>
-          <pre>vault/
-├── writings/
-│   ├── collisions/
-│   │   └── trap-of-independency.md
+          <pre>Vault/
+├── writings/                         a channel; for posts, the label
+│   ├── _channel.md                   the channel itself: its title and order
+│   ├── collisions/                   a channel inside it; for posts, the sublabel
+│   │   └── trap-of-independency.md   a post
 │   └── why-i-started-ohm.md
-├── photographs/
-│   └── lisboa/
-│       └── lisboa-12.md
-└── loose-thought.md              no folder: filed under other</pre>
+├── analytics/
+│   ├── churn-query.md                a block about a query
+│   └── churn.sql                     the query itself
+├── _entities/person/ada-lovelace.md  an entity
+├── _sources/&lt;id&gt;/source.json         a source you captured
+├── .vault/                           the vault's own files: configuration and index
+└── loose-thought.md                  no folder: a post here is filed under other</pre>
+          <p>Folders whose names start with <code>_</code> or <code>.</code> hold things that are not blocks. Obsidian and other editors see blocks and channels, and can ignore the rest.</p>
         </section>
 
         <section aria-labelledby="file">
-          <h2 id="file">One file</h2>
+          <h2 id="file">One post</h2>
           <pre>---
 title: Trap of independency
 date: 2026-03-01
@@ -119,18 +136,21 @@ The body, in Markdown.
 
 ![The author](https://example.com/media/author.webp)</pre>
           <p>The part between the two lines of dashes holds the post's properties, as plain YAML. Obsidian shows it in its own properties panel, and you can edit it there.</p>
+          <p>The <code>visibility</code> property is what makes this file a post. A file with <code>kind: post</code> is one too.</p>
         </section>
 
         <section aria-labelledby="mapping">
           <h2 id="mapping">What maps to what</h2>
+          <p>For a post, the file and the workspace say the same things.</p>
           <div class="table">
             <table>
               <thead>
                 <tr><th>In the file</th><th>In your workspace</th></tr>
               </thead>
               <tbody>
-                <tr><th scope="row">The folder</th><td>The label</td></tr>
+                <tr><th scope="row">The folder</th><td>The label: the post's home channel</td></tr>
                 <tr><th scope="row">The folder inside it</th><td>The sublabel</td></tr>
+                <tr><th scope="row"><code>channels</code></th><td>Other channels it is in. Kept with the post, and never published</td></tr>
                 <tr><th scope="row">The file name</th><td>The slug</td></tr>
                 <tr><th scope="row"><code>title</code>, <code>subtitle</code>, <code>date</code></th><td>The same</td></tr>
                 <tr><th scope="row"><code>visibility</code></th><td>Who can see it. A file with none is private</td></tr>
@@ -157,16 +177,66 @@ The body, in Markdown.
               </tbody>
             </table>
           </div>
+          <p><code>[[first-essay|the first essay]]</code> links to the same post and shows your own words. <a href="/connections#links">Connections</a></p>
+        </section>
+
+        <section aria-labelledby="block">
+          <h2 id="block">A block that is not a post</h2>
+          <p>A block has no <code>visibility</code>. It says what it is with <code>kind</code> when the vault would guess otherwise, and where its original lives with <code>origin</code>.</p>
+          <pre>---
+kind: code
+title: Q3 churn query
+channels: [sql-snippets]
+origin: ~/work/queries/churn.sql
+---
+
+What I used for the board review.
+
+![[churn.sql]]</pre>
+          <p>The query itself can sit beside the block, as <code>churn.sql</code>, or stay where it is, named by <code>origin</code>. <a href="/blocks-and-channels#properties">Blocks and channels</a></p>
+        </section>
+
+        <section aria-labelledby="channel">
+          <h2 id="channel">A channel</h2>
+          <p>A folder is a channel. A <code>_channel.md</code> inside it describes the channel; you only need one when there is something to say.</p>
+          <pre>---
+title: Writings
+kind: collection
+order: [why-i-started-ohm, writings/collisions]
+---
+
+Essays, finished and not.</pre>
+          <p><code>order</code> names blocks by slug and channels by path. What it leaves out follows, newest first.</p>
+        </section>
+
+        <section aria-labelledby="entity">
+          <h2 id="entity">An entity</h2>
+          <p>An entity is a file in <code>_entities/</code>, in a folder for its kind: <code>person</code>, <code>work</code>, <code>place</code> or <code>org</code>.</p>
+          <pre>_entities/person/ada-lovelace.md
+---
+name: Ada Lovelace
+aliases: [ada]
+---
+
+Wrote the first published program.</pre>
+          <p><code>@ada</code> in any block mentions her.</p>
+        </section>
+
+        <section aria-labelledby="source">
+          <h2 id="source">A source</h2>
+          <p>A source is a folder in <code>_sources/</code>, named by its ID. Its <code>source.json</code> says what it is (<code>page</code>, <code>post</code>, <code>file</code>, <code>image</code>, <code>video</code>, <code>audio</code>, <code>thread</code>, <code>book</code> or <code>other</code>), its address, title and author, when it was published and captured, and how much of it is kept. Its extracted text and the original can sit beside it. A block names it with <code>from</code>.</p>
         </section>
 
         <section aria-labelledby="exact">
           <h2 id="exact">Nothing is lost on the way</h2>
           <p>A post written out as a file and read back is the same post. That holds for titles and text in any script, and for text that YAML would otherwise misread.</p>
+          <p>The same holds for every block, channel, entity and source: the vault reads your files and writes them back exactly as it found them, so a file changes only when you change it.</p>
+          <p>What only a machine needs, such as a file's size, dates and content address, is never written into your files. It is kept in <code>.vault/index.sqlite</code>, which can always be rebuilt. <a href="/roots-and-index#written">Other folders and the index</a></p>
         </section>
 
         <nav class="page-pager" aria-label="Docs pages">
           <a rel="prev" href="/sync"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Sync with a folder</a>
-          <a rel="next" href="/export">Export and leaving<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a rel="next" href="/roots-and-index">Other folders and the index<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
         </nav>
       </article>
     </main>
@@ -175,9 +245,13 @@ The body, in Markdown.
       <p id="toc-title">On this page</p>
       <ul>
         <li><a href="#folder">The folder</a></li>
-        <li><a href="#file">One file</a></li>
+        <li><a href="#file">One post</a></li>
         <li><a href="#mapping">What maps to what</a></li>
         <li><a href="#links">Links and pictures</a></li>
+        <li><a href="#block">A block that is not a post</a></li>
+        <li><a href="#channel">A channel</a></li>
+        <li><a href="#entity">An entity</a></li>
+        <li><a href="#source">A source</a></li>
         <li><a href="#exact">Nothing is lost on the way</a></li>
       </ul>
     </nav>

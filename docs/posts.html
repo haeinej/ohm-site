@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="Everything you make in the vault is a post: an essay, a note to yourself, a photograph, a link.">
+    <meta name="description" content="A post is a block you publish, or mean to: an essay, a note to yourself, a photograph, a link. In the workspace, everything you make is a post, private ones included, until you choose who it is for.">
     <link rel="canonical" href="https://docs.ohmmmm.com/posts">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Posts · ohm docs">
-    <meta property="og:description" content="Everything you make in the vault is a post: an essay, a note to yourself, a photograph, a link.">
+    <meta property="og:description" content="A post is a block you publish, or mean to: an essay, a note to yourself, a photograph, a link. In the workspace, everything you make is a post, private ones included, until you choose who it is for.">
     <meta property="og:url" content="https://docs.ohmmmm.com/posts">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts" aria-current="page">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -88,9 +100,9 @@
     <main id="content">
       <article aria-labelledby="title">
         <header>
-          <p class="group">Workspace</p>
+          <p class="group">Your vault</p>
           <h1 id="title">Posts</h1>
-          <p class="introduction">Everything you make in the vault is a post: an essay, a note to yourself, a photograph, a link.</p>
+          <p class="introduction">A post is a block you publish, or mean to: an essay, a note to yourself, a photograph, a link. In the workspace, everything you make is a post, private ones included, until you choose who it is for.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
@@ -148,12 +160,12 @@
         <section aria-labelledby="connections">
           <h2 id="connections">Connecting posts</h2>
           <p>A link from one post to another is a connection. Use it for a reply, a follow-up, or the next part of a series. A post can connect to as many as 32 others.</p>
-          <p>A public post that connects to a private one does not show the private post's title, or that it exists, to anyone who cannot read it.</p>
+          <p>A public post that connects to a private one does not show the private post's title, or that it exists, to anyone who cannot read it. <a href="/connections#connect">Connections</a></p>
         </section>
 
         <section aria-labelledby="address">
           <h2 id="address">A post's address</h2>
-          <p>A post's address is built from where it is filed and its slug.</p>
+          <p>A post's address is built from where it is filed and its slug. Where it is filed, its label and sublabel, is its home channel.</p>
           <pre>/posts/writings/collisions/trap-of-independency
        label    sublabel   slug</pre>
           <ul>
@@ -170,7 +182,7 @@
         </section>
 
         <nav class="page-pager" aria-label="Docs pages">
-          <a rel="prev" href="/workspace"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>The workspace</a>
+          <a rel="prev" href="/blocks-and-channels"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Blocks and channels</a>
           <a rel="next" href="/labels">Labels<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
         </nav>
       </article>

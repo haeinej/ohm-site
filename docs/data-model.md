@@ -1,6 +1,6 @@
 # Data model
 
-A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else.
+A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else; a vault folder holds blocks, channels, sources and entities, and a cortex keeps its journal.
 
 <a id="post"></a>
 
@@ -97,6 +97,71 @@ The service stores posts and account links in two tables.
 | `links` | ohm user ID, with the DID unique | Which AT Protocol account an ohm account works in, and when its published posts were first mirrored |
 
 The database enforces unique keys and conditional updates.
+
+<a id="nodes"></a>
+
+## Vault folder nodes
+
+A vault folder is read as four kinds of node by [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs), which is pure: callers pass `{ path, text }` and write what they get back. The lexicons in `lexicons/com/ohmmmm/vault/` (`block`, `channel`, `entity`, `source`, all keyed by TID) describe file contents; none is written to a PDS.
+
+| Node | Path | Fields |
+| --- | --- | --- |
+| Block | `<folders>/<name>.md` | `kind`, `title`, `slug`, `channels`, `origin`, `from`, `excerpt`, `tags`, `by`, `status`, `intent`, `created`, `updated`; the body |
+| Channel | `<folders>/_channel.md`, or any folder holding a block | `title`, `kind`, `order`, `site`; the body is the description |
+| Entity | `_entities/<kind>/<name>.md` | `name`, `aliases`, `uri`; `kind` from the folder |
+| Source | `_sources/<id>/source.json` | `kind`, `uri`, `platform`, `platformId`, `title`, `author`, `publishedAt`, `capturedAt`, `retain`, `meta` |
+
+The values each kind of field allows:
+
+| Values | Allowed |
+| --- | --- |
+| Block `kind` | `text`, `excerpt`, `link`, `media`, `file`, `code`, `post` |
+| Channel `kind` | `collection`, `concept`, `inbox`, `import` |
+| Entity kind | `person`, `work`, `place`, `org` |
+| Source `kind` | `page`, `post`, `file`, `image`, `video`, `audio`, `thread`, `book`, `other` |
+| `retain` | `reference`, `text`, `full` |
+| `status` | `proposed`, `kept`, `archived` |
+| `intent` | `private`, `friends`, `public` |
+
+A block's folder is its home channel. A file with `kind: post`, or with no `kind` and a `visibility`, is read and written by the unchanged post code, so it keeps its version and syncs as before; `channels` is stored as an ordinary post property. Unknown properties are kept. IDs are 13-character TIDs, given once; a node without one is keyed by its path until it has one. `readNode(nodeFile(n))` gives back `n` for any node that was read, and problems come back as sentences rather than errors.
+
+<a id="edges"></a>
+
+## Evidence edges
+
+`evidence(vault)` returns `{ kind, from, to, at }` for each edge, from content alone.
+
+| Kind | From |
+| --- | --- |
+| `contains` | A block's folder or `channels` list; a folder inside a folder |
+| `links` | A double-bracket link, a web or `at://` link, a post's `connect` |
+| `embeds` | `![[file]]` or `![[block]]` |
+| `mentions` | `@handle`, matched to an entity's slug, name or aliases |
+| `from`, `quotes` | A block's `from` and `excerpt` |
+
+`at` is a body line number, or the property the edge came from. A target is a node key, `url:`, `at:`, `file:<name>`, or `missing:<as written>`. Fenced code, inline code and e-mail addresses are skipped. Inference has no edge kind here: it is a cortex node that cites a block as `{node, version}`.
+
+<a id="index"></a>
+
+## The index
+
+`.vault/index.sqlite`, written only by `scan` in [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs), holds the tables `meta`, `files`, `nodes`, `edges`, `terms` and `problems`. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a `reference` root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. [The agent reference](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) has the full contract.
+
+<a id="journal"></a>
+
+## The cortex journal
+
+ohm-cortex keeps one append-only file, `.cortex/journal.jsonl`. Every line has `seq`, a unique `id`, `at`, `actor` (`{kind: "human" or "agent", name}`), sometimes `session`, and a `type`.
+
+| `type` | Holds |
+| --- | --- |
+| `change` | `node`, `op` (create, update, remove, restore), `before` and `after` versions, `reason`, `evidence`; `proposedBy` for a confirmed identity fact or an approved skill |
+| `note` | One observation, with `evidence`. Changes no file |
+| `settled` | What became of a note |
+| `session` | `summary`, `outcome`, `made` (change IDs), `project`, `deadEnds` (`tried`, `why`, `check`), `resolved` |
+| `save` | A name and a note. Changes nothing |
+
+Nodes are named `identity`, `playbook`, `memory/<name>`, `working/<agent>`, `skill/<name>`, `tool/<name>` and `channel/<path>`. Earlier versions are kept in `.cortex/history/` by version hash. Evidence pointers are `{node, version}` or `{session}`. Lines are ordered by time, then ID, so two machines' journals join by union. Older `proposal` and `decision` lines are read and change nothing. No line records what an agent read.
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.

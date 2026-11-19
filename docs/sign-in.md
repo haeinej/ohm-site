@@ -10,6 +10,8 @@ Your ohm sign-in answers who is using the workspace. Your AT Protocol account an
 
 You need to prove that you control the connected account because its name alone is public: anyone could type it. An app password or approval at your server supplies that proof. Signing in with Bluesky can answer both questions in one flow.
 
+Neither account is needed to keep a vault folder on your own computer. You sign in when you want the workspace in your browser, or to publish. [A vault folder](https://docs.ohmmmm.com/quick-start.md#folder-start)
+
 <a id="steps"></a>
 
 ## Two steps

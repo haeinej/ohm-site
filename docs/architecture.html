@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="ohm keeps a vault of posts. The member&#x27;s PDS owns public records; ohm stores the working copy; clients on the member&#x27;s device perform approved publication.">
+    <meta name="description" content="ohm has three parts. ohm-vault holds what a member knows and makes, ohm-cortex holds what agents know about the member, and the member&#x27;s PDS owns public records. The vault service stores the working copy of posts; clients on the member&#x27;s device perform approved publication.">
     <link rel="canonical" href="https://docs.ohmmmm.com/architecture">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="System overview · ohm docs">
-    <meta property="og:description" content="ohm keeps a vault of posts. The member&#x27;s PDS owns public records; ohm stores the working copy; clients on the member&#x27;s device perform approved publication.">
+    <meta property="og:description" content="ohm has three parts. ohm-vault holds what a member knows and makes, ohm-cortex holds what agents know about the member, and the member&#x27;s PDS owns public records. The vault service stores the working copy of posts; clients on the member&#x27;s device perform approved publication.">
     <meta property="og:url" content="https://docs.ohmmmm.com/architecture">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -90,13 +102,31 @@
         <header>
           <p class="group">For agents</p>
           <h1 id="title">System overview</h1>
-          <p class="introduction">ohm keeps a vault of posts. The member's PDS owns public records; ohm stores the working copy; clients on the member's device perform approved publication.</p>
+          <p class="introduction">ohm has three parts. ohm-vault holds what a member knows and makes, ohm-cortex holds what agents know about the member, and the member's PDS owns public records. The vault service stores the working copy of posts; clients on the member's device perform approved publication.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
+        <section aria-labelledby="parts">
+          <h2 id="parts">Vault, cortex and PDS</h2>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><td></td><th>ohm-vault</th><th>ohm-cortex</th><th>The member's PDS</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Holds</th><td>Blocks, channels, sources, entities; posts among them</td><td>Identity, memories, working memory, notes, skills, tools, the journal</td><td>Public <code>com.ohmmmm.post</code> records, identity, files</td></tr>
+                <tr><th scope="row">Edges</th><td>Evidence only: what the content shows</td><td>Inference: cortex nodes pointing at vault blocks (<code>grounds</code>, <code>observes</code>, <code>learned</code>, <code>acts</code>)</td><td>None of ohm's</td></tr>
+                <tr><th scope="row">Kept as</th><td>A folder on the member's machine, and for posts, the vault service's working copy</td><td>A folder on the member's machine</td><td>A repository at the member's host</td></tr>
+                <tr><th scope="row">Repository</th><td><a href="https://github.com/haeinej/ohm-vault">haeinej/ohm-vault</a></td><td>haeinej/ohm-cortex (not public yet)</td><td>External</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The vault never imports cortex, and cortex never imports the vault. Cortex refers to blocks by ID and version only, through a small read-only vault contract: today its own folder reader, and planned, a reader over the vault's index. The cortex is not synced with ohm or stored by the vault service.</p>
+        </section>
+
         <section aria-labelledby="how">
           <h2 id="how">How it works</h2>
-          <p>The vault holds what a member makes: posts filed under labels and sublabels, private, for friends or public. It is member-scoped, and only public posts can become repository records.</p>
+          <p>The vault service holds what a member makes for the web: posts filed under labels and sublabels, private, for friends or public. A post's label and sublabel are its home channel. The service is member-scoped, and only public posts can become repository records. A vault folder on the member's machine holds every kind of block, and is read and indexed locally. <a href="/data-model#nodes">Data model</a></p>
           <ol>
             <li><strong>Sign in.</strong> A person signs in to ohm, and once connects the AT Protocol account that owns their posts. That account lives on a Personal Data Server (PDS) they host themselves or at Bluesky. It is theirs whether or not they use ohm.</li>
             <li><strong>Mirror.</strong> What the account has already published is read from its repository into the vault. From then on the vault holds everything: public posts, and private and friends-only ones that exist nowhere else on the network.</li>
@@ -128,7 +158,9 @@
               <tbody>
                 <tr><th scope="row">Workspace</th><td>The member's browser, served from <code>app.ohmmmm.com/vault</code></td><td>Editor, repository tree, publish review</td><td>Implemented</td></tr>
                 <tr><th scope="row">Agent tools</th><td>An MCP server, <code>ohm-vault</code>, on the member's machine</td><td>Vault tools composed from service requests. <a href="/mcp">Agent integration</a></td><td>Implemented</td></tr>
-                <tr><th scope="row">Folder sync</th><td>A command-line client on the member's machine</td><td>Two-way sync between the vault and a folder of Markdown files</td><td>Implemented</td></tr>
+                <tr><th scope="row">Folder sync</th><td>A command-line client on the member's machine</td><td>Two-way sync between the vault and a folder of Markdown files, for posts</td><td>Implemented</td></tr>
+                <tr><th scope="row">Vault folder and index</th><td>The <code>ohm vault</code> command on the member's machine</td><td>Reads blocks, channels, sources and entities, and read-only roots; keeps <code>.vault/index.sqlite</code>. No network calls</td><td>Implemented</td></tr>
+                <tr><th scope="row">ohm-cortex</th><td>The member's machine: MCP over stdio or HTTP, CLI, hooks</td><td>Agent memory, the journal, history. Separate software</td><td>Implemented, outside this repository</td></tr>
                 <tr><th scope="row">Vault service</th><td>Cloudflare Workers and D1</td><td>Stores posts; checks versions; computes mirror and publish plans</td><td>Implemented</td></tr>
                 <tr><th scope="row">ohm sign-in</th><td>Cloudflare Workers and D1</td><td>ohm accounts and sessions, with Google, Microsoft and Bluesky as identity providers</td><td>Implemented</td></tr>
                 <tr><th scope="row">Personal Data Server (PDS)</th><td>The member's host: self-hosted, or Bluesky</td><td>The account's DID, signing key, and repository of public records and files</td><td>External</td></tr>
@@ -168,6 +200,8 @@
             <li><strong>Requests are idempotent.</strong> A request sent twice ends in the same state as one sent once. A post's ID is generated by the client, so creating it twice creates one post.</li>
             <li><strong>One portable post format.</strong> Post sync and export produce the same Markdown files. <a href="/files">Posts as files</a></li>
             <li><strong>The service makes no model calls.</strong> Judgement belongs to the member and their own agent.</li>
+            <li><strong>Evidence and inference are kept apart.</strong> The vault derives edges from content alone. What an agent concludes is a cortex node that points at blocks; it never becomes an edge between two blocks. <a href="/graph">The graph</a></li>
+            <li><strong>Derived data stays rebuildable.</strong> The vault index holds only what can be read again from files, and never writes cache data into them.</li>
           </ol>
         </section>
 
@@ -193,7 +227,7 @@
           <h2 id="section">In this section</h2>
           <ul>
             <li><a href="/identity">Identity and access</a>: the two identities, and how every request is authenticated.</li>
-            <li><a href="/data-model">Data model</a>: a post in the vault, the published record, identifiers and versions.</li>
+            <li><a href="/data-model">Data model</a>: a post in the vault, the published record, identifiers and versions; vault folder nodes, evidence edges, and the cortex journal.</li>
             <li><a href="/protocols">Mirror and publish</a>: the two exchanges with a member's repository.</li>
             <li><a href="/mcp">Agent integration</a>: the MCP server, its tools, and how changes are confirmed.</li>
             <li><a href="/api">Service API</a>: every request, error and agent tool.</li>
@@ -210,6 +244,7 @@
     <nav class="site-toc" aria-labelledby="toc-title">
       <p id="toc-title">On this page</p>
       <ul>
+        <li><a href="#parts">Vault, cortex and PDS</a></li>
         <li><a href="#how">How it works</a></li>
         <li><a href="#components">Components</a></li>
         <li><a href="#ownership">Ownership</a></li>

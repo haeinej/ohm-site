@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="What is built, what has been tested and what remains planned. A merged implementation is not evidence that the feature is deployed or verified with a live account.">
+    <meta name="description" content="What is built, what has been tested and what remains planned, for the vault service, the vault folder, the cortex and the workspace&#x27;s design. A merged implementation is not evidence that the feature is deployed or verified with a live account.">
     <link rel="canonical" href="https://docs.ohmmmm.com/limits">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Status and limits · ohm docs">
-    <meta property="og:description" content="What is built, what has been tested and what remains planned. A merged implementation is not evidence that the feature is deployed or verified with a live account.">
+    <meta property="og:description" content="What is built, what has been tested and what remains planned, for the vault service, the vault folder, the cortex and the workspace&#x27;s design. A merged implementation is not evidence that the feature is deployed or verified with a live account.">
     <meta property="og:url" content="https://docs.ohmmmm.com/limits">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -90,34 +102,92 @@
         <header>
           <p class="group">Reference</p>
           <h1 id="title">Status and limits</h1>
-          <p class="introduction">What is built, what has been tested and what remains planned. A merged implementation is not evidence that the feature is deployed or verified with a live account.</p>
+          <p class="introduction">What is built, what has been tested and what remains planned, for the vault service, the vault folder, the cortex and the workspace's design. A merged implementation is not evidence that the feature is deployed or verified with a live account.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
         <section aria-labelledby="status">
           <h2 id="status">Implementation status</h2>
+          <p>Each piece is one of: <strong>Built</strong>; <strong>Built, not verified</strong>, where tests pass but it has not been run for real; <strong>Planned</strong>, where a plan or design names it; or <strong>Not built</strong>, where nothing schedules it yet.</p>
+          <h3>The vault service and the workspace</h3>
           <div class="table">
             <table>
               <thead>
                 <tr><th>Area</th><th>Status</th><th>Notes</th></tr>
               </thead>
               <tbody>
-                <tr><th scope="row">Sign-in with Google, Microsoft or Bluesky</th><td>Implemented</td><td>In production. Sign-in with Bluesky is not yet verified end to end</td></tr>
-                <tr><th scope="row">Connecting a self-hosted PDS</th><td>Implemented</td><td>In production</td></tr>
-                <tr><th scope="row">Connecting a Bluesky account</th><td>Implemented</td><td>Not yet verified end to end</td></tr>
+                <tr><th scope="row">Sign-in with Google or Microsoft</th><td>Built</td><td>In production</td></tr>
+                <tr><th scope="row">Sign-in with Bluesky</th><td>Built, not verified</td><td>Not yet verified end to end</td></tr>
+                <tr><th scope="row">Connecting a self-hosted PDS</th><td>Built</td><td>In production</td></tr>
+                <tr><th scope="row">Connecting a Bluesky account</th><td>Built, not verified</td><td>Not yet verified end to end</td></tr>
                 <tr><th scope="row">Accounts hosted by ohm</th><td>Planned</td><td></td></tr>
                 <tr><th scope="row">Access</th><td>Restricted</td><td>An allow list of accounts during testing</td></tr>
-                <tr><th scope="row">Workspace</th><td>Implemented</td><td>Vault editor; account switching clears private state</td></tr>
-                <tr><th scope="row">Mirror</th><td>Implemented</td><td>Runs automatically when an account is first connected</td></tr>
-                <tr><th scope="row">Publishing public posts</th><td>Implemented</td><td>Verified against a test PDS. Not yet run against a live account</td></tr>
+                <tr><th scope="row">Workspace</th><td>Built</td><td>Posts under labels; account switching clears private state</td></tr>
+                <tr><th scope="row">Mirror</th><td>Built</td><td>Runs automatically when an account is first connected</td></tr>
+                <tr><th scope="row">Publishing public posts</th><td>Built, not verified</td><td>Verified against a test PDS. Not yet run against a live account</td></tr>
                 <tr><th scope="row">Friends-only delivery</th><td>Planned</td><td></td></tr>
                 <tr><th scope="row">Attachments stored by ohm</th><td>Planned</td><td>A post references files by address, and a copy is made at publish</td></tr>
-                <tr><th scope="row">Agent tools</th><td>Implemented and tested</td><td>Ten vault tools; stand-in services and signed-token integration checks do not prove live sign-in</td></tr>
-                <tr><th scope="row">Folder sync</th><td>Implemented</td><td>Command line, local folders</td></tr>
+                <tr><th scope="row">Vault agent tools</th><td>Built, not verified</td><td>Ten tools over posts; stand-in services and signed-token checks do not prove a live sign-in</td></tr>
+                <tr><th scope="row">Folder sync</th><td>Built</td><td>Command line, local folders. Posts only: every Markdown file is read as a post</td></tr>
                 <tr><th scope="row">Sync from the workspace, and with cloud storage</th><td>Planned</td><td></td></tr>
+                <tr><th scope="row">Earlier versions of a post, and bringing a removed one back</th><td>Not built</td><td>Each post has one current version</td></tr>
                 <tr><th scope="row">Deleting ohm's copy</th><td>Manual</td><td>Carried out on request</td></tr>
                 <tr><th scope="row">Agent keys</th><td>Planned</td><td>Until then an agent signs in with an app password from the member's PDS</td></tr>
                 <tr><th scope="row">Finding people</th><td>Planned</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>The vault folder</h3>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Area</th><th>Status</th><th>Notes</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Blocks, channels, sources and entities as files</th><td>Built</td><td>Read and written exactly; tested</td></tr>
+                <tr><th scope="row">Evidence edges</th><td>Built</td><td>Drawn from content only</td></tr>
+                <tr><th scope="row">Roots and the index: <code>vault init</code>, <code>index</code>, <code>status</code>, <code>inspect</code>, <code>search</code></th><td>Built</td><td>Tested against real temporary folders</td></tr>
+                <tr><th scope="row">A Google Drive root</th><td>Built, not verified</td><td>Not tried against a real Google Drive mount</td></tr>
+                <tr><th scope="row">Two-way roots, such as an Obsidian vault</th><td>Planned</td><td>Refused until built</td></tr>
+                <tr><th scope="row">Agent tools over the index</th><td>Planned</td><td>Search, read, neighbours, capture and collect</td></tr>
+                <tr><th scope="row">Blocks other than posts in the vault service and the workspace</th><td>Not built</td><td>They stay in the folder</td></tr>
+                <tr><th scope="row">Sync that knows blocks</th><td>Not built</td><td>Sync reads every Markdown file as a post</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>The cortex</h3>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Area</th><th>Status</th><th>Notes</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">The cortex folder, its MCP server over standard input and over HTTP</th><td>Built</td><td>Separate software, ohm-cortex; 119 tests, on Node 20 and 22</td></tr>
+                <tr><th scope="row">The journal: changes marked with who made them, history, as-of, save, restore, revert</th><td>Built</td><td></td></tr>
+                <tr><th scope="row">Sessions and dead ends</th><td>Built</td><td>Shown at session start near the folder they were recorded in</td></tr>
+                <tr><th scope="row">Evidence on notes and memories</th><td>Built</td><td>Checked for shape and existence; how much is enough is guidance</td></tr>
+                <tr><th scope="row">Hooks for Claude Code and Codex</th><td>Built, not verified</td><td>Tested with synthetic inputs; not yet tried in a real session</td></tr>
+                <tr><th scope="row">Reading a vault folder</th><td>Built</td><td>Through cortex's own folder reader: one channel per file</td></tr>
+                <tr><th scope="row">Reading the vault's full format through its index</th><td>Planned</td><td></td></tr>
+                <tr><th scope="row">Memories marked out of date when their blocks change</th><td>Planned</td><td></td></tr>
+                <tr><th scope="row">ChatGPT and Claude web connectors</th><td>Not built</td><td>They need OAuth</td></tr>
+                <tr><th scope="row">Syncing the cortex with ohm</th><td>Not built</td><td>The cortex stays a folder of its own</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Designed for the workspace</h3>
+          <p>These are drawn in the ohm-ux wireframe with sample data. None is in the live editor.</p>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Area</th><th>Status</th><th>Notes</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Channels as records, a block in many, each channel's own order, drag and ⌥-drag</th><td>Planned</td><td><a href="/workspace#coming">Coming to the workspace</a></td></tr>
+                <tr><th scope="row">Connecting words, whole blocks and pulling a line; the connections card</th><td>Planned</td><td><a href="/connections#designed">Connections</a></td></tr>
+                <tr><th scope="row">The graph, with evidence and inference</th><td>Planned</td><td><a href="/graph#designed">The graph</a></td></tr>
+                <tr><th scope="row">Version history: Dates, You and Agents; revert, restore, save</th><td>Planned</td><td><a href="/history#designed">History</a></td></tr>
+                <tr><th scope="row">Daily autosaves</th><td>Planned</td><td>ohm-cortex does not write them yet</td></tr>
               </tbody>
             </table>
           </div>
@@ -131,6 +201,11 @@
         <section aria-labelledby="agent">
           <h2 id="agent">Your agent reads your private posts</h2>
           <p>That is how it knows what you are working on. Whichever company runs the model your agent uses sees what it reads.</p>
+        </section>
+
+        <section aria-labelledby="cortex">
+          <h2 id="cortex">Your agent edits your cortex without asking</h2>
+          <p>Every change it makes is recorded with its name, and you can undo any of them. Nothing is undone on its own: read the history now and then. <a href="/history">History</a></p>
         </section>
 
         <section aria-labelledby="ohm">
@@ -161,6 +236,7 @@
         <li><a href="#status">Implementation status</a></li>
         <li><a href="#for-good">Anything you publish is public for good</a></li>
         <li><a href="#agent">Your agent reads your private posts</a></li>
+        <li><a href="#cortex">Your agent edits your cortex without asking</a></li>
         <li><a href="#ohm">ohm can read your private posts</a></li>
         <li><a href="#not">What ohm is not</a></li>
       </ul>

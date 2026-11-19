@@ -8,6 +8,8 @@ You can export your vault posts as Markdown files, to keep or to take elsewhere.
 
 Every post: private, friends-only and public. Attachments remain references to their addresses; ohm does not yet keep a file store to include in an export.
 
+Export covers what ohm holds, which is posts. A vault folder on your computer, with its other blocks, channels, sources and entities, is already yours and needs no export; nor does your cortex, which is a folder of its own.
+
 <a id="format"></a>
 
 ## The format

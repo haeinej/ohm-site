@@ -66,6 +66,8 @@ Other services copy a public post the moment it is written. Making it private la
 
 A post's record is kept under its permanent ID, so renaming or refiling a post changes its address without making it a different post.
 
+The address comes from the post's home channel: its label and sublabel. Other channels a post is in do not change it. [Blocks and channels](https://docs.ohmmmm.com/blocks-and-channels.md#home)
+
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.
 All pages: https://docs.ohmmmm.com/llms.txt

@@ -17,7 +17,7 @@ Until you connect a folder, ohm holds the only copy of your private and friends-
 
 ## Connect one
 
-Use the ohm command-line sync with a folder on your computer. It writes posts as Markdown files under their labels. Run it again to exchange edits. [How posts look as files](https://docs.ohmmmm.com/files.md)
+Use the ohm command-line sync with a folder on your computer. It writes posts as Markdown files under their labels: each post in the folder of its home channel. Run it again to exchange edits. [How posts look as files](https://docs.ohmmmm.com/files.md)
 
 A locally synced cloud-storage folder is still a local folder to this command. Choosing a folder and pressing Sync in the workspace is a planned flow.
 
@@ -74,6 +74,20 @@ Writing `visibility: public` in a file only marks the post. It becomes public wh
 ## If a sync is interrupted
 
 Run it again. A sync can be repeated safely, and it picks up where things stand.
+
+<a id="blocks"></a>
+
+## Sync knows posts, not other blocks
+
+Sync was built for posts, and it has not learned blocks of other kinds yet.
+
+- **Every Markdown file is read as a post.** Outside folders whose names start with `_` or `.`, sync reads each `.md` file as a post, private unless it says otherwise. A block you wrote as a query or a passage would arrive in your workspace as a private post.
+- **A file more than two folders deep is reported,** because a post sits under a label and at most one sublabel.
+- **`_channel.md`, `_entities/` and `_sources/` are left alone,** as is `.vault/`.
+
+Until sync knows blocks, keep the folder you sync for posts apart from a vault folder that holds other blocks, or expect every Markdown file in it to become a post. The `vault index` command reads both kinds and never sends anything. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md)
+
+Two-way sync with a folder the vault reads, such as an Obsidian vault, is planned and not built.
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.

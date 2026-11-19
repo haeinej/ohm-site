@@ -1,12 +1,22 @@
 # Quick start
 
-Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.
+Keep what you think and make in one vault, while choosing what becomes public. Start by saving one private post in the workspace, or by indexing a folder you already keep; add publishing and an agent when you need them.
 
 <a id="why"></a>
 
 ## Why the pieces are separate
 
 An idea can become a draft, then a public post. You need somewhere to work on it before it is ready, and a way to publish it without making every draft public. Your vault is that working space. Your own account on the open network holds what you publish.
+
+A few words are used everywhere in these docs.
+
+- **A block** is one unit of thought: a note, a passage you kept, a photograph, a link, a query.
+- **A channel** is an ordered collection of blocks. A block can be in many channels.
+- **A post** is a block you publish. Its first channel, its home, gives it its address on your site; in the workspace that channel is called its label.
+
+[Blocks and channels](https://docs.ohmmmm.com/blocks-and-channels.md) explains them with examples.
+
+Today the workspace in your browser holds posts. Blocks of other kinds, and channels of your own, live in a vault folder on your computer. You can start from either.
 
 <a id="need"></a>
 
@@ -21,6 +31,7 @@ An AT Protocol account is your identity on the open network. A Personal Data Ser
 | A website | Gives public records a page with your own design | Optional for saving private work; connecting its content is separate work |
 | A coding agent | Reads and writes your posts with you | Optional; the browser editor works without one |
 | A local folder | Gives you a separate copy of your posts | Optional; export or command-line sync when you want one |
+| A vault folder | Holds blocks of every kind, channels, sources and entities as Markdown files, and can read Google Drive or Obsidian folders where they are | Optional; needs Node 22 or newer, and no account |
 
 Access is restricted while ohm is being tested. These steps describe the implemented workspace; check [Status and limits](https://docs.ohmmmm.com/limits.md) for what remains unverified or unavailable.
 
@@ -49,7 +60,7 @@ Supported posts you have already published are brought into your workspace. They
 The workspace has three parts.
 
 - **A narrow rail on the left,** with you at the foot of it.
-- **Your repository beside it:** your labels as folders, with your posts inside them. Labels are the sections of your work, in your own words: Writings, Photographs, Things I make.
+- **Your repository beside it:** your labels as folders, with your posts inside them. Labels are the sections of your work, in your own words: Writings, Photographs, Things I make. A label is a post's home channel, the one its address on your site comes from.
 - **The post you have open,** filling the rest.
 
 [More about the workspace](https://docs.ohmmmm.com/workspace.md)
@@ -101,6 +112,24 @@ Syncing never publishes. [More about syncing](https://docs.ohmmmm.com/sync.md)
 Connect the coding agent you already use, and it can read and write in your workspace. It reads your private posts too, which is how it knows what you are working on.
 
 Anything that changes what other people see is shown to you first, publishing included. [More about your agent](https://docs.ohmmmm.com/agent.md)
+
+If you want your agent to remember what it learns about you between sessions, give it a cortex: a separate folder where every change it makes is marked with its name, and you undo what you do not want. [The cortex](https://docs.ohmmmm.com/cortex.md)
+
+<a id="folder-start"></a>
+
+## Or start from a folder you already keep
+
+You do not need an account to begin. A vault folder is a folder of Markdown files on your computer, and the vault can also read folders you already keep, such as Google Drive or an Obsidian vault, without copying them or writing to them.
+
+From inside the folder you want as your vault, run:
+
+```
+npx github:haeinej/ohm-vault vault init
+npx github:haeinej/ohm-vault vault index
+npx github:haeinej/ohm-vault vault search rain
+```
+
+The first makes `.vault/config.json`, where you can name other folders to read. The second reads everything and keeps an index beside it, in `.vault/index.sqlite`. The third finds blocks by their words. Nothing here signs in, reaches ohm, or publishes anything. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md)
 
 <a id="next"></a>
 
