@@ -1,5 +1,5 @@
 {
-  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "$schema": "../node_modules/wrangler/config-schema.json",
   "name": "ohm-web",
   "account_id": "bf82067932bd22931840d77dd338d57f",
   "main": "src/worker.js",

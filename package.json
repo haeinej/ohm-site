@@ -1,0 +1,25 @@
+{
+  "name": "ohm-site",
+  "private": true,
+  "description": "ohm's public websites: ohmmmm.com (home/) and docs.ohmmmm.com (docs/)",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --experimental-sqlite --test",
+    "home:dev": "wrangler dev --config home/wrangler.jsonc --ip 127.0.0.1 --port 8790 --local-upstream 127.0.0.1:8790",
+    "home:check": "node --check home/src/worker.js && node --check home/public/sw.js && node --check home/public/sw-register.js && wrangler deploy --config home/wrangler.jsonc --dry-run",
+    "home:deploy": "wrangler deploy --config home/wrangler.jsonc",
+    "home:seo": "node home/scripts/check-seo.mjs",
+    "home:joiners": "node home/scripts/joiners.mjs",
+    "docs:dev": "wrangler dev --config docs/wrangler.jsonc --ip 127.0.0.1 --port 8791",
+    "docs:build": "python3 docs/build.py",
+    "docs:deploy": "wrangler deploy --config docs/wrangler.jsonc"
+  },
+  "devDependencies": {
+    "markdown-it": "15.0.3",
+    "parse5": "^8.1.1",
+    "wrangler": "^4.161.0"
+  }
+}

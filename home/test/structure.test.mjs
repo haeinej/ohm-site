@@ -29,21 +29,21 @@ test('home Wrangler schema resolves to the root installed dependency', async () 
   const config = new URL('../wrangler.jsonc', import.meta.url);
   const source = await readFile(config, 'utf8');
   const path = source.match(/"\$schema":\s*"([^"]+)"/)[1];
-  assert.equal(new URL(path, config).href, new URL('../../../node_modules/wrangler/config-schema.json', import.meta.url).href);
+  assert.equal(new URL(path, config).href, new URL('../../node_modules/wrangler/config-schema.json', import.meta.url).href);
   await access(new URL(path, config));
 });
 
 test('local docs previews use repo-owned paths, not private launchers', async () => {
-  const root = new URL('../../../', import.meta.url);
+  const root = new URL('../../', import.meta.url);
   const { scripts } = JSON.parse(await readFile(new URL('package.json', root), 'utf8'));
   for (const [name, option, path] of [
-    ['docs:dev', '--config', 'public/docs/wrangler.jsonc'],
+    ['docs:dev', '--config', 'docs/wrangler.jsonc'],
   ]) {
     assert.ok(scripts[name]?.includes(`${option} ${path}`));
     assert.match(scripts[name], /--ip 127\.0\.0\.1/);
     await access(new URL(path, root));
   }
-  for (const path of ['public/README.md', 'public/home/README.md']) {
+  for (const path of ['README.md', 'home/README.md']) {
     assert.doesNotMatch(await readFile(new URL(path, root), 'utf8'), /\.claude\/launch\.json/);
   }
 });

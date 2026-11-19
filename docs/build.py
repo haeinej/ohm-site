@@ -1,20 +1,22 @@
 """Builds docs.ohmmmm.com.
 
-    python3 public/docs/build.py
+    python3 docs/build.py          (from the ohm-site checkout; or npm run docs:build)
 
 The docs' words are in this file: GROUPS sets the sidebar and the order of pages, and each doc()
 call below is one page, written in a small Markdown (## headings with {#ids}, lists, tables,
 code blocks, **bold**, `code`, [links](/docs/page#section), ### headings inside a section, and
 {{figure:name}} for a diagram drawn in FIGURES). Edit here, run, and commit what changes. The
-Service API page is read from ../../service/CAPABILITIES.md.
+Service API page is read from ohm-vault's service/CAPABILITIES.md: a checkout beside this one
+(../ohm-vault), or the folder named by OHM_VAULT_DIR.
 
 It writes, in this folder: index.html, one .html per page, 404.html, sitemap.xml and robots.txt,
 and for agents a .md copy of each page, llms.txt and llms-full.txt.
 It does not write styles.css, reader.js, _headers, wrangler.jsonc or assets/, which are edited by
 hand.
 
-The live ohmmmm.com is ../home (public/home/public) and is not touched here.
-Deploy the docs from this folder: npx wrangler deploy --profile ohm"""
+The live ohmmmm.com is ../home (home/public) and is not touched here.
+Deploy the docs from the repository root: npm run docs:deploy"""
+import os
 import html
 import re
 from pathlib import Path
@@ -1257,7 +1259,7 @@ These are the authoritative sources in [haeinej/ohm-vault](https://github.com/ha
 - [mcp/tools.mjs](https://github.com/haeinej/ohm-vault/blob/main/mcp/tools.mjs): schemas, composition and confirmations.
 - [service/src/capabilities/](https://github.com/haeinej/ohm-vault/tree/main/service/src/capabilities): request contracts and authorization; [service/CAPABILITIES.md](https://github.com/haeinej/ohm-vault/blob/main/service/CAPABILITIES.md) is generated from these tables.
 - [service/public/vault/](https://github.com/haeinej/ohm-vault/tree/main/service/public/vault): member-visible editor, publish review and account-scope behavior.
-- [public/docs/build.py](https://github.com/haeinej/ohm-vault/blob/main/public/docs/build.py): authored public documentation and generated HTML, Markdown and LLM outputs.
+- [docs/build.py in ohm-site](https://github.com/haeinej/ohm-site/blob/main/docs/build.py): authored public documentation and generated HTML, Markdown and LLM outputs. The public sites live in their own repository, haeinej/ohm-site.
 - [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs): the vault folder format, its checks and its evidence edges. [docs/agents/vault-format.md](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) is its contract.
 - [vault/roots.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/roots.mjs) and [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs): `.vault/config.json` roots and `.vault/index.sqlite`; [scripts/vault.mjs](https://github.com/haeinej/ohm-vault/blob/main/scripts/vault.mjs) is the command.
 - [plans/vault.md](https://github.com/haeinej/ohm-vault/blob/main/plans/vault.md): the split between vault and cortex, and the steps not yet built.
@@ -1274,7 +1276,6 @@ The root dependencies supply the CLI, Markdown renderer, public-site tooling and
 Then verify the implementation:
 ```
 npm run capabilities
-python3 public/docs/build.py
 npm test
 git diff --check
 ```
@@ -1456,7 +1457,13 @@ Your workspace includes them, and ohm holds your workspace. ohm serves this priv
 # what is exchanged. The request reference is read from service/CAPABILITIES.md, which the
 # service's own tables write, so it cannot say anything the service does not do.
 
-SERVICE_REFERENCE = docs_site.parent.parent / "service" / "CAPABILITIES.md"
+# The service lives in ohm-vault, not here: read its reference from a checkout beside this one, or
+# from the folder OHM_VAULT_DIR names.
+OHM_VAULT = Path(os.environ.get("OHM_VAULT_DIR") or docs_site.parent.parent / "ohm-vault").expanduser()
+SERVICE_REFERENCE = OHM_VAULT / "service" / "CAPABILITIES.md"
+if not SERVICE_REFERENCE.exists():
+    raise SystemExit(f"The Service API page is built from {SERVICE_REFERENCE}, which is not there. "
+                     "Check out haeinej/ohm-vault beside ohm-site, or set OHM_VAULT_DIR to its folder.")
 
 ACCESS = {
     "Anyone": "Public",
@@ -2546,7 +2553,7 @@ ids = {slug: {sid for sid, _, _ in sections(PAGES[slug]["body"])} for slug in OR
 ids["index"] = {gid(name) for name, _ in GROUPS}
 for slug in ["index"] + ORDER:
     text = docs_index() if slug == "index" else docs_page(slug)
-    # Reject old site routes, while allowing source paths such as public/docs/build.py.
+    # Reject old site routes, while allowing source paths such as docs/build.py.
     assert not re.search(r'href="(?:https://docs\.ohmmmm\.com)?/docs(?:[/#?]|")', text), slug
     page_ids = re.findall(r'\sid="([^"]+)"', text)
     assert len(page_ids) == len(set(page_ids)), (slug, "Duplicate HTML IDs")
