@@ -23,7 +23,8 @@ Each piece is one of: **Built**; **Built, not verified**, where tests pass but i
 | Publishing public posts | Built, not verified | Verified against a test PDS. Not yet run against a live account |
 | Friends-only delivery | Planned | |
 | Attachments stored by ohm | Planned | A post references files by address, and a copy is made at publish |
-| Vault agent tools | Built, not verified | Ten tools over posts; stand-in services and signed-token checks do not prove a live sign-in |
+| Vault agent tools | Built, not verified | Eighteen service tools over public and friends-only posts and blocks; stand-in services and signed-token checks do not prove a live sign-in |
+| Local vault agent tools | Built | Six tools over a vault folder, through `ohm vault mcp`; tested |
 | Folder sync | Built | Command line, local folders. Posts only: every Markdown file is read as a post |
 | Sync from the workspace, and with cloud storage | Planned | |
 | Earlier versions of a post, and bringing a removed one back | Not built | Each post has one current version |

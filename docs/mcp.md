@@ -6,7 +6,7 @@ An agent reaches a vault through an MCP server that runs on the member's own mac
 
 ## Overview
 
-ohm does not run a background agent. It ships a Model Context Protocol (MCP) server, `ohm-vault`, that a member runs on their own machine and connects to the agent they already use. The server exposes 10 vault tools, composed from authenticated service requests made as that member.
+ohm does not run a background agent. It ships a Model Context Protocol (MCP) server, `ohm-vault`, that a member runs on their own machine and connects to the agent they already use. The server exposes 18 vault tools, composed from authenticated service requests made as that member.
 
 Diagram: the path of one tool call.
 1. Agent → MCP server: tools/call
@@ -33,7 +33,8 @@ Start with these rules.
 
 - **The vault is one person's work,** as posts filed under labels and sublabels. Start with `vault_tree` to see its shape, then `vault_read` or `vault_search`.
 - **Every post is private, for friends, or public.** Private posts are context for helping the member. Nothing from one belongs in anything another person can see.
-- **A new post is saved private.** `vault_save` never shares anything. To change who a post is for, use `vault_set_visibility`, which always asks first.
+- **These tools never see private posts.** They list, read and search only public and friends-only posts. `vault_save` changes an existing one; a new block starts on the device, through the local tool `vault_capture`. `vault_set_visibility` moves a post only between public and friends, and always asks first.
+- **Friends tools work in the friends layer.** `vault_friends_*` read and change friends-only blocks and who can read them; `vault_shared_*` read what friends shared with the member. There is no tool to add a friend: that stays with the member, signed in.
 - **Saving is not publishing.** A post marked public reaches the member's website and the network only through `vault_publish`. `vault_status` says what is waiting.
 - **Changes are made from a version.** `vault_read` returns it, and `vault_save` passes it back. If the post changed in between, read it again.
 - **A two-call tool is asking for the member's decision.** Show the member what the first call returned, and make the second call only if they agree.
@@ -96,14 +97,39 @@ The server holds one credential: the app password, in its own environment on the
 | `vault_list` | Read | None | `getTree` |
 | `vault_read` | Read | None | `getTree`, `getPost` |
 | `vault_search` | Read | None | `searchPosts` |
-| `vault_save` | Change | When the post is not private | `getTree`, `getPost`, `putPost` |
+| `vault_save` | Change | Always | `getTree`, `getPost`, `putPost` |
 | `vault_set_visibility` | Change | Always | `getTree`, `getPost`, `putPost` |
 | `vault_status` | Read | None | `getPublishPlan` |
 | `vault_publish` | Change | Always | `getPublishPlan`, `getAttachment` |
 | `vault_mirror` | Change | Always | `importPublished` |
 | `vault_delete` | Change | Always | `getTree`, `getPost`, `deletePost` |
+| `vault_friends_list` | Read | None | `listBlocks` |
+| `vault_friends_read` | Read | None | `getBlock` |
+| `vault_friends_save` | Change | Always | `putBlock` |
+| `vault_friends_delete` | Change | Always | `deleteBlock` |
+| `vault_friends_who` | Read | None | `listFriends` |
+| `vault_friends_remove` | Change | Always | `listFriends`, `removeFriend` |
+| `vault_shared_list` | Read | None | `listShared` |
+| `vault_shared_read` | Read | None | `getShared` |
 
 A tool has no capability of its own. Anything a tool can do, the service API can do, and the access rules are the service's. [Service API](https://docs.ohmmmm.com/api.md)
+
+<a id="local"></a>
+
+## Local tools
+
+`ohm vault mcp --vault DIR --agent NAME` is a second stdio server, over a vault folder on the member's own machine. It needs no sign-in and reads only that folder and the roots it configures, private files included.
+
+| Tool | Effect | What it does |
+| --- | --- | --- |
+| `vault_local_search` | Read | Searches the folder's index by words |
+| `vault_local_read` | Read | One node, with its file's details and its journal history |
+| `vault_neighbors` | Read | Follows evidence in or out by kind, up to five steps |
+| `vault_capture` | Change | Proposes a block from a web address or a file in a root, marked as proposed by the agent |
+| `vault_collect` | Change | Files a block in a channel, or moves it within the channel's order |
+| `vault_index` | Change | Scans the folder and its roots, and reports what changed |
+
+Changes are written to the folder's journal. Nothing here reaches the service or the network.
 
 <a id="confirmation"></a>
 
@@ -125,7 +151,8 @@ The same agent reads the member's private posts and content written by other peo
 
 | Risk | Control |
 | --- | --- |
-| A private post is exposed by a save | A new post is always private. Widening who can see a post is a separate tool that always requires confirmation |
+| A private post is exposed by a save | Service tools never read or write private posts. Changing who can see a post, or saving a friends-only block, always requires confirmation |
+| An agent widens who can read | There is no tool to add a friend. Removing one always requires confirmation |
 | Something is published without the member knowing | Saving never publishes. `vault_publish` always requires confirmation of the exact plan |
 | A post is overwritten | Every save names the version that was read. A stale save is refused |
 | A post is lost | `vault_delete` always requires confirmation |

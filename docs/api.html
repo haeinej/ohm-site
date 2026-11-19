@@ -583,8 +583,8 @@
               <tbody>
                 <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
                 <tr><th scope="row">Access</th><td>Member</td></tr>
-                <tr><th scope="row">Parameters</th><td><code>q</code>: the words to look for<br><code>visibility</code>: optional: only posts at this visibility<br><code>limit</code>: optional: how many, 10 unless said, 50 at most</td></tr>
-                <tr><th scope="row">Returns</th><td><code>found</code>, and <code>posts</code> (id, slug, title, label, sublabel, visibility, date, passage)</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>q</code>: the words to look for<br><code>visibility</code>: optional: only posts at this visibility<br><code>excludePrivate</code>: optional: pass 1 to search public and friends posts only<br><code>limit</code>: optional: how many, 10 unless said, 50 at most</td></tr>
+                <tr><th scope="row">Returns</th><td><code>found</code>, <code>posts</code> (id, slug, title, label, sublabel, visibility, date, passage), and <code>visibilityScope: shared</code> when private posts were excluded</td></tr>
               </tbody>
             </table>
           </div>
@@ -812,6 +812,14 @@
                 <tr><th scope="row"><code>vault_publish</code></th><td>Change</td><td><code>getPublishPlan</code>, <code>getAttachment</code></td></tr>
                 <tr><th scope="row"><code>vault_mirror</code></th><td>Change</td><td><code>importPublished</code></td></tr>
                 <tr><th scope="row"><code>vault_delete</code></th><td>Change</td><td><code>getTree</code>, <code>getPost</code>, <code>deletePost</code></td></tr>
+                <tr><th scope="row"><code>vault_friends_list</code></th><td>Read</td><td><code>listBlocks</code></td></tr>
+                <tr><th scope="row"><code>vault_friends_read</code></th><td>Read</td><td><code>getBlock</code></td></tr>
+                <tr><th scope="row"><code>vault_friends_save</code></th><td>Change</td><td><code>putBlock</code></td></tr>
+                <tr><th scope="row"><code>vault_friends_delete</code></th><td>Change</td><td><code>deleteBlock</code></td></tr>
+                <tr><th scope="row"><code>vault_friends_who</code></th><td>Read</td><td><code>listFriends</code></td></tr>
+                <tr><th scope="row"><code>vault_friends_remove</code></th><td>Change</td><td><code>listFriends</code>, <code>removeFriend</code></td></tr>
+                <tr><th scope="row"><code>vault_shared_list</code></th><td>Read</td><td><code>listShared</code></td></tr>
+                <tr><th scope="row"><code>vault_shared_read</code></th><td>Read</td><td><code>getShared</code></td></tr>
               </tbody>
             </table>
           </div>

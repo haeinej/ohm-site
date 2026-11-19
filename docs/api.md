@@ -361,8 +361,8 @@ The posts that mention every word of `q`, best first, each with a passage that s
 | --- | --- |
 | Method | `GET` |
 | Access | Member |
-| Parameters | `q`: the words to look for<br>`visibility`: optional: only posts at this visibility<br>`limit`: optional: how many, 10 unless said, 50 at most |
-| Returns | `found`, and `posts` (id, slug, title, label, sublabel, visibility, date, passage) |
+| Parameters | `q`: the words to look for<br>`visibility`: optional: only posts at this visibility<br>`excludePrivate`: optional: pass 1 to search public and friends posts only<br>`limit`: optional: how many, 10 unless said, 50 at most |
+| Returns | `found`, `posts` (id, slug, title, label, sublabel, visibility, date, passage), and `visibilityScope: shared` when private posts were excluded |
 
 <a id="mirror"></a>
 
@@ -549,6 +549,14 @@ An agent's tools are compositions of the requests above and add no capability of
 | `vault_publish` | Change | `getPublishPlan`, `getAttachment` |
 | `vault_mirror` | Change | `importPublished` |
 | `vault_delete` | Change | `getTree`, `getPost`, `deletePost` |
+| `vault_friends_list` | Read | `listBlocks` |
+| `vault_friends_read` | Read | `getBlock` |
+| `vault_friends_save` | Change | `putBlock` |
+| `vault_friends_delete` | Change | `deleteBlock` |
+| `vault_friends_who` | Read | `listFriends` |
+| `vault_friends_remove` | Change | `listFriends`, `removeFriend` |
+| `vault_shared_list` | Read | `listShared` |
+| `vault_shared_read` | Read | `getShared` |
 
 The server that offers these tools is described in [Agent integration](https://docs.ohmmmm.com/mcp.md). Vault tools follow these rules.
 
