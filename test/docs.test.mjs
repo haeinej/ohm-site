@@ -15,15 +15,17 @@ const haveVault = existsSync(`${vault}/service/src/capabilities/index.mjs`) && e
 test('public docs include every registered request and every vault tool', { skip: !haveVault && `needs the vault/ folder of an ohmmmm checkout at ${vault}, or OHM_VAULT_DIR` }, async () => {
   const { CAPABILITIES } = await import(pathToFileURL(`${vault}/service/src/capabilities/index.mjs`).href);
   const { TOOLS } = await import(pathToFileURL(`${vault}/mcp/tools.mjs`).href);
+  const { LOCAL_TOOLS } = await import(pathToFileURL(`${vault}/mcp/local.mjs`).href);
   const api = await readFile(new URL('../docs/api.md', import.meta.url), 'utf8');
   const mcp = await readFile(new URL('../docs/mcp.md', import.meta.url), 'utf8');
   const requests = CAPABILITIES.flatMap(capability => Object.keys(capability.requests)).sort();
   const names = [...api.matchAll(/^### `(com\.ohmmmm\.[\w.]+)`$/gm)].map(match => match[1]).sort();
   assert.deepEqual(names, requests, 'include reserved requests as well as implemented ones');
   const tools = TOOLS.map(tool => tool.name).sort();
-  for (const [page, text] of [['API', api], ['MCP', mcp]]) {
+  const local = LOCAL_TOOLS.map(tool => tool.name);
+  for (const [page, text, expected] of [['API', api, tools], ['MCP', mcp, [...tools, ...local].sort()]]) {
     const listed = [...text.matchAll(/^\| `(vault_\w+)` \|/gm)].map(match => match[1]).sort();
-    assert.deepEqual(listed, tools, `${page} must list every tool and no non-tool requests`);
+    assert.deepEqual(listed, expected, `${page} must list every tool and no non-tool requests`);
   }
 });
 

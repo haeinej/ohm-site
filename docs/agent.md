@@ -14,10 +14,11 @@ What your agent remembers about you is not kept in the vault. It is kept in a co
 
 | Server | What it works in | Its tools |
 | --- | --- | --- |
-| `ohm-vault` | Your posts, in the vault service | Ten `vault_*` tools. [MCP reference](https://docs.ohmmmm.com/mcp.md#tools) |
+| `ohm-vault` | Your public and friends-only posts and blocks, in the vault service | Eighteen `vault_*` tools. [MCP reference](https://docs.ohmmmm.com/mcp.md#tools) |
+| `ohm vault mcp` | A vault folder on your computer | Six local tools: search, read, neighbors, capture, collect, index. [Local tools](https://docs.ohmmmm.com/mcp.md#local) |
 | `cortex` | Your cortex folder | Twenty `cortex_*` tools. [The cortex](https://docs.ohmmmm.com/cortex.md) |
 
-Agent tools for a vault folder on your computer, with blocks of every kind, are planned and not built. Until then an agent can run the `vault search` and `vault inspect` commands in that folder like any other command. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md#index)
+No service tool returns a private post. Your agent reaches private blocks only through the local tools, in a folder on your own machine. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md#index)
 
 <a id="need"></a>
 
