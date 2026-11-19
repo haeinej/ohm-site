@@ -1,6 +1,6 @@
 # ohm docs
 
-> ohm is an agentic social network that extends a person's own website: a vault of posts that are private, for friends or public, with public posts published to the person's own AT Protocol account; and MCP tools for the person's own coding agent.
+> ohm is an agentic social network that extends a person's own website: a vault of blocks in channels, kept as a folder, whose posts are private, for friends or public, with public posts published to the person's own AT Protocol account; MCP tools for the person's own coding agent; and ohm-cortex, a separate folder where that agent keeps what it knows, every change marked with who made it. Evidence comes from content; inference lives in the cortex.
 
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.
 
@@ -9,7 +9,7 @@ Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): depend
 ## For agents
 
 - [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): The entry contract for an agent working in ohm.
-- [System overview](https://docs.ohmmmm.com/architecture.md): ohm keeps a vault of posts.
+- [System overview](https://docs.ohmmmm.com/architecture.md): ohm has three parts.
 - [Identity and access](https://docs.ohmmmm.com/identity.md): A member has two identities.
 - [Data model](https://docs.ohmmmm.com/data-model.md): A post maps to a vault row, a public repository record and a Markdown file.
 - [Mirror and publish](https://docs.ohmmmm.com/protocols.md): Two exchanges connect a vault to its member's repository.
@@ -18,14 +18,27 @@ Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): depend
 
 ## Get started
 
-- [Quick start](https://docs.ohmmmm.com/quick-start.md): Keep your drafts and published work in one place, while choosing what becomes public.
+- [Quick start](https://docs.ohmmmm.com/quick-start.md): Keep what you think and make in one vault, while choosing what becomes public.
 - [Sign in](https://docs.ohmmmm.com/sign-in.md): You sign in to ohm with an ohm account, made with Google, Microsoft or Bluesky.
 
-## Workspace
+## Your vault
 
-- [The workspace](https://docs.ohmmmm.com/workspace.md): Your posts sit in a tree of labels beside the rail, and the post you open fills the rest.
-- [Posts](https://docs.ohmmmm.com/posts.md): Everything you make in the vault is a post.
-- [Labels](https://docs.ohmmmm.com/labels.md): Labels are the sections of your work, in your own words.
+- [The workspace](https://docs.ohmmmm.com/workspace.md): The workspace, at app.ohmmmm.com/vault, is where you write and file your posts in a browser.
+- [Blocks and channels](https://docs.ohmmmm.com/blocks-and-channels.md): A block is one unit of thought, and a channel is an ordered collection of blocks.
+- [Posts](https://docs.ohmmmm.com/posts.md): A post is a block you publish, or mean to.
+- [Labels](https://docs.ohmmmm.com/labels.md): Labels are the sections of your site, in your own words.
+
+## Connections and the graph
+
+- [Connections](https://docs.ohmmmm.com/connections.md): A connection says that one thing in your vault relates to another.
+- [The graph](https://docs.ohmmmm.com/graph.md): Your vault and your cortex form one graph around you.
+
+## Your folder
+
+- [Sync with a folder](https://docs.ohmmmm.com/sync.md): The command-line sync brings your posts and a local folder of Markdown files into line.
+- [Your vault as files](https://docs.ohmmmm.com/files.md): In a vault folder, every block, channel and entity is a Markdown file, and a source is a small folder of its own.
+- [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md): Your vault can read folders you already keep, such as Google Drive, an Obsidian vault or a folder of code, where they are.
+- [Export and leaving](https://docs.ohmmmm.com/export.md): You can export your vault posts as Markdown files, to keep or to take elsewhere.
 
 ## Sharing
 
@@ -33,11 +46,10 @@ Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): depend
 - [Publish](https://docs.ohmmmm.com/publish.md): Publish makes what other people see match your workspace.
 - [Friends](https://docs.ohmmmm.com/friends.md): Friends-only sharing is planned.
 
-## Folder
+## Cortex and history
 
-- [Sync with a folder](https://docs.ohmmmm.com/sync.md): The command-line sync brings your posts and a local folder of Markdown files into line.
-- [Posts as files](https://docs.ohmmmm.com/files.md): In your folder, each post is one Markdown file.
-- [Export and leaving](https://docs.ohmmmm.com/export.md): You can export your vault posts as Markdown files, to keep or to take elsewhere.
+- [The cortex](https://docs.ohmmmm.com/cortex.md): ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read.
+- [History](https://docs.ohmmmm.com/history.md): Every change to your cortex is one line in one journal, marked with who made it.
 
 ## Agent
 
@@ -47,4 +59,4 @@ Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): depend
 ## Reference
 
 - [Where your things live](https://docs.ohmmmm.com/where-things-live.md): Public posts live in your AT Protocol repository.
-- [Status and limits](https://docs.ohmmmm.com/limits.md): What is built, what has been tested and what remains planned.
+- [Status and limits](https://docs.ohmmmm.com/limits.md): What is built, what has been tested and what remains planned, for the vault service, the vault folder, the cortex and the workspace's design.

@@ -28,9 +28,11 @@ REPOSITORY = "https://github.com/haeinej/ohm-vault"
 
 GROUPS = [
     ("Get started", ["quick-start", "sign-in"]),
-    ("Workspace", ["workspace", "posts", "labels"]),
+    ("Your vault", ["workspace", "blocks-and-channels", "posts", "labels"]),
+    ("Connections and the graph", ["connections", "graph"]),
+    ("Your folder", ["sync", "files", "roots-and-index", "export"]),
     ("Sharing", ["visibility", "publish", "friends"]),
-    ("Folder", ["sync", "files", "export"]),
+    ("Cortex and history", ["cortex", "history"]),
     ("Agent", ["agent", "finding-people"]),
     ("For agents", ["agent-guide", "architecture", "identity", "data-model", "protocols", "mcp", "api"]),
     ("Reference", ["where-things-live", "limits"]),
@@ -47,10 +49,16 @@ def doc(slug, title, intro, body, nav=None):
 ALERT = "ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits."
 
 doc("quick-start", "Quick start",
-    "Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.",
+    "Keep what you think and make in one vault, while choosing what becomes public. Start by saving one private post in the workspace, or by indexing a folder you already keep; add publishing and an agent when you need them.",
     body="""
 ## Why the pieces are separate {#why}
 An idea can become a draft, then a public post. You need somewhere to work on it before it is ready, and a way to publish it without making every draft public. Your vault is that working space. Your own account on the open network holds what you publish.
+A few words are used everywhere in these docs.
+- **A block** is one unit of thought: a note, a passage you kept, a photograph, a link, a query.
+- **A channel** is an ordered collection of blocks. A block can be in many channels.
+- **A post** is a block you publish. Its first channel, its home, gives it its address on your site; in the workspace that channel is called its label.
+[Blocks and channels](/docs/blocks-and-channels) explains them with examples.
+Today the workspace in your browser holds posts. Blocks of other kinds, and channels of your own, live in a vault folder on your computer. You can start from either.
 
 ## What you need, and why {#need}
 An AT Protocol account is your identity on the open network. A Personal Data Server, or PDS, is the server that holds that account's public records. Bluesky hosts accounts too; you can connect one instead of running a server yourself.
@@ -61,6 +69,7 @@ An AT Protocol account is your identity on the open network. A Personal Data Ser
 | A website | Gives public records a page with your own design | Optional for saving private work; connecting its content is separate work |
 | A coding agent | Reads and writes your posts with you | Optional; the browser editor works without one |
 | A local folder | Gives you a separate copy of your posts | Optional; export or command-line sync when you want one |
+| A vault folder | Holds blocks of every kind, channels, sources and entities as Markdown files, and can read Google Drive or Obsidian folders where they are | Optional; needs Node 22 or newer, and no account |
 Access is restricted while ohm is being tested. These steps describe the implemented workspace; check [Status and limits](/docs/limits) for what remains unverified or unavailable.
 
 ## 1. Sign in {#sign-in}
@@ -76,7 +85,7 @@ Supported posts you have already published are brought into your workspace. They
 ## 3. Look around your workspace {#workspace}
 The workspace has three parts.
 - **A narrow rail on the left,** with you at the foot of it.
-- **Your repository beside it:** your labels as folders, with your posts inside them. Labels are the sections of your work, in your own words: Writings, Photographs, Things I make.
+- **Your repository beside it:** your labels as folders, with your posts inside them. Labels are the sections of your work, in your own words: Writings, Photographs, Things I make. A label is a post's home channel, the one its address on your site comes from.
 - **The post you have open,** filling the rest.
 [More about the workspace](/docs/workspace)
 
@@ -104,6 +113,17 @@ Syncing never publishes. [More about syncing](/docs/sync)
 ## 8. Bring in your agent {#agent}
 Connect the coding agent you already use, and it can read and write in your workspace. It reads your private posts too, which is how it knows what you are working on.
 Anything that changes what other people see is shown to you first, publishing included. [More about your agent](/docs/agent)
+If you want your agent to remember what it learns about you between sessions, give it a cortex: a separate folder where every change it makes is marked with its name, and you undo what you do not want. [The cortex](/docs/cortex)
+
+## Or start from a folder you already keep {#folder-start}
+You do not need an account to begin. A vault folder is a folder of Markdown files on your computer, and the vault can also read folders you already keep, such as Google Drive or an Obsidian vault, without copying them or writing to them.
+From inside the folder you want as your vault, run:
+```
+npx github:haeinej/ohm-vault vault init
+npx github:haeinej/ohm-vault vault index
+npx github:haeinej/ohm-vault vault search rain
+```
+The first makes `.vault/config.json`, where you can name other folders to read. The second reads everything and keeps an index beside it, in `.vault/index.sqlite`. The third finds blocks by their words. Nothing here signs in, reaches ohm, or publishes anything. [Other folders and the index](/docs/roots-and-index)
 
 ## Things to ask your agent first {#next}
 - "What have I written about this before?"
@@ -118,6 +138,7 @@ doc("sign-in", "Sign in",
 ## Why there are two accounts {#why}
 Your ohm sign-in answers who is using the workspace. Your AT Protocol account answers whose public records and private working copy it should open. Connecting them lets you return with a familiar sign-in while keeping your identity and published posts with the host you chose.
 You need to prove that you control the connected account because its name alone is public: anyone could type it. An app password or approval at your server supplies that proof. Signing in with Bluesky can answer both questions in one flow.
+Neither account is needed to keep a vault folder on your own computer. You sign in when you want the workspace in your browser, or to publish. [A vault folder](/docs/quick-start#folder-start)
 
 ## Two steps {#steps}
 1. **Sign in or sign up.** With Google, Microsoft or Bluesky. This is your ohm account: it is who is at the keyboard.
@@ -155,16 +176,17 @@ You can export your posts and ask for ohm's copy to be deleted. Your account on 
 """)
 
 doc("workspace", "The workspace",
-    "Your posts sit in a tree of labels beside the rail, and the post you open fills the rest.",
+    "The workspace, at app.ohmmmm.com/vault, is where you write and file your posts in a browser. Your posts sit in a tree of labels beside the rail, and the post you open fills the rest.",
     body="""
 ## Why work here {#why}
 Use the workspace when you want to make or edit something: a draft, a photograph's caption, or a post you may publish. Nothing you save here is shared until you publish it.
 For a first visit, save one private post and reopen it. You do not need an agent or a public website to use the editor. [Quick start](/docs/quick-start)
+The workspace holds posts: blocks that carry who they are for, ready to publish when you choose. Blocks of other kinds, channels of your own, sources and entities are kept in a vault folder on your computer, not here yet. [Blocks and channels](/docs/blocks-and-channels)
 
 ## Your repository, in the side panel {#tree}
 The side panel is everything you have, as folders that open and close.
-- A **label** is a section of your work, in your own words.
-- A **sublabel** is a group inside a label, such as a series or an album.
+- A **label** is a section of your work, in your own words. It is a post's home channel: the channel its address on your site comes from.
+- A **sublabel** is a group inside a label, such as a series or an album: a channel inside that channel.
 - **Posts** sit inside those, private, friends-only and public together. A small mark beside each says who it is for.
 A post you have not filed sits under `other`. [Labels](/docs/labels)
 
@@ -204,10 +226,117 @@ You, your agent and a sync can all change a post. Every save says which version 
 
 ## You {#you}
 Your picture is at the foot of the rail. Its menu takes your whole vault away as files, disconnects your account on the open network, and signs you out.
+
+## Coming to the workspace {#coming}
+The next version of the workspace is designed, in a wireframe with sample data. **None of what follows is in the live editor yet.** It is described so you know where the words on these pages are heading.
+- **Channels as records.** Every channel of your own shows in the tree, and an empty one stays. A block is listed in every channel it is in, and each channel keeps its own order. Dragging a block moves it; holding ⌥ while dragging adds it to another channel as well.
+- **Connections.** Select words and choose Connect to make them a link to another block. Connect two whole blocks, with an optional line on why, or pull a line from a block's dot to another block. [Connections](/docs/connections#designed)
+- **A connections card** beside each block: the graph around it, the channels it sits in, and what connects to it and from it.
+- **The graph** of everything around you, with what your content shows in grey and what your cortex concluded in green. [The graph](/docs/graph#designed)
+- **Version history.** Every change, yours and your agents', with who made it; revert a change, restore a version, save a point. [History](/docs/history#designed)
+""")
+
+doc("blocks-and-channels", "Blocks and channels",
+    "A block is one unit of thought, and a channel is an ordered collection of blocks. A block can sit in many channels; the first one, its home, gives it its address when you publish it as a post.",
+    body="""
+## Why blocks and channels {#why}
+Until now a vault held one kind of thing: posts, each filed under one label. That is enough for a website, but not for thinking. An article you saved, the passage you kept from it, a SQL query, a PDF on Google Drive and your own half-formed idea all had to be a post, and each could sit in only one place.
+A vault now holds **blocks**, arranged in **channels**, the way Are.na arranges things. **Sources** keep what came in from outside as it was, and **entities** are the people, works, places and organisations many blocks are about. Your posts are blocks too, so nothing you already have changes.
+
+## Where this works today {#today}
+| Where | What it holds |
+| --- | --- |
+| A vault folder on your computer | Blocks of every kind, channels, sources and entities, as Markdown files. Read and indexed by the `vault` command. [Other folders and the index](/docs/roots-and-index) |
+| The workspace and the vault service | Posts only. A post is filed under a label and sublabel, which are its home channel |
+Agent tools for the vault folder are planned and not built. Blocks of other kinds are not stored by the vault service. [Status and limits](/docs/limits#status)
+
+## Blocks {#blocks}
+A block is a Markdown file. What it is, its **kind**, is one of these.
+| Kind | What it is | Read as this when |
+| --- | --- | --- |
+| `text` | Your own writing | Nothing else fits |
+| `excerpt` | Words you kept from a source | You say so |
+| `link` | A web address, and what you said about it | The block is one address |
+| `media` | A picture, video or recording | The block is one embedded media file |
+| `file` | A PDF, a spreadsheet, any other file | The block is one embedded file |
+| `code` | A query, a script, a notebook | The block is one fenced code block |
+| `post` | A block with a visibility, published or ready to be | It has a `visibility` property |
+You rarely write the kind yourself: the vault works it out from what the block contains. Write it when you mean something else.
+The vault never runs code. SQL, Python or any other code sits in a fenced block with its language, and Obsidian's links, embeds, callouts, Mermaid diagrams and math keep working.
+
+## What a block says about itself {#properties}
+Properties sit at the top of the file, between two lines of dashes. Each is optional.
+| Property | What it says |
+| --- | --- |
+| `kind` | What the block is, when the vault would guess otherwise |
+| `title` | A name that helps you recognise it |
+| `slug` | The name other blocks link to it by. The file name, unless you say otherwise |
+| `channels` | Every channel it is in besides its folder |
+| `origin` | Where the original lives, when it is not this file: a path on your computer, a Google Drive path, a web address or an AT URI |
+| `from`, `excerpt` | The source it was captured from, and the exact words kept from it |
+| `tags` | Words to find it by |
+| `by` | Who made it: `me`, or `agent:<name>` |
+| `status` | `proposed`, `kept` or `archived` |
+| `intent` | Who you mean it for if you publish it: `private`, `friends` or `public`. It shares nothing |
+| `created`, `updated` | When |
+A block also gets an ID once, which never changes. Renaming or moving a file does not make it a different block.
+
+## Channels {#channels}
+A folder is a channel, and a folder inside it is a channel inside that one. Every folder that holds a block is a channel, whether or not you describe it.
+To describe a channel, put a `_channel.md` in its folder.
+- **Its body** is the channel's description.
+- **`title`** is its name, when the folder name is not enough.
+- **`kind`** is `collection`, `concept`, `inbox` or `import`.
+- **`order`** lists what comes first, by block slug or channel path. Everything it does not list follows, newest first.
+Each channel keeps its own order, so a block can be first in one channel and last in another.
+
+## One block, many channels {#many}
+A block's folder is its **home channel**. To put it in more channels, list them:
+```
+---
+kind: code
+title: Q3 churn query
+channels: [sql-snippets]
+origin: ~/work/queries/churn.sql
+---
+
+What I used for the board review. It joins on account_id, not user_id, because of the merge.
+
+![[churn.sql]]
+```
+This block lives in `analytics/` and is also in `sql-snippets`. Nothing is copied: it is one block, listed in two channels. A channel named in `channels` must be a folder in the vault; if it is not, the vault says so.
+
+## The home channel and the address {#home}
+When a block is published as a post, its home channel gives it its address on your site.
+```
+writing/collisions/ep-01.md   ->   /posts/writing/collisions/ep-01
+```
+- **The first folder is the post's label,** and the folder inside it is its sublabel. That is all a label is: a post's home channel, under the name your site uses for its sections. [Labels](/docs/labels)
+- **Other channels do not change the address.** Listing `channels` on a post leaves where it is published as it was.
+- **A post sits at most two folders deep:** its label, and a sublabel inside it.
+- **Moving a post out of its home channel changes its address,** at the next Publish, which shows you the new address first.
+
+## Sources {#sources}
+A source is something that came in from outside, kept as it was: a page, a post, a file, an image, a video, a recording, a thread, a book. It lives in its own folder, `_sources/<id>/`, with a `source.json` that says what it is, where it came from and when it was captured, beside any extracted text or the original.
+A block names its source with `from`, and keeps the exact words it quotes in `excerpt`. The source stays as it was, so a block that quotes it can always be checked against it.
+
+## Entities {#entities}
+An entity is a person, a work, a place or an organisation that many blocks are about. Each is a file in `_entities/person/`, `_entities/work/`, `_entities/place/` or `_entities/org/`, with a `name`, other names in `aliases`, and an optional `uri`.
+Writing `@ada` in a block mentions the entity whose slug, name or alias is `ada`. The mention is a connection the index records. [Connections](/docs/connections#kinds)
+
+## Posts are blocks {#posts}
+A post is a block you publish. In the folder it is a block of kind `post`: it has a `visibility`, and it is read and written exactly as before. When it is published it is a `com.ohmmmm.post` record in your own account, unchanged.
+| In the vault folder | In the workspace | On your site |
+| --- | --- | --- |
+| The folder `writing/collisions` | Label `writing`, sublabel `collisions` | The section `/posts/writing/collisions/` |
+| The file `ep-01.md` | The post's slug | `/posts/writing/collisions/ep-01` |
+| `channels: [slowness]` | A property, kept and never published | Nothing |
+| `visibility: public` | Marked for everyone | Shown after you publish |
+[Posts](/docs/posts) · [Posts as files](/docs/files)
 """)
 
 doc("posts", "Posts",
-    "Everything you make in the vault is a post: an essay, a note to yourself, a photograph, a link.",
+    "A post is a block you publish, or mean to: an essay, a note to yourself, a photograph, a link. In the workspace, everything you make is a post, private ones included, until you choose who it is for.",
     body="""
 ## What a post has {#parts}
 - **A body,** in Markdown.
@@ -243,10 +372,10 @@ A link that points straight at a picture, a video, an audio file or a document i
 
 ## Connecting posts {#connections}
 A link from one post to another is a connection. Use it for a reply, a follow-up, or the next part of a series. A post can connect to as many as 32 others.
-A public post that connects to a private one does not show the private post's title, or that it exists, to anyone who cannot read it.
+A public post that connects to a private one does not show the private post's title, or that it exists, to anyone who cannot read it. [Connections](/docs/connections#connect)
 
 ## A post's address {#address}
-A post's address is built from where it is filed and its slug.
+A post's address is built from where it is filed and its slug. Where it is filed, its label and sublabel, is its home channel.
 ```
 /posts/writings/collisions/trap-of-independency
        label    sublabel   slug
@@ -261,8 +390,15 @@ Deleting a post that is published removes it from your site at the next Publish.
 """)
 
 doc("labels", "Labels",
-    "Labels are the sections of your work, in your own words. Every post sits under one label, and the post's address comes from it.",
+    "Labels are the sections of your site, in your own words. A post's label, and its sublabel if it has one, is its home channel: the channel its address comes from.",
     body="""
+## Labels and channels {#channels}
+A block can be in many channels. When it is published as a post, one of them has to decide where it lives on your site: its first channel, its home. On your site, and in the workspace, that home channel is called the post's **label**, and a channel inside it the **sublabel**.
+- **In a vault folder,** the label is the post's first folder and the sublabel the folder inside it.
+- **Other channels a post is in** do not change its label or its address.
+- **A channel that is not a post's home** never appears on your site.
+[Blocks and channels](/docs/blocks-and-channels#home)
+
 ## Labels are your sections {#labels}
 A label is whatever you call a part of your work: `Writings`, `Photographs`, `Things I make`. Another person might have `Blog`, `Journal` and `Field recordings`.
 - A label can be any words, in any language, with any capitalisation.
@@ -299,6 +435,106 @@ A post you have not filed sits under `other`. It is a last resort, not a section
 Ask your agent: "Look at my posts and suggest how to label them." It starts from a plain default, `Writing`, `Photos` and `Projects`, and asks you questions until the structure is yours. The names are always your decision. [Your agent](/docs/agent)
 """)
 
+doc("connections", "Connections",
+    "A connection says that one thing in your vault relates to another. Every connection is evidence: something your content shows, made by you when you write and file. A model never draws one.",
+    body="""
+## Why connections are yours {#why}
+Two blocks belong together because you put them together: you filed them in one channel, linked one from the other, or quoted the same source. That is something anyone can check by reading your files, and it stays true until you change them.
+What an agent concludes about your blocks is different. It may be useful, and it may be wrong. So it is never stored as a connection. It is kept in your cortex, as a note or a memory that points at the blocks it was drawn from, and your blocks are not changed by it. [The graph](/docs/graph)
+
+## The kinds of connection {#kinds}
+The vault draws a connection only where your content shows one, and records where it found it.
+| Connection | Comes from |
+| --- | --- |
+| A channel contains a block | The block's folder, or its `channels` list |
+| A channel contains a channel | A folder inside a folder |
+| A block links to something | A double-bracket link, a `[words](https://…)` link, or a post's `connect` list |
+| A block embeds something | `![[churn.sql]]`, or `![[another-block]]` |
+| A block mentions an entity | `@ada`, matched to an entity's slug, name or aliases |
+| A block is from a source, or quotes it | Its `from` and `excerpt` properties |
+A link to something the vault does not have is kept as missing, not dropped, so you can see what you meant to write. Anything inside code is never a connection: an example of a link in a code block stays an example.
+
+## Links in the text {#links}
+Write another block's slug in double brackets, and your words become a connection.
+- `[[bridge-at-dusk]]` links to the block whose slug, path, file name or title is `bridge-at-dusk`, or failing that, an entity of that name.
+- `[[bridge-at-dusk|that bridge]]` links to the same block and shows your words in its place.
+- `[the essay](https://example.com/essay)` links to a page on the web, and an `at://` address links to a record on the network.
+These are the same links Obsidian reads, so a vault folder opened there shows them as links. Two blocks with the same slug make a double-bracket link ambiguous, and the vault tells you so.
+
+## A post's connect list {#connect}
+A post can also carry a `connect` list: up to 32 other posts or web pages it follows from, such as the essay it replies to or the last part of a series.
+When the post is published, each entry becomes an address in the record's `connect`. Only a public post can be linked from a published one: a public post that connects to a private one does not show the private post's title, or that it exists, to anyone who cannot read it. [Posts](/docs/posts#connections)
+
+## What the index finds {#index}
+`vault index` reads every block and keeps every connection in `.vault/index.sqlite`, with the line it was found on, or the property it came from.
+```
+npx github:haeinej/ohm-vault vault inspect churn-query
+```
+`vault inspect` shows one block with what links to it and what it links to, besides where its original is and its size. Nothing is written into your files. [Other folders and the index](/docs/roots-and-index#index)
+
+## What a connection is not {#not}
+- **Not a guess.** If an agent sees that two blocks belong together, it writes a note or a memory in your cortex that cites both, and it may suggest the connection to you in words. If you agree and connect them, the connection is yours, like any other.
+- **Not a tag.** A `#tag` is indexed for search, and is not a connection.
+- **Not shared on their own.** Connections live in your files and your index. Only what a published post links to goes out, with the post, as addresses in its record.
+
+## Designed for the workspace {#designed}
+Making connections in the workspace is designed in the ohm-ux wireframe and **not built in the live editor**. In the live editor today, a link is Markdown you type.
+- **Connect selected words.** Select words inside one paragraph, choose Connect, find a block, and the words become `[[slug|the words]]`.
+- **Connect whole blocks.** From a block's connections card, + Connect finds another block and connects the two, with an optional line on why. The vault folder's format does not yet have a place for a whole-block connection or its why.
+- **Pull a line.** Press the dot at the end of a block's row and pull a line to another block.
+- **The connections card.** The graph around a block, the channels it sits in, and its connections in both directions, each saying where it was read: in the text, with the linked words, or on the whole block, with its why.
+- **Read-only when shared.** On a block others can see, connections are read only, as its text is.
+No agent tool makes a connection in this design either. [History](/docs/history#designed)
+""")
+
+doc("graph", "The graph",
+    "Your vault and your cortex form one graph around you. Its edges are of two kinds: evidence, which your content shows, and inference, which your cortex concludes. Keeping them apart is the point.",
+    body="""
+## Two kinds of edge {#two}
+- **Evidence** is what the content shows: a channel contains a block, a block links to another, mentions a person, or came from a source. You make it by writing and filing. Anyone can check it, and it can always be rebuilt from your files. **A model never makes evidence.**
+- **Inference** is what your cortex concludes: a memory, a note, a skill or a tool, each pointing at what it was drawn from. Remove an inference and the evidence under it is untouched.
+**A model never draws an edge between two blocks.** It writes a cortex node that points at both.
+
+## Evidence {#evidence}
+| Edge | Made when |
+| --- | --- |
+| `contains` | A channel holds a block, or a channel |
+| `links` | A block links to another, or to a page |
+| `embeds` | A block embeds a file or another block |
+| `mentions` | A block names an entity |
+| `from`, `quotes` | A block came from a source, or quotes it |
+The vault's index draws these from your files. [Connections](/docs/connections#kinds)
+
+## Inference {#inference}
+Each part of the cortex joins the graph by pointing down at what it was drawn from.
+| Cortex node | Edge | Points at | Its evidence |
+| --- | --- | --- | --- |
+| Memory | `grounds` | The blocks, channels or sessions it rests on | Two or more distinct blocks, each at the version read; or the session where you said it |
+| Note | `observes` | What it saw it in | One session, or a node at a version |
+| Skill | `learned` | The channels and blocks it was used on | Three or more sessions |
+| Tool | `acts` | What it reads and writes | Its declaration, which you write |
+| Identity fact | `about` | You | Your words, or the block and passage that state it |
+The counts are guidance in the cortex's playbook, not rules in code: the cortex checks that each pointer is well formed and that what it cites exists. [The cortex](/docs/cortex#evidence)
+
+{{figure:graph}}
+
+## The layers around you {#layers}
+The workspace draws the graph centred on you, a layer at a time.
+1. **You.**
+2. **Your cortex:** memories, notes, skills and tools, close around you. It is only ever yours.
+3. **Your channels,** then the channels inside them.
+4. **Blocks.** A block can be in any number of channels.
+5. **Sources and entities** the blocks came from and mention.
+
+## What is built {#status}
+- **Evidence edges are built,** in the vault's index on your computer. `vault inspect` lists them for one block.
+- **Inference is built,** in ohm-cortex: notes and memories carry their evidence as pointers to a node at a version, or to a session.
+- **The cortex reads your vault through a simpler reader today.** Connecting a vault folder with `cortex vault connect` reads each Markdown file as a block in the one channel of its folder. Reading the vault's full format, through its index, is planned.
+
+## Designed for the workspace {#designed}
+The drawn graph is designed in the ohm-ux wireframe, with sample data, and **not built in the live editor**: you at the centre, evidence in grey and inference in green, nodes that drift and settle, hover to light one node's edges, click a block to open it, click an entity to centre the graph on them. Where evidence and inference join the same pair, evidence wins.
+""")
+
 doc("visibility", "Who sees a post",
     "Every post is marked private, for friends, or public. Public sharing happens only through Publish. Friends-only delivery is planned; marking a post for friends currently keeps it in your working vault.",
     body="""
@@ -325,6 +561,10 @@ Private means private from other people. Two things still read a private post.
 - **ohm.** Your workspace holds every post, so ohm can read it. ohm shows your private posts to nobody and does not use them to match you with other people.
 - **Your agent,** if you connect one, and therefore the company that runs the model it uses.
 [Where your things live](/docs/where-things-live)
+
+## Blocks that are not posts {#blocks}
+Only a post has a visibility. A block of any other kind, in a vault folder on your computer, is not sent anywhere: indexing it never reaches ohm or publishes it. Its `intent` property only records who you mean it for, if you publish it one day. [Blocks and channels](/docs/blocks-and-channels#properties)
+Your cortex is private in the same way: it is a folder of your own, and nothing in it is published.
 """)
 
 doc("publish", "Publish",
@@ -367,6 +607,7 @@ Other services copy a public post the moment it is written. Making it private la
 
 ## Addresses {#addresses}
 A post's record is kept under its permanent ID, so renaming or refiling a post changes its address without making it a different post.
+The address comes from the post's home channel: its label and sublabel. Other channels a post is in do not change it. [Blocks and channels](/docs/blocks-and-channels#home)
 """)
 
 doc("friends", "Friends",
@@ -405,7 +646,7 @@ Your workspace is a working copy. With a folder connected, the originals of your
 Until you connect a folder, ohm holds the only copy of your private and friends-only posts, and the workspace says so.
 
 ## Connect one {#connect}
-Use the ohm command-line sync with a folder on your computer. It writes posts as Markdown files under their labels. Run it again to exchange edits. [How posts look as files](/docs/files)
+Use the ohm command-line sync with a folder on your computer. It writes posts as Markdown files under their labels: each post in the folder of its home channel. Run it again to exchange edits. [How posts look as files](/docs/files)
 A locally synced cloud-storage folder is still a local folder to this command. Choosing a folder and pressing Sync in the workspace is a planned flow.
 
 ## What Sync does {#does}
@@ -441,25 +682,38 @@ Writing `visibility: public` in a file only marks the post. It becomes public wh
 
 ## If a sync is interrupted {#interrupted}
 Run it again. A sync can be repeated safely, and it picks up where things stand.
+
+## Sync knows posts, not other blocks {#blocks}
+Sync was built for posts, and it has not learned blocks of other kinds yet.
+- **Every Markdown file is read as a post.** Outside folders whose names start with `_` or `.`, sync reads each `.md` file as a post, private unless it says otherwise. A block you wrote as a query or a passage would arrive in your workspace as a private post.
+- **A file more than two folders deep is reported,** because a post sits under a label and at most one sublabel.
+- **`_channel.md`, `_entities/` and `_sources/` are left alone,** as is `.vault/`.
+Until sync knows blocks, keep the folder you sync for posts apart from a vault folder that holds other blocks, or expect every Markdown file in it to become a post. The `vault index` command reads both kinds and never sends anything. [Other folders and the index](/docs/roots-and-index)
+Two-way sync with a folder the vault reads, such as an Obsidian vault, is planned and not built.
 """)
 
-doc("files", "Posts as files",
-    "In your folder, each post is one Markdown file. A label is a folder, a sublabel is a folder inside it, and everything else about the post is written at the top of the file.",
+doc("files", "Your vault as files",
+    "In a vault folder, every block, channel and entity is a Markdown file, and a source is a small folder of its own. A post is a block with a visibility, in the folder of its label.",
     body="""
 ## The folder {#folder}
 ```
-vault/
-├── writings/
-│   ├── collisions/
-│   │   └── trap-of-independency.md
+Vault/
+├── writings/                         a channel; for posts, the label
+│   ├── _channel.md                   the channel itself: its title and order
+│   ├── collisions/                   a channel inside it; for posts, the sublabel
+│   │   └── trap-of-independency.md   a post
 │   └── why-i-started-ohm.md
-├── photographs/
-│   └── lisboa/
-│       └── lisboa-12.md
-└── loose-thought.md              no folder: filed under other
+├── analytics/
+│   ├── churn-query.md                a block about a query
+│   └── churn.sql                     the query itself
+├── _entities/person/ada-lovelace.md  an entity
+├── _sources/<id>/source.json         a source you captured
+├── .vault/                           the vault's own files: configuration and index
+└── loose-thought.md                  no folder: a post here is filed under other
 ```
+Folders whose names start with `_` or `.` hold things that are not blocks. Obsidian and other editors see blocks and channels, and can ignore the rest.
 
-## One file {#file}
+## One post {#file}
 ```
 ---
 title: Trap of independency
@@ -472,12 +726,15 @@ The body, in Markdown.
 ![The author](https://example.com/media/author.webp)
 ```
 The part between the two lines of dashes holds the post's properties, as plain YAML. Obsidian shows it in its own properties panel, and you can edit it there.
+The `visibility` property is what makes this file a post. A file with `kind: post` is one too.
 
 ## What maps to what {#mapping}
+For a post, the file and the workspace say the same things.
 | In the file | In your workspace |
 | --- | --- |
-| The folder | The label |
+| The folder | The label: the post's home channel |
 | The folder inside it | The sublabel |
+| `channels` | Other channels it is in. Kept with the post, and never published |
 | The file name | The slug |
 | `title`, `subtitle`, `date` | The same |
 | `visibility` | Who can see it. A file with none is private |
@@ -492,9 +749,148 @@ Both ways of writing them are read, and each file keeps whichever it was written
 | --- | --- | --- |
 | A link to another post | `[the first essay](first-essay.md)` | `[[first-essay]]` |
 | A picture | `![A wet street](street.jpg)` | `![[street.jpg]]` |
+`[[first-essay|the first essay]]` links to the same post and shows your own words. [Connections](/docs/connections#links)
+
+## A block that is not a post {#block}
+A block has no `visibility`. It says what it is with `kind` when the vault would guess otherwise, and where its original lives with `origin`.
+```
+---
+kind: code
+title: Q3 churn query
+channels: [sql-snippets]
+origin: ~/work/queries/churn.sql
+---
+
+What I used for the board review.
+
+![[churn.sql]]
+```
+The query itself can sit beside the block, as `churn.sql`, or stay where it is, named by `origin`. [Blocks and channels](/docs/blocks-and-channels#properties)
+
+## A channel {#channel}
+A folder is a channel. A `_channel.md` inside it describes the channel; you only need one when there is something to say.
+```
+---
+title: Writings
+kind: collection
+order: [why-i-started-ohm, writings/collisions]
+---
+
+Essays, finished and not.
+```
+`order` names blocks by slug and channels by path. What it leaves out follows, newest first.
+
+## An entity {#entity}
+An entity is a file in `_entities/`, in a folder for its kind: `person`, `work`, `place` or `org`.
+```
+_entities/person/ada-lovelace.md
+---
+name: Ada Lovelace
+aliases: [ada]
+---
+
+Wrote the first published program.
+```
+`@ada` in any block mentions her.
+
+## A source {#source}
+A source is a folder in `_sources/`, named by its ID. Its `source.json` says what it is (`page`, `post`, `file`, `image`, `video`, `audio`, `thread`, `book` or `other`), its address, title and author, when it was published and captured, and how much of it is kept. Its extracted text and the original can sit beside it. A block names it with `from`.
 
 ## Nothing is lost on the way {#exact}
 A post written out as a file and read back is the same post. That holds for titles and text in any script, and for text that YAML would otherwise misread.
+The same holds for every block, channel, entity and source: the vault reads your files and writes them back exactly as it found them, so a file changes only when you change it.
+What only a machine needs, such as a file's size, dates and content address, is never written into your files. It is kept in `.vault/index.sqlite`, which can always be rebuilt. [Other folders and the index](/docs/roots-and-index#written)
+""")
+
+doc("roots-and-index", "Other folders and the index",
+    "Your vault can read folders you already keep, such as Google Drive, an Obsidian vault or a folder of code, where they are. An index on your computer makes all of it searchable and records how it connects.",
+    nav="Other folders and the index",
+    body="""
+## Why read other folders {#why}
+Some of what you know is not in your vault folder: papers on Google Drive, an Obsidian vault you already keep, a folder of SQL you run at work. Copying them in would leave two versions of each to keep in step. The vault reads those folders where they are instead, without copying them in and without ever writing to them.
+Each one is a **root**, and its files appear as blocks in a channel of their own. The index then finds them by their words, alongside everything else.
+
+## What you need, and why {#need}
+| You need | Why |
+| --- | --- |
+| A vault folder | The vault is the folder. Its configuration and index are kept inside it, in `.vault/` |
+| Node 22 or newer | The index is a SQLite database, which Node has built in. Before Node 22.13 the command turns it on for itself |
+| The folders you want read, on this computer | A root is a folder on this machine. Google Drive is read through the folder Google Drive for desktop mounts |
+| Nothing else | No account and no service. Indexing never reaches ohm or publishes anything |
+
+## Your first index {#first-use}
+**Start the configuration,** from inside your vault folder:
+```
+npx github:haeinej/ohm-vault vault init
+```
+**Name the folders it should read,** in `.vault/config.json`:
+```
+{
+  "roots": [
+    { "name": "research", "path": "~/Library/CloudStorage/GoogleDrive-you@example.com/My Drive/Research", "include": ["**/*.pdf", "**/*.md"] },
+    { "name": "notes", "path": "~/Documents/Obsidian/Notes", "channel": "reading/notes" },
+    { "name": "queries", "path": "~/work/queries", "include": ["*.sql"], "retain": "full" }
+  ]
+}
+```
+**Read everything,** and keep what was found:
+```
+npx github:haeinej/ohm-vault vault index
+```
+**Look for something,** and look at one block closely:
+```
+npx github:haeinej/ohm-vault vault search 서울 rain
+npx github:haeinej/ohm-vault vault inspect churn-query
+```
+You have succeeded when `vault search` finds a file from one of your roots. Each command prints what it did as JSON, and says in a sentence what it could not do.
+
+## Naming a root {#config}
+| Setting | What it changes |
+| --- | --- |
+| `name` | What the root is called: lowercase letters, digits and hyphens. `vault` is taken by the vault folder itself |
+| `path` | The folder, absolute or starting `~/`. It cannot be the vault itself, a folder inside it, or a folder around it |
+| `channel` | The channel its files appear in. The root's name, unless you say otherwise. Folders inside the root become channels inside that one |
+| `include`, `exclude` | Which files to take, as patterns: `*.sql` matches by name anywhere, `docs/*.md` only in that folder, `**` any depth. Everything, unless you say otherwise |
+| `retain` | How much the vault keeps of each file. See below |
+A root entry the vault cannot use is left out with a sentence saying why; the others still apply.
+
+## How much is kept {#retain}
+| `retain` | What the vault keeps | Choose it when |
+| --- | --- | --- |
+| `reference` | Where the file is, its size and date. The file is never opened | Opening a file would cost something, as on Google Drive |
+| `text` | Its words too, so search finds it | You want to find it by what it says. The default, except on Google Drive |
+| `full` | A copy of its bytes in `.vault/cache` as well | The original may change or go, and you want what you saw |
+A Google Drive folder keeps only references unless you say otherwise. Google Drive for desktop keeps many files online only, and opening one makes Drive download it; a reference never opens the file, so it has no content address either.
+
+## What each file becomes {#blocks}
+Every file a root takes becomes a block whose `origin` is the file's own path.
+- **A Markdown file** is read as the block it is, with its links and properties.
+- **A `.sql`, `.py` or other code file** is a `code` block.
+- **An image, video or recording** is a `media` block.
+- **Anything else** is a `file` block, such as a PDF.
+A root is read only. Two-way sync with a folder such as an Obsidian vault is planned, and a root that asks for it is refused until it is built.
+
+## The index {#index}
+`vault index` reads your vault folder and every root, and keeps what it found in `.vault/index.sqlite`: every block, channel, entity and source, every connection, the words for search, and each file's size, date and content address.
+- **The first time, it reads everything.** After that it reads only files whose size or dates changed, so an unchanged vault takes as long as listing its folders.
+- **It says what changed:** what was added, changed, moved and removed. A file that was renamed or moved is recognised as the same file.
+- **`vault search`** finds blocks by their words. Words in a title, name or tag count more than words in the text. Korean, Japanese and Chinese are found without spaces.
+- **`vault inspect`** shows one block with everything known about it, including what is not in its file: where its original is, its size, when it last changed, its content address, whether a copy is cached, and what links to it.
+- **`vault status`** says what the index holds, root by root, and when it last read them.
+
+## What is written, and what is not {#written}
+- **Your files are not changed.** Size, dates and content addresses are kept in the index, not in your files, so a file changes only when you change it.
+- **Nothing is ever written in a root.**
+- **The index can always be deleted.** The next `vault index` makes it again from your files. A damaged index is set aside and made again.
+- **Nothing leaves your computer.** Indexing never reaches the vault service, signs in, or publishes.
+
+## When something cannot be read {#problems}
+- **A root that is not there,** such as Google Drive when it is not running, cannot be read. The index keeps what it knew about it and says so, rather than treating its files as removed.
+- **A file the vault cannot make sense of** is named with a sentence and left as it is: a channel that is not a folder, two files with the same name, an origin it does not understand, a copied file that carries another file's ID.
+- **A root you remove from the configuration** has its blocks removed from the index at the next `vault index`. The folder itself is untouched.
+
+## What is built {#status}
+The configuration, roots and the index are built and tested against real temporary folders. They have not been tried against a real Google Drive mount. Agent tools that search, read and collect blocks through the index are planned, and so is the cortex reading your vault through it. [Status and limits](/docs/limits#status)
 """)
 
 doc("export", "Export and leaving",
@@ -502,6 +898,7 @@ doc("export", "Export and leaving",
     body="""
 ## What you get {#what}
 Every post: private, friends-only and public. Attachments remain references to their addresses; ohm does not yet keep a file store to include in an export.
+Export covers what ohm holds, which is posts. A vault folder on your computer, with its other blocks, channels, sources and entities, is already yours and needs no export; nor does your cortex, which is a folder of its own.
 
 ## The format {#format}
 The post contents use the same Markdown format as command-line Sync. A folder export opens directly in Obsidian or another Markdown editor. The single-file download is a JSON container of file paths and Markdown text, rather than a ZIP archive or one combined Markdown document. [Posts as files](/docs/files)
@@ -526,6 +923,189 @@ Export first if you have not connected a folder. Until you do one or the other, 
 Use command-line Sync with your exported Markdown folder and connected account to bring posts back. Browser folder sync and an import wizard for the JSON download are not built. [Sync with a folder](/docs/sync)
 """)
 
+doc("cortex", "The cortex",
+    "ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.",
+    body="""
+## Why a cortex {#why}
+A coding agent forgets you between sessions. Each new session learns again how you name things, what you tried last week, and what you asked it never to do. Where an agent does remember, the memory is usually kept somewhere you cannot read or correct.
+A cortex is that memory as a folder of Markdown files you can open. Your agent writes to it as it works, and every change it makes is recorded with its name, so you can see what it did and undo what you do not want.
+It holds no content of yours. Your writing stays in your vault; the cortex points at blocks by their ID and version, and never copies them.
+
+## What you need, and why {#need}
+| You need | Why |
+| --- | --- |
+| A checkout of [ohm-cortex](https://github.com/haeinej/ohm-cortex) and Node | It runs on your own computer. Its tests run on Node 20 and 22 |
+| A folder for the cortex | The cortex is the folder. `~/cortex` unless you name another |
+| A coding agent that speaks MCP | It reads and writes the cortex through twenty `cortex_*` tools. Claude Code and Codex can also run its hooks |
+| A vault folder | Optional. It lets memories point at your blocks, and tells the agent what each channel means |
+Cortex does not need ohm, an ohm account or a vault. ohm does not store or sync it.
+
+## The folder {#folder}
+```
+cortex/
+├── agents/         AGENTS.md, the rules for keeping this cortex, and secrets/
+├── identity.md     whose cortex it is, read in full every session
+├── vault.md        how to read your vault: each channel, what it means, how blocks there are filed
+├── memory/         one thing learned per file, and an index of them
+├── skills/         <name>/SKILL.md, in the form coding agents already read
+├── tools/          what the agent can use, each on or off
+└── .cortex/        the journal, earlier versions, working memory
+```
+For you it is three folders: what your agent has learned, what it knows how to do, and what it is able to use. `agents/` says how the cortex is kept, and `identity.md` says whose it is.
+
+## Who may change what {#layers}
+| Part | Where | Changed by | Read |
+| --- | --- | --- | --- |
+| Rules | `agents/AGENTS.md` | Cortex itself, and your own additions | Every session |
+| Secrets | `agents/secrets/` | You only | Never by the agent. Never committed |
+| Identity | `identity.md` | You confirm; an agent only proposes, with evidence | Every session, in full |
+| Memory | `memory/` | An agent, at once, as its own change. You revert or edit any time | The index every session; a memory when it fits |
+| Working memory | `.cortex/working/` | Each agent its own, at once | Every session |
+| What a channel means | `vault.md` | An agent or you, at once. What you wrote by hand stands | Every session |
+| Skills | `skills/` | An agent proposes; you approve | Descriptions every session; a skill when it fits |
+| Tools | `tools/` | You only. An agent may ask for one | The list every session |
+
+## Your first use {#first-use}
+From your checkout of ohm-cortex, start a cortex:
+```
+node bin/cortex.mjs init ~/cortex
+```
+Then give your agent this as an MCP server's command:
+```
+node /path/to/cortex/bin/cortex.mjs mcp ~/cortex
+```
+When it connects, the agent is told to call `cortex_start`, which hands it the rules, your identity, its memories and what is waiting for you. Ask it something about yourself, then ask it to remember one thing. Run `cortex history` and you see the memory it wrote, under its name.
+`cortex status` lists everything waiting for you or broken, and how to clear each. For a client that connects to a server rather than starting one, `cortex serve` offers the same tools over HTTP on your own machine, with a token from `cortex token`.
+
+## Agents edit; you revert {#edits}
+An agent does not ask before it writes a memory, its own working memory, or what a channel means. It writes, and the write is recorded as a change under its name, with its reason. You read what each agent did in the history, and revert or restore what you do not want. Nothing is lost: what a change replaced is kept. [History](/docs/history)
+
+## What waits for you {#waits}
+Some things need your trust, so an agent can only propose them.
+- **An identity fact** is proposed with its evidence, and set only when you run `cortex confirm`. `cortex reject` turns it down, and that value is not proposed again.
+- **A skill** an agent writes waits until you run `cortex approve`, and is not used before.
+- **A tool** is only asked for. You build it, add it to `tools/` and switch it on.
+Confirming and approving are done from the command line only, because an MCP client cannot prove that it is you. An agent never writes the rules, your identity, a skill or a tool, not even by restoring an earlier version, and never another agent's working memory.
+
+## Hooks for Claude Code and Codex {#hooks}
+With the hooks installed, your agent does not have to remember to start from the cortex. `cortex install-hooks claude-code` or `cortex install-hooks codex` prints what to add to that client's settings, and writes nothing.
+| Moment | What the hook does |
+| --- | --- |
+| Session start | Hands the agent the rules, your identity, memories marked always, working memory, and the open dead ends recorded near its folder |
+| A prompt | Nothing yet |
+| The end of a turn | Asks the agent to distill its working memory, once for each change not distilled |
+| Session end | Records nothing |
+A hook never fails a session: on any error it writes nothing and lets the session go on. The hooks are tested with synthetic inputs and have not yet been tried in a real Claude Code or Codex session.
+
+## Sessions and dead ends {#sessions}
+Nothing is captured on an agent's behalf. When it finishes a task, or gives up, it writes a session with `cortex_session`, like a commit message: one line of what it did, the changes it made, and its dead ends.
+A dead end is what it tried and dropped, why, and a command that would show whether it still holds. The next session that starts in that folder is shown the open dead ends, so it does not try the same thing again. A later session marks a dead end resolved when it no longer holds. Cortex never runs the command itself. [History](/docs/history#sessions)
+
+## Evidence {#evidence}
+A note or a memory says what it was drawn from, as a list of pointers: a node at the version read, such as a block in your vault or another memory, or a session.
+- **Something you said** rests on the session you said it in, and becomes a memory at once.
+- **Something inferred about you** rests on two or more sessions.
+- **Something inferred about your work** rests on two or more distinct blocks, each at the version read.
+- **A skill** rests on three sessions where the same method was used.
+Cortex checks that each pointer is well formed and that what it cites exists. How much is enough is judgement, written in the rules as guidance. This is how inference joins the graph without touching your blocks. [The graph](/docs/graph#inference)
+
+## Connecting a vault {#vault}
+`cortex vault connect <folder>` connects a vault kept in a folder and writes `vault.md`, where the agent records what each channel means and how blocks there are filed. Each session, cortex brings `vault.md` in step: counts, what moved or left, and memories pointing at blocks no longer there.
+Cortex's own folder reader is simpler than the vault format: it reads each Markdown file as a block in the one channel of its folder. Reading a vault's blocks in many channels, through the vault's index, is planned.
+
+## What the cortex does not do {#not}
+- **It does not record what an agent reads.** Only what it changes, and what it says it did.
+- **It does not sync with ohm.** It stays a folder of its own; keep it in git if you want it on two machines.
+- **It does not mark memories out of date** when a block they point at changes. That is planned.
+- **It does not yet serve ChatGPT's or Claude's web connectors,** which need OAuth.
+""")
+
+doc("history", "History",
+    "Every change to your cortex is one line in one journal, marked with who made it: you, or an agent by name. You read it back, name a point, and undo what you do not want, without rewriting anything. The same history for your whole workspace is designed, and not built.",
+    body="""
+## Why history {#why}
+When agents edit directly, you need to see what each one did, and to take back what you did not want without losing anything else. History gives you both. It only grows: undoing is a new change, and what it replaced is kept.
+
+## What has history today {#where}
+| What | History | Status |
+| --- | --- | --- |
+| Your cortex | Every change, with who made it; every earlier version; saves; restore and revert; agents' sessions and dead ends | Built, in ohm-cortex |
+| Posts in the vault service | A version per post, so two saves never overwrite each other unseen. Earlier versions are not kept, and a removed post cannot be brought back | Version history not built |
+| Your vault folder | Your own files. Keep them in git, or your own backup, for history. The index keeps none | Not part of ohm |
+| The workspace's history view | Dates, You and Agents, over everything | Designed, not built |
+
+## The journal {#journal}
+Everything that happens in a cortex is a line in one append-only file, `.cortex/journal.jsonl`. Every line has a running count, its own ID, when it happened, and who did it.
+| Line | Written when | It holds |
+| --- | --- | --- |
+| `change` | A node changes, by you or an agent | The node, what was done, the versions before and after, why, and the evidence |
+| `note` | An agent observes something | One line, with evidence. It changes no file |
+| `settled` | Notes are settled | What became of a note: kept, dropped, or the memory it went into |
+| `session` | An agent finishes or gives up a task | What was done, the changes it made, and its dead ends |
+| `save` | Someone names a point in history | A name and a note. It changes nothing |
+Every earlier version of every node is kept in `.cortex/history/`, by its version. Between the two, any part of the cortex can be read as it was at any point.
+The journal is private, like the rest of the cortex. In git it joins two machines' lines without a conflict, because every line has its own ID.
+
+## Who made each change {#who}
+Every line names its actor: you, as a person, or an agent, by the name it connected with. An agent can never act under your name.
+In this invented example, Codex learned that Mira likes short titles and wrote a memory. She lists what agents did:
+```
+$ cortex history --actor agent
+41  2026-11-19T10:02:00.000Z  codex  create memory/likes-short-titles  (none) -> c91…  Mira cut three titles to four words
+```
+
+## Reading the past {#read}
+| Command | Agent tool | Does |
+| --- | --- | --- |
+| `cortex history` | `cortex_history` | Lists changes and saves, oldest first. Filter by node, by a prefix such as `memory/`, since a count or a date, and by who |
+| `cortex as-of <node> <when>` | `cortex_as_of` | A node as it was at a save's name, a date, a time or a count |
+Reading writes nothing.
+
+## Save a point {#save}
+`cortex save before-reorganising "Before I sort the reading notes"` names this point in history, so you can read things back as they were. A save changes nothing: every change is already recorded. An agent can save a point too, with `cortex_save`.
+
+## Undo {#undo}
+| Command | Agent tool | Does |
+| --- | --- | --- |
+| `cortex restore <node> <version>` | `cortex_restore` | Brings a node back to an earlier version, as a new change |
+| `cortex revert <change>` | `cortex_revert` | Undoes one change: the node goes back to what it was just before. Refused if the node has changed again since; restore a version instead. Reverting the change that made a node removes it |
+Neither rewrites a line of the journal. Each is a new change, by you or an agent, and can itself be undone.
+Your identity, the rules, skills and tools are restored and reverted only by you. An agent restores only what it may write, and never over what you wrote by hand.
+```
+$ cortex revert 41 --reason "Only for essays"
+Change 41 is undone: memory/likes-short-titles is back as it was. What it replaced is kept.
+```
+
+## Sessions and dead ends {#sessions}
+When an agent finishes a task, or gives it up, it records a session:
+```
+{
+  "summary": "Retitled the walk photos by place",
+  "outcome": "done",
+  "made": ["m3x1-4f2a9c0b7d11"],
+  "project": "/home/mira/walks",
+  "deadEnds": [
+    { "tried": "Titling photos by date", "why": "Mira finds them by place", "check": "ls photos/walks | head" }
+  ]
+}
+```
+`made` groups the changes it made in that task. Each dead end stays open until a later session marks it resolved. `cortex_start` lists the open ones, and when a Claude Code or Codex session starts in that folder, the hook shows those recorded there, so the next agent does not try dating the photos again.
+
+## What is not recorded {#not-recorded}
+What an agent reads or searches is not recorded. History holds what was changed, what was observed, and what an agent says it did.
+
+## Designed for the workspace {#designed}
+Showing history in the workspace is designed in the ohm-ux wireframe, and **not built in the live editor**.
+- **Three tabs:** Dates, with one autosave per day; You, your changes and saves; Agents, their sessions, each opening into the changes it made and its dead ends.
+- **One line per change,** as a verb and a page: Created, Edited, Moved, Filed, Connected, Restored, Reverted, Deleted. An icon says whether you or an agent made it.
+- **Open a line** to see who made it, when and why, and what it touched. From there: Revert this change, Restore this version, or open the page.
+- **A page's versions,** from a clock in its toolbar.
+- **Daily autosaves:** every page as it was at the end of each day with changes. ohm-cortex does not write these yet.
+- **Edits close together join one line,** when the same person or agent types within five minutes.
+- **A page others can see** is read only here: changing what others see asks first.
+In this design, reverting a change undoes only the parts that change touched, and is refused if a later change touched the same part. ohm-cortex today reverts a whole node, and refuses if the node has changed since.
+""")
+
 doc("agent", "Your agent",
     "Let the coding agent you already use help with your actual drafts. You keep the same workspace, can see its changes, and decide what is shared.",
     nav="Connect your agent",
@@ -533,7 +1113,12 @@ doc("agent", "Your agent",
 ## What it is {#what}
 ohm does not run a background agent for you. Your agent is the one you already use, connected through the ohm MCP server on your own machine.
 The tools work in the same vault you see in the browser. A post your agent saves is there when you open it, even though the agent does not keep running.
-Agent memory is not part of ohm's vault; it is a separate project, ohm-cortex.
+What your agent remembers about you is not kept in the vault. It is kept in a cortex, separate software with its own MCP server, which you connect beside the vault's. [The cortex](/docs/cortex)
+| Server | What it works in | Its tools |
+| --- | --- | --- |
+| `ohm-vault` | Your posts, in the vault service | Ten `vault_*` tools. [MCP reference](/docs/mcp#tools) |
+| ohm-cortex | Your cortex folder | Twenty `cortex_*` tools. [The cortex](/docs/cortex) |
+Agent tools for a vault folder on your computer, with blocks of every kind, are planned and not built. Until then an agent can run the `vault search` and `vault inspect` commands in that folder like any other command. [Other folders and the index](/docs/roots-and-index#index)
 
 ## What you need, and why {#need}
 | You need | Why it is needed |
@@ -568,6 +1153,18 @@ Whatever your agent reads is also seen by the company that runs the model it use
 | Publish | | Yes: it shows what will change, and waits |
 | Remove a post | | Yes |
 The rule behind the table: reading is free, and anything that changes what other people see, or removes something, is shown to you first. The first answer says exactly what would happen. Only your yes to that exact answer does it.
+The vault service does not record which saves your agent made, and keeps no earlier versions of a post. [History](/docs/history#where)
+
+## In your cortex, it edits and you revert {#cortex}
+Your cortex works the other way round, because nothing in it is ever shown to anyone else.
+- **It edits directly.** It writes memories, its own working memory, and what each channel of your vault means, without asking first.
+- **Every change is marked with its name,** its reason, and the versions before and after. You read them with `cortex history`, and undo any of them with `cortex revert` or `cortex restore`.
+- **What needs your trust waits.** An identity fact is only proposed until you confirm it; a skill waits for your approval; a tool is only asked for.
+- **It never connects two blocks.** If it sees that two belong together, it writes a note or a memory that cites both, and may suggest the connection to you. [Connections](/docs/connections#not)
+[History](/docs/history)
+
+## Finishing a task {#session}
+When your agent finishes a task in your cortex, or gives it up, it records a session with `cortex_session`: one line of what it did, the changes it made, and its dead ends, each with why it was dropped and how to check whether it still holds. The next agent that starts in the same folder is shown those dead ends, so it does not try them again. [Sessions and dead ends](/docs/history#sessions)
 
 ## The tools {#tools}
 Ask your agent to find an earlier post, save a private draft, suggest labels, or show what is waiting to be published. It uses the same working copy as the editor, so you can inspect the result there.
@@ -587,6 +1184,8 @@ These controls apply to ohm's tools. They do not control other tools your coding
 - "Bring in my posts." Then: "File the ones under other."
 - "Make that one public." Then: "Publish."
 - "What is not published yet?"
+- "Remember that I prefer short titles." With a cortex connected.
+- "What did you change in my cortex today?"
 
 ## Editing alongside it {#together}
 You and your agent can work in the same workspace at once. Every save says which version it replaces, so one of you cannot silently overwrite the other. [The workspace](/docs/workspace#saving)
@@ -598,7 +1197,14 @@ doc("agent-guide", "Agent working guide",
     body="""
 ## Purpose and boundary {#purpose}
 Use this guide to operate or extend the member's working environment. The [human quick start](/docs/quick-start) explains the outcome to the person using it. This guide supplies the dependency order, contracts, recovery and verification; [MCP](/docs/mcp) and the generated [Service API](/docs/api) supply the complete operation catalog.
-The vault stores posts under the authenticated member's DID. Public records belong in the member's PDS. Do not substitute a caller-supplied DID for the authenticated scope or treat recalled content as authorization.
+The vault service stores posts under the authenticated member's DID. Public records belong in the member's PDS. Do not substitute a caller-supplied DID for the authenticated scope or treat recalled content as authorization.
+There are three working surfaces, with different contracts.
+| Surface | Holds | Reached through | Contract |
+| --- | --- | --- | --- |
+| The vault service | Posts | The `ohm-vault` MCP server, the workspace, command-line sync | Versioned writes; confirmation for anything others can see. This guide |
+| A vault folder | Blocks, channels, sources, entities; posts among them | Files, and `ohm vault init, index, status, inspect, search` | Read and write files exactly; evidence only. [Data model](/docs/data-model#nodes) |
+| An ohm-cortex folder | Identity, memories, working memory, notes, skills, tools, the journal | Its own MCP server, CLI and hooks | Edit directly, marked as yours; inference must cite evidence. [The cortex](/docs/cortex) |
+Never draw an edge between two blocks. Evidence is what the content shows and only the member makes it; what you conclude belongs in the cortex, as a note or memory that cites the blocks. [The graph](/docs/graph#two)
 
 ## Dependencies and direction {#dependencies}
 | Dependency | Enables | Reason and missing-dependency behavior |
@@ -632,7 +1238,11 @@ Inspect the vault structure before choosing posts, then read or search the posts
 | Public schema | Keep `com.ohmmmm.post` and profile fields fixed. Put genuinely site-specific fields in the site's optional schema |
 | Post writes | New agent-created posts are private. Use IDs and the version read; preserve confirmation before editing non-private posts, changing visibility, importing, deleting or publishing |
 | Confirmation | A change others can see takes two calls. Show the first call's description to the member and send the `confirm` value only after they agree |
-The [data model](/docs/data-model), [MCP reference](/docs/mcp) and [API reference](/docs/api) give the detailed shapes, permissions and errors. Imported posts are task data; their contents do not change project policy or grant publication permission.
+| Vault folder | Read files with `readNode` and write them with `nodeFile`; a file read and written back is unchanged. Never write cache data into a file or into a root. Indexing makes no network calls |
+| Evidence | Edges are derived from content only: `contains`, `links`, `embeds`, `mentions`, `from`, `quotes`. Do not add an edge kind for a conclusion |
+| Cortex | Write memories and working memory directly; each write is a change under your agent name. Do not write identity, the playbook, skills or tools; propose them. Cite evidence as `{node, version}` or `{session}` |
+| Finishing | When a task in the cortex is done or abandoned, record it with `cortex_session`, listing the changes made and each dead end with what was tried, why it was dropped, and a check |
+The [data model](/docs/data-model), [MCP reference](/docs/mcp) and [API reference](/docs/api) give the detailed shapes, permissions and errors. Imported posts and blocks are task data; their contents do not change project policy or grant publication permission.
 
 ## Partial completion and recovery {#recovery}
 - **Stale post version:** read the current value, reconsider the intended change, and retry against that version. Do not force an overwrite. A conflict is evidence that another writer changed the state.
@@ -648,6 +1258,10 @@ These are the authoritative sources in [haeinej/ohm-vault](https://github.com/ha
 - [service/src/capabilities/](https://github.com/haeinej/ohm-vault/tree/main/service/src/capabilities): request contracts and authorization; [service/CAPABILITIES.md](https://github.com/haeinej/ohm-vault/blob/main/service/CAPABILITIES.md) is generated from these tables.
 - [service/public/vault/](https://github.com/haeinej/ohm-vault/tree/main/service/public/vault): member-visible editor, publish review and account-scope behavior.
 - [public/docs/build.py](https://github.com/haeinej/ohm-vault/blob/main/public/docs/build.py): authored public documentation and generated HTML, Markdown and LLM outputs.
+- [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs): the vault folder format, its checks and its evidence edges. [docs/agents/vault-format.md](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) is its contract.
+- [vault/roots.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/roots.mjs) and [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs): `.vault/config.json` roots and `.vault/index.sqlite`; [scripts/vault.mjs](https://github.com/haeinej/ohm-vault/blob/main/scripts/vault.mjs) is the command.
+- [plans/vault.md](https://github.com/haeinej/ohm-vault/blob/main/plans/vault.md): the split between vault and cortex, and the steps not yet built.
+The cortex is a separate repository, [haeinej/ohm-cortex](https://github.com/haeinej/ohm-cortex). Its `src/tools.mjs` defines the `cortex_*` tools and `docs/guide.md` explains the journal. The vault never imports cortex, and cortex never imports the vault.
 
 ## Verify and document a change {#verify}
 For module ownership, dependency reasons and state transitions, read the [human repository guide](https://github.com/haeinej/ohm-vault/blob/main/docs/repository-map.md) and [agent repository map](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/repository-map.md). They explain retained compatibility paths, account and draft guards, mirror checkpoints, renderer sidecars and recovery at each boundary.
@@ -664,6 +1278,7 @@ python3 public/docs/build.py
 npm test
 git diff --check
 ```
+For the vault folder format and the index alone, `node --test test/node.test.mjs` and `node --experimental-sqlite --test test/indexer.test.mjs` run against real temporary folders. They do not prove a real Google Drive mount.
 The capability reference must match its registered tables. The docs build checks HTML page links and anchors; tests also check Markdown/LLM outbound fragments, static-page IDs, the six-route SEO contract, offline script routing and MCP initialization from an extracted package with only locked runtime dependencies. The broader tests exercise service boundaries, member isolation, versions and tool composition using local fixtures. Passing them is not evidence of a successful live member sign-in or deployment.
 For a local public-site preview, run `npm run home:dev` or `npm run docs:dev` from the root (loopback ports 8790 and 8791). Run `npm run home:seo -- http://127.0.0.1:8790` against the home preview, not production, to check this checkout. [Public site ownership](https://github.com/haeinej/ohm-vault/blob/main/public/README.md) explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.
 Use the bundled `document-work` skill for each coherent completed outcome. Update the canonical human guide with purpose, dependency reasons and recognizable first use; update this guide or the precise reference with contracts and recovery. Regenerate outputs from their source. Use synthetic examples and keep private member material out of public docs. Report implementation, local test evidence and live verification separately. [Status and limits](/docs/limits) records the remaining product boundaries.
@@ -709,7 +1324,7 @@ You also hear when you are the person someone else is looking for. Your agent pa
 """)
 
 doc("where-things-live", "Where your things live",
-    "Public posts live in your AT Protocol repository. ohm keeps your working vault. Sync or export can keep a copy with you.",
+    "Public posts live in your AT Protocol repository. ohm keeps the working copy of your posts. A vault folder and your cortex are folders on your own computer, and sync or export can keep a copy of your posts with you.",
     body="""
 ## The places {#places}
 | | What is there | Whose it is |
@@ -718,6 +1333,21 @@ doc("where-things-live", "Where your things live",
 | Your ohm account | Who you are when you sign in to ohm | Made with Google, Microsoft or Bluesky. It holds no posts |
 | Your folder, once synced | Your posts as Markdown files | Yours, on your machine or in locally synced storage |
 | Your vault on ohm | A working copy of every post | ohm holds it for you |
+| A vault folder | Blocks, channels, sources and entities as Markdown files | Yours, on your machine. Indexing never sends it anywhere; only posts you sync reach ohm |
+| The folders a vault reads | Your Google Drive, Obsidian or code folders, where they already are | Yours. The vault only reads them |
+| Your cortex | What your agent knows about you, as a folder | Yours, on your machine. ohm never sees it |
+
+## Inside the folders {#folders}
+| Path | What it holds | Can it be rebuilt |
+| --- | --- | --- |
+| `.vault/config.json` | The folders the vault reads, and how much it keeps of each | No: you wrote it |
+| `.vault/index.sqlite` | Every block, channel, entity, source and connection the vault found, the words for search, each file's size, date and content address | Yes: delete it, and `vault index` makes it again |
+| `.vault/cache/` | Copies of files from folders set to keep them in full | Yes, while the originals are there |
+| `_entities/`, `_sources/` | Entities, and what you captured from outside | No: they are your content |
+| `.cortex/journal.jsonl` | Every change to your cortex, with who made it; notes, sessions, saves | No: it is the cortex's history |
+| `.cortex/history/` | Every earlier version of every part of your cortex | No |
+| `.cortex/working/` | Each agent's working memory | No |
+| `agents/secrets/` | Secrets, such as the token for the cortex over HTTP | No. Never read by the agent, never committed |
 
 ## By who can see the post {#by-visibility}
 | | The original | ohm's working copy | Who ohm shows it to |
@@ -741,33 +1371,73 @@ Your identity is your own. It is an AT Protocol account, and its name can be you
 """)
 
 doc("limits", "Status and limits",
-    "What is built, what has been tested and what remains planned. A merged implementation is not evidence that the feature is deployed or verified with a live account.",
+    "What is built, what has been tested and what remains planned, for the vault service, the vault folder, the cortex and the workspace's design. A merged implementation is not evidence that the feature is deployed or verified with a live account.",
     body="""
 ## Implementation status {#status}
+Each piece is one of: **Built**; **Built, not verified**, where tests pass but it has not been run for real; **Planned**, where a plan or design names it; or **Not built**, where nothing schedules it yet.
+### The vault service and the workspace
 | Area | Status | Notes |
 | --- | --- | --- |
-| Sign-in with Google, Microsoft or Bluesky | Implemented | In production. Sign-in with Bluesky is not yet verified end to end |
-| Connecting a self-hosted PDS | Implemented | In production |
-| Connecting a Bluesky account | Implemented | Not yet verified end to end |
+| Sign-in with Google or Microsoft | Built | In production |
+| Sign-in with Bluesky | Built, not verified | Not yet verified end to end |
+| Connecting a self-hosted PDS | Built | In production |
+| Connecting a Bluesky account | Built, not verified | Not yet verified end to end |
 | Accounts hosted by ohm | Planned | |
 | Access | Restricted | An allow list of accounts during testing |
-| Workspace | Implemented | Vault editor; account switching clears private state |
-| Mirror | Implemented | Runs automatically when an account is first connected |
-| Publishing public posts | Implemented | Verified against a test PDS. Not yet run against a live account |
+| Workspace | Built | Posts under labels; account switching clears private state |
+| Mirror | Built | Runs automatically when an account is first connected |
+| Publishing public posts | Built, not verified | Verified against a test PDS. Not yet run against a live account |
 | Friends-only delivery | Planned | |
 | Attachments stored by ohm | Planned | A post references files by address, and a copy is made at publish |
-| Agent tools | Implemented and tested | Ten vault tools; stand-in services and signed-token integration checks do not prove live sign-in |
-| Folder sync | Implemented | Command line, local folders |
+| Vault agent tools | Built, not verified | Ten tools over posts; stand-in services and signed-token checks do not prove a live sign-in |
+| Folder sync | Built | Command line, local folders. Posts only: every Markdown file is read as a post |
 | Sync from the workspace, and with cloud storage | Planned | |
+| Earlier versions of a post, and bringing a removed one back | Not built | Each post has one current version |
 | Deleting ohm's copy | Manual | Carried out on request |
 | Agent keys | Planned | Until then an agent signs in with an app password from the member's PDS |
 | Finding people | Planned | |
+### The vault folder
+| Area | Status | Notes |
+| --- | --- | --- |
+| Blocks, channels, sources and entities as files | Built | Read and written exactly; tested |
+| Evidence edges | Built | Drawn from content only |
+| Roots and the index: `vault init`, `index`, `status`, `inspect`, `search` | Built | Tested against real temporary folders |
+| A Google Drive root | Built, not verified | Not tried against a real Google Drive mount |
+| Two-way roots, such as an Obsidian vault | Planned | Refused until built |
+| Agent tools over the index | Planned | Search, read, neighbours, capture and collect |
+| Blocks other than posts in the vault service and the workspace | Not built | They stay in the folder |
+| Sync that knows blocks | Not built | Sync reads every Markdown file as a post |
+### The cortex
+| Area | Status | Notes |
+| --- | --- | --- |
+| The cortex folder, its MCP server over standard input and over HTTP | Built | Separate software, ohm-cortex; 119 tests, on Node 20 and 22 |
+| The journal: changes marked with who made them, history, as-of, save, restore, revert | Built | |
+| Sessions and dead ends | Built | Shown at session start near the folder they were recorded in |
+| Evidence on notes and memories | Built | Checked for shape and existence; how much is enough is guidance |
+| Hooks for Claude Code and Codex | Built, not verified | Tested with synthetic inputs; not yet tried in a real session |
+| Reading a vault folder | Built | Through cortex's own folder reader: one channel per file |
+| Reading the vault's full format through its index | Planned | |
+| Memories marked out of date when their blocks change | Planned | |
+| ChatGPT and Claude web connectors | Not built | They need OAuth |
+| Syncing the cortex with ohm | Not built | The cortex stays a folder of its own |
+### Designed for the workspace
+These are drawn in the ohm-ux wireframe with sample data. None is in the live editor.
+| Area | Status | Notes |
+| --- | --- | --- |
+| Channels as records, a block in many, each channel's own order, drag and ⌥-drag | Planned | [Coming to the workspace](/docs/workspace#coming) |
+| Connecting words, whole blocks and pulling a line; the connections card | Planned | [Connections](/docs/connections#designed) |
+| The graph, with evidence and inference | Planned | [The graph](/docs/graph#designed) |
+| Version history: Dates, You and Agents; revert, restore, save | Planned | [History](/docs/history#designed) |
+| Daily autosaves | Planned | ohm-cortex does not write them yet |
 
 ## Anything you publish is public for good {#for-good}
 A public post on the AT Protocol is copied by other services the moment it is written. Taking a post down removes it from your website, not from every copy.
 
 ## Your agent reads your private posts {#agent}
 That is how it knows what you are working on. Whichever company runs the model your agent uses sees what it reads.
+
+## Your agent edits your cortex without asking {#cortex}
+Every change it makes is recorded with its name, and you can undo any of them. Nothing is undone on its own: read the history now and then. [History](/docs/history)
 
 ## ohm can read your private posts {#ohm}
 Your workspace includes them, and ohm holds your workspace. ohm serves this private data only to you. A synced folder keeps a copy of your posts with you.
@@ -864,11 +1534,20 @@ The access level of each request is one of four.
 
 
 doc("architecture", "System overview",
-    "ohm keeps a vault of posts. The member's PDS owns public records; ohm stores the working copy; clients on the member's device perform approved publication.",
+    "ohm has three parts. ohm-vault holds what a member knows and makes, ohm-cortex holds what agents know about the member, and the member's PDS owns public records. The vault service stores the working copy of posts; clients on the member's device perform approved publication.",
     nav="Overview",
     body="""
+## Vault, cortex and PDS {#parts}
+| | ohm-vault | ohm-cortex | The member's PDS |
+| --- | --- | --- | --- |
+| Holds | Blocks, channels, sources, entities; posts among them | Identity, memories, working memory, notes, skills, tools, the journal | Public `com.ohmmmm.post` records, identity, files |
+| Edges | Evidence only: what the content shows | Inference: cortex nodes pointing at vault blocks (`grounds`, `observes`, `learned`, `acts`) | None of ohm's |
+| Kept as | A folder on the member's machine, and for posts, the vault service's working copy | A folder on the member's machine | A repository at the member's host |
+| Repository | [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault) | [haeinej/ohm-cortex](https://github.com/haeinej/ohm-cortex) | External |
+The vault never imports cortex, and cortex never imports the vault. Cortex refers to blocks by ID and version only, through a small read-only vault contract: today its own folder reader, and planned, a reader over the vault's index. The cortex is not synced with ohm or stored by the vault service.
+
 ## How it works {#how}
-The vault holds what a member makes: posts filed under labels and sublabels, private, for friends or public. It is member-scoped, and only public posts can become repository records.
+The vault service holds what a member makes for the web: posts filed under labels and sublabels, private, for friends or public. A post's label and sublabel are its home channel. The service is member-scoped, and only public posts can become repository records. A vault folder on the member's machine holds every kind of block, and is read and indexed locally. [Data model](/docs/data-model#nodes)
 1. **Sign in.** A person signs in to ohm, and once connects the AT Protocol account that owns their posts. That account lives on a Personal Data Server (PDS) they host themselves or at Bluesky. It is theirs whether or not they use ohm.
 2. **Mirror.** What the account has already published is read from its repository into the vault. From then on the vault holds everything: public posts, and private and friends-only ones that exist nowhere else on the network.
 3. **Work.** Posts are read, written and filed in the vault, through any of three clients: the workspace in a browser, an agent's tools, or a synced folder of Markdown files. A new post is private. Saving changes the vault and nothing else.
@@ -887,7 +1566,9 @@ Three rules hold everywhere and are worth knowing before anything else.
 | --- | --- | --- | --- |
 | Workspace | The member's browser, served from `app.ohmmmm.com/vault` | Editor, repository tree, publish review | Implemented |
 | Agent tools | An MCP server, `ohm-vault`, on the member's machine | Vault tools composed from service requests. [Agent integration](/docs/mcp) | Implemented |
-| Folder sync | A command-line client on the member's machine | Two-way sync between the vault and a folder of Markdown files | Implemented |
+| Folder sync | A command-line client on the member's machine | Two-way sync between the vault and a folder of Markdown files, for posts | Implemented |
+| Vault folder and index | The `ohm vault` command on the member's machine | Reads blocks, channels, sources and entities, and read-only roots; keeps `.vault/index.sqlite`. No network calls | Implemented |
+| ohm-cortex | The member's machine: MCP over stdio or HTTP, CLI, hooks | Agent memory, the journal, history. Separate software | Implemented, outside this repository |
 | Vault service | Cloudflare Workers and D1 | Stores posts; checks versions; computes mirror and publish plans | Implemented |
 | ohm sign-in | Cloudflare Workers and D1 | ohm accounts and sessions, with Google, Microsoft and Bluesky as identity providers | Implemented |
 | Personal Data Server (PDS) | The member's host: self-hosted, or Bluesky | The account's DID, signing key, and repository of public records and files | External |
@@ -912,6 +1593,8 @@ Public records remain at the member's PDS. Posts have a portable folder format.
 5. **Requests are idempotent.** A request sent twice ends in the same state as one sent once. A post's ID is generated by the client, so creating it twice creates one post.
 6. **One portable post format.** Post sync and export produce the same Markdown files. [Posts as files](/docs/files)
 7. **The service makes no model calls.** Judgement belongs to the member and their own agent.
+8. **Evidence and inference are kept apart.** The vault derives edges from content alone. What an agent concludes is a cortex node that points at blocks; it never becomes an edge between two blocks. [The graph](/docs/graph)
+9. **Derived data stays rebuildable.** The vault index holds only what can be read again from files, and never writes cache data into them.
 
 ## Deployment {#deployment}
 | Address | Serves |
@@ -924,7 +1607,7 @@ The vault service and ohm sign-in are separate Workers with separate databases. 
 
 ## In this section {#section}
 - [Identity and access](/docs/identity): the two identities, and how every request is authenticated.
-- [Data model](/docs/data-model): a post in the vault, the published record, identifiers and versions.
+- [Data model](/docs/data-model): a post in the vault, the published record, identifiers and versions; vault folder nodes, evidence edges, and the cortex journal.
 - [Mirror and publish](/docs/protocols): the two exchanges with a member's repository.
 - [Agent integration](/docs/mcp): the MCP server, its tools, and how changes are confirmed.
 - [Service API](/docs/api): every request, error and agent tool.
@@ -1000,7 +1683,7 @@ While ohm is tested, the service accepts requests only from DIDs on an allow lis
 """)
 
 doc("data-model", "Data model",
-    "A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else.",
+    "A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else; a vault folder holds blocks, channels, sources and entities, and a cortex keeps its journal.",
     body="""
 ## A post in the vault {#post}
 | Field | Type | Meaning |
@@ -1072,6 +1755,51 @@ The service stores posts and account links in two tables.
 | `posts` | Account DID and post ID | The post as JSON, its version and sequence, and indexed copies of the fields the repository tree is drawn from |
 | `links` | ohm user ID, with the DID unique | Which AT Protocol account an ohm account works in, and when its published posts were first mirrored |
 The database enforces unique keys and conditional updates.
+
+## Vault folder nodes {#nodes}
+A vault folder is read as four kinds of node by [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs), which is pure: callers pass `{ path, text }` and write what they get back. The lexicons in `lexicons/com/ohmmmm/vault/` (`block`, `channel`, `entity`, `source`, all keyed by TID) describe file contents; none is written to a PDS.
+| Node | Path | Fields |
+| --- | --- | --- |
+| Block | `<folders>/<name>.md` | `kind`, `title`, `slug`, `channels`, `origin`, `from`, `excerpt`, `tags`, `by`, `status`, `intent`, `created`, `updated`; the body |
+| Channel | `<folders>/_channel.md`, or any folder holding a block | `title`, `kind`, `order`, `site`; the body is the description |
+| Entity | `_entities/<kind>/<name>.md` | `name`, `aliases`, `uri`; `kind` from the folder |
+| Source | `_sources/<id>/source.json` | `kind`, `uri`, `platform`, `platformId`, `title`, `author`, `publishedAt`, `capturedAt`, `retain`, `meta` |
+The values each kind of field allows:
+| Values | Allowed |
+| --- | --- |
+| Block `kind` | `text`, `excerpt`, `link`, `media`, `file`, `code`, `post` |
+| Channel `kind` | `collection`, `concept`, `inbox`, `import` |
+| Entity kind | `person`, `work`, `place`, `org` |
+| Source `kind` | `page`, `post`, `file`, `image`, `video`, `audio`, `thread`, `book`, `other` |
+| `retain` | `reference`, `text`, `full` |
+| `status` | `proposed`, `kept`, `archived` |
+| `intent` | `private`, `friends`, `public` |
+A block's folder is its home channel. A file with `kind: post`, or with no `kind` and a `visibility`, is read and written by the unchanged post code, so it keeps its version and syncs as before; `channels` is stored as an ordinary post property. Unknown properties are kept. IDs are 13-character TIDs, given once; a node without one is keyed by its path until it has one. `readNode(nodeFile(n))` gives back `n` for any node that was read, and problems come back as sentences rather than errors.
+
+## Evidence edges {#edges}
+`evidence(vault)` returns `{ kind, from, to, at }` for each edge, from content alone.
+| Kind | From |
+| --- | --- |
+| `contains` | A block's folder or `channels` list; a folder inside a folder |
+| `links` | A double-bracket link, a web or `at://` link, a post's `connect` |
+| `embeds` | `![[file]]` or `![[block]]` |
+| `mentions` | `@handle`, matched to an entity's slug, name or aliases |
+| `from`, `quotes` | A block's `from` and `excerpt` |
+`at` is a body line number, or the property the edge came from. A target is a node key, `url:`, `at:`, `file:<name>`, or `missing:<as written>`. Fenced code, inline code and e-mail addresses are skipped. Inference has no edge kind here: it is a cortex node that cites a block as `{node, version}`.
+
+## The index {#index}
+`.vault/index.sqlite`, written only by `scan` in [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs), holds the tables `meta`, `files`, `nodes`, `edges`, `terms` and `problems`. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a `reference` root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. [The agent reference](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) has the full contract.
+
+## The cortex journal {#journal}
+ohm-cortex keeps one append-only file, `.cortex/journal.jsonl`. Every line has `seq`, a unique `id`, `at`, `actor` (`{kind: "human" or "agent", name}`), sometimes `session`, and a `type`.
+| `type` | Holds |
+| --- | --- |
+| `change` | `node`, `op` (create, update, remove, restore), `before` and `after` versions, `reason`, `evidence`; `proposedBy` for a confirmed identity fact or an approved skill |
+| `note` | One observation, with `evidence`. Changes no file |
+| `settled` | What became of a note |
+| `session` | `summary`, `outcome`, `made` (change IDs), `project`, `deadEnds` (`tried`, `why`, `check`), `resolved` |
+| `save` | A name and a note. Changes nothing |
+Nodes are named `identity`, `playbook`, `memory/<name>`, `working/<agent>`, `skill/<name>`, `tool/<name>` and `channel/<path>`. Earlier versions are kept in `.cortex/history/` by version hash. Evidence pointers are `{node, version}` or `{session}`. Lines are ordered by time, then ID, so two machines' journals join by union. Older `proposal` and `decision` lines are read and change nothing. No line records what an agent read.
 """)
 
 doc("protocols", "Mirror and publish",
@@ -1232,6 +1960,11 @@ Some service requests are deliberately not available to an agent.
 | `exportFiles` | Export is for the command line and the workspace |
 | `account.get`, `account.connect`, `account.disconnect` | They require an ohm session, which an agent does not have |
 | `identity.findAccount`, `identity.whoAmI` | They are steps of signing in |
+
+## Other servers {{#other}}
+These tools work on posts in the vault service only.
+- **A vault folder** has no MCP tools yet. Tools that search, read, follow connections, capture and collect blocks through `.vault/index.sqlite` are planned. Until then the `ohm vault` command reads the folder, and makes no network calls. [Other folders and the index](/docs/roots-and-index)
+- **ohm-cortex** is a separate MCP server, over standard input and output or HTTP, with twenty `cortex_*` tools. An agent connected to both keeps its conclusions there, never as edges between blocks. [The cortex](/docs/cortex)
 """
 
 
@@ -1425,6 +2158,33 @@ def system_figure():
                   "The vault service only reads from the PDS.", 640, 400, parts)
 
 
+def graph_figure():
+    parts = [
+        group(0, 0, 640, 112, "CORTEX: INFERENCE"),
+        box(16, 38, 140, 58, "Skill", "How it works"),
+        box(172, 38, 140, 58, "Memory", "What it learned"),
+        box(328, 38, 140, 58, "Note", "What it saw"),
+        box(484, 38, 140, 58, "Tool", "What it can use"),
+        group(0, 200, 640, 212, "VAULT: EVIDENCE"),
+        box(16, 238, 140, 58, "Channel", "essays"),
+        box(250, 238, 140, 58, "Block", "On slowness"),
+        box(484, 238, 140, 58, "Block", "Bridge at dusk"),
+        box(250, 340, 140, 58, "Source", "A book"),
+        box(484, 340, 140, 58, "Entity", "The Thames"),
+        arrow(146, 96, 146, 236, "learned", (154, 170), dashed=True),
+        arrow(242, 96, 300, 236, "grounds", (276, 150), dashed=True),
+        arrow(398, 96, 500, 236, "observes", (420, 150), "end", dashed=True),
+        arrow(554, 96, 574, 236, "acts", (574, 170), dashed=True),
+        arrow(156, 267, 248, 267, "contains", (202, 258), "middle"),
+        arrow(390, 267, 482, 267, "links", (436, 258), "middle"),
+        arrow(320, 296, 320, 338, "from", (330, 322)),
+        arrow(554, 296, 554, 338, "mentions", (564, 322)),
+    ]
+    return figure("graph", "Inference in the cortex points down at evidence in the vault",
+                  "Solid lines are evidence: what your content shows, made by you. Dashed lines are inference: a cortex node pointing at what it was drawn from. "
+                  "No line joins two blocks except one you made.", 640, 412, parts)
+
+
 def sequence_figure(name, title, caption, actors, steps):
     width, top, row = 640, 0, 42
     column = width / len(actors)
@@ -1470,7 +2230,7 @@ CAPTIONS = {
     "mcp": "The MCP server runs on the member's machine and acts as the member. Dashed lines are responses.",
     "publish": "The vault service computes the plan and reads the repository. Every write comes from the member's device, signed in at the member's own PDS. Dashed lines are responses.",
 }
-FIGURES = {"system": system_figure, **{
+FIGURES = {"system": system_figure, "graph": graph_figure, **{
     name: (lambda name=name: sequence_figure(name, SEQUENCES[name][0], CAPTIONS[name], *SEQUENCES[name][1:])) for name in SEQUENCES
 }}
 
@@ -1591,7 +2351,7 @@ def first_sentence(text):
     return re.match(r".*?[.:](?= |$)", text).group(0).rstrip(":").rstrip(".") + "."
 
 
-INDEX_INTRO = ("Keep your drafts and published work in one workspace, and let your own agent work in it with you. "
+INDEX_INTRO = ("Keep what you think and make in one vault of blocks and channels, publish what you choose, and let your own agent work in it with you, with a cortex that records every change it makes. "
                "The human guides explain why the pieces are needed and how to reach a useful result. "
                "The agent guides explain the exact connections, contracts and recovery behind that experience.")
 
@@ -1679,6 +2439,12 @@ FIGURE_TEXT = {
 - Vault service → Personal Data Server: reads only.
 - Vault service → ohm sign-in: session check.
 - Personal Data Server → the member's website and other applications: public records.""",
+    "graph": """Diagram: inference in the cortex points down at evidence in the vault.
+- Cortex (inference): a skill, a memory, a note and a tool.
+- Vault (evidence): the channel "essays", the blocks "On slowness" and "Bridge at dusk", a source (a book) and an entity (the Thames).
+- Evidence, made by the person: the channel contains "On slowness"; "On slowness" links to "Bridge at dusk"; "On slowness" is from the book; "Bridge at dusk" mentions the Thames.
+- Inference, drawn by the cortex: the skill was learned on the channel; the memory grounds on "On slowness"; the note observes "Bridge at dusk"; the tool acts on "Bridge at dusk".
+- No line joins two blocks except one the person made.""",
 }
 
 
@@ -1748,8 +2514,9 @@ def md_page(slug, level=1):
 
 
 AGENT_ORDER = [s for s in ORDER if GROUP_OF[s] == "For agents"] + [s for s in ORDER if GROUP_OF[s] != "For agents"]
-LLMS_INTRO = (f"# ohm docs\n\n> ohm is an agentic social network that extends a person's own website: a vault of posts that are private, "
-              f"for friends or public, with public posts published to the person's own AT Protocol account; and MCP tools for the person's own coding agent.\n\n"
+LLMS_INTRO = (f"# ohm docs\n\n> ohm is an agentic social network that extends a person's own website: a vault of blocks in channels, kept as a folder, "
+              f"whose posts are private, for friends or public, with public posts published to the person's own AT Protocol account; MCP tools for the person's own coding agent; "
+              f"and ohm-cortex, a separate folder where that agent keeps what it knows, every change marked with who made it. Evidence comes from content; inference lives in the cortex.\n\n"
               f"{ALERT}\n\n")
 
 

@@ -1,6 +1,6 @@
 # Posts
 
-Everything you make in the vault is a post: an essay, a note to yourself, a photograph, a link.
+A post is a block you publish, or mean to: an essay, a note to yourself, a photograph, a link. In the workspace, everything you make is a post, private ones included, until you choose who it is for.
 
 <a id="parts"></a>
 
@@ -58,13 +58,13 @@ A link that points straight at a picture, a video, an audio file or a document i
 
 A link from one post to another is a connection. Use it for a reply, a follow-up, or the next part of a series. A post can connect to as many as 32 others.
 
-A public post that connects to a private one does not show the private post's title, or that it exists, to anyone who cannot read it.
+A public post that connects to a private one does not show the private post's title, or that it exists, to anyone who cannot read it. [Connections](https://docs.ohmmmm.com/connections.md#connect)
 
 <a id="address"></a>
 
 ## A post's address
 
-A post's address is built from where it is filed and its slug.
+A post's address is built from where it is filed and its slug. Where it is filed, its label and sublabel, is its home channel.
 
 ```
 /posts/writings/collisions/trap-of-independency

@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else.">
+    <meta name="description" content="A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else; a vault folder holds blocks, channels, sources and entities, and a cortex keeps its journal.">
     <link rel="canonical" href="https://docs.ohmmmm.com/data-model">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Data model · ohm docs">
-    <meta property="og:description" content="A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else.">
+    <meta property="og:description" content="A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else; a vault folder holds blocks, channels, sources and entities, and a cortex keeps its journal.">
     <meta property="og:url" content="https://docs.ohmmmm.com/data-model">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -90,7 +102,7 @@
         <header>
           <p class="group">For agents</p>
           <h1 id="title">Data model</h1>
-          <p class="introduction">A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else.</p>
+          <p class="introduction">A post maps to a vault row, a public repository record and a Markdown file. The service stores posts and account links, and nothing else; a vault folder holds blocks, channels, sources and entities, and a cortex keeps its journal.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
@@ -219,6 +231,87 @@
           <p>The database enforces unique keys and conditional updates.</p>
         </section>
 
+        <section aria-labelledby="nodes">
+          <h2 id="nodes">Vault folder nodes</h2>
+          <p>A vault folder is read as four kinds of node by <a href="https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs">vault/node.mjs</a>, which is pure: callers pass <code>{ path, text }</code> and write what they get back. The lexicons in <code>lexicons/com/ohmmmm/vault/</code> (<code>block</code>, <code>channel</code>, <code>entity</code>, <code>source</code>, all keyed by TID) describe file contents; none is written to a PDS.</p>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Node</th><th>Path</th><th>Fields</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Block</th><td><code>&lt;folders&gt;/&lt;name&gt;.md</code></td><td><code>kind</code>, <code>title</code>, <code>slug</code>, <code>channels</code>, <code>origin</code>, <code>from</code>, <code>excerpt</code>, <code>tags</code>, <code>by</code>, <code>status</code>, <code>intent</code>, <code>created</code>, <code>updated</code>; the body</td></tr>
+                <tr><th scope="row">Channel</th><td><code>&lt;folders&gt;/_channel.md</code>, or any folder holding a block</td><td><code>title</code>, <code>kind</code>, <code>order</code>, <code>site</code>; the body is the description</td></tr>
+                <tr><th scope="row">Entity</th><td><code>_entities/&lt;kind&gt;/&lt;name&gt;.md</code></td><td><code>name</code>, <code>aliases</code>, <code>uri</code>; <code>kind</code> from the folder</td></tr>
+                <tr><th scope="row">Source</th><td><code>_sources/&lt;id&gt;/source.json</code></td><td><code>kind</code>, <code>uri</code>, <code>platform</code>, <code>platformId</code>, <code>title</code>, <code>author</code>, <code>publishedAt</code>, <code>capturedAt</code>, <code>retain</code>, <code>meta</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The values each kind of field allows:</p>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Values</th><th>Allowed</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Block <code>kind</code></th><td><code>text</code>, <code>excerpt</code>, <code>link</code>, <code>media</code>, <code>file</code>, <code>code</code>, <code>post</code></td></tr>
+                <tr><th scope="row">Channel <code>kind</code></th><td><code>collection</code>, <code>concept</code>, <code>inbox</code>, <code>import</code></td></tr>
+                <tr><th scope="row">Entity kind</th><td><code>person</code>, <code>work</code>, <code>place</code>, <code>org</code></td></tr>
+                <tr><th scope="row">Source <code>kind</code></th><td><code>page</code>, <code>post</code>, <code>file</code>, <code>image</code>, <code>video</code>, <code>audio</code>, <code>thread</code>, <code>book</code>, <code>other</code></td></tr>
+                <tr><th scope="row"><code>retain</code></th><td><code>reference</code>, <code>text</code>, <code>full</code></td></tr>
+                <tr><th scope="row"><code>status</code></th><td><code>proposed</code>, <code>kept</code>, <code>archived</code></td></tr>
+                <tr><th scope="row"><code>intent</code></th><td><code>private</code>, <code>friends</code>, <code>public</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>A block's folder is its home channel. A file with <code>kind: post</code>, or with no <code>kind</code> and a <code>visibility</code>, is read and written by the unchanged post code, so it keeps its version and syncs as before; <code>channels</code> is stored as an ordinary post property. Unknown properties are kept. IDs are 13-character TIDs, given once; a node without one is keyed by its path until it has one. <code>readNode(nodeFile(n))</code> gives back <code>n</code> for any node that was read, and problems come back as sentences rather than errors.</p>
+        </section>
+
+        <section aria-labelledby="edges">
+          <h2 id="edges">Evidence edges</h2>
+          <p><code>evidence(vault)</code> returns <code>{ kind, from, to, at }</code> for each edge, from content alone.</p>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Kind</th><th>From</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row"><code>contains</code></th><td>A block's folder or <code>channels</code> list; a folder inside a folder</td></tr>
+                <tr><th scope="row"><code>links</code></th><td>A double-bracket link, a web or <code>at://</code> link, a post's <code>connect</code></td></tr>
+                <tr><th scope="row"><code>embeds</code></th><td><code>![[file]]</code> or <code>![[block]]</code></td></tr>
+                <tr><th scope="row"><code>mentions</code></th><td><code>@handle</code>, matched to an entity's slug, name or aliases</td></tr>
+                <tr><th scope="row"><code>from</code>, <code>quotes</code></th><td>A block's <code>from</code> and <code>excerpt</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><code>at</code> is a body line number, or the property the edge came from. A target is a node key, <code>url:</code>, <code>at:</code>, <code>file:&lt;name&gt;</code>, or <code>missing:&lt;as written&gt;</code>. Fenced code, inline code and e-mail addresses are skipped. Inference has no edge kind here: it is a cortex node that cites a block as <code>{node, version}</code>.</p>
+        </section>
+
+        <section aria-labelledby="index">
+          <h2 id="index">The index</h2>
+          <p><code>.vault/index.sqlite</code>, written only by <code>scan</code> in <a href="https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs">vault/indexer.mjs</a>, holds the tables <code>meta</code>, <code>files</code>, <code>nodes</code>, <code>edges</code>, <code>terms</code> and <code>problems</code>. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a <code>reference</code> root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. <a href="https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md">The agent reference</a> has the full contract.</p>
+        </section>
+
+        <section aria-labelledby="journal">
+          <h2 id="journal">The cortex journal</h2>
+          <p>ohm-cortex keeps one append-only file, <code>.cortex/journal.jsonl</code>. Every line has <code>seq</code>, a unique <code>id</code>, <code>at</code>, <code>actor</code> (<code>{kind: "human" or "agent", name}</code>), sometimes <code>session</code>, and a <code>type</code>.</p>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th><code>type</code></th><th>Holds</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row"><code>change</code></th><td><code>node</code>, <code>op</code> (create, update, remove, restore), <code>before</code> and <code>after</code> versions, <code>reason</code>, <code>evidence</code>; <code>proposedBy</code> for a confirmed identity fact or an approved skill</td></tr>
+                <tr><th scope="row"><code>note</code></th><td>One observation, with <code>evidence</code>. Changes no file</td></tr>
+                <tr><th scope="row"><code>settled</code></th><td>What became of a note</td></tr>
+                <tr><th scope="row"><code>session</code></th><td><code>summary</code>, <code>outcome</code>, <code>made</code> (change IDs), <code>project</code>, <code>deadEnds</code> (<code>tried</code>, <code>why</code>, <code>check</code>), <code>resolved</code></td></tr>
+                <tr><th scope="row"><code>save</code></th><td>A name and a note. Changes nothing</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Nodes are named <code>identity</code>, <code>playbook</code>, <code>memory/&lt;name&gt;</code>, <code>working/&lt;agent&gt;</code>, <code>skill/&lt;name&gt;</code>, <code>tool/&lt;name&gt;</code> and <code>channel/&lt;path&gt;</code>. Earlier versions are kept in <code>.cortex/history/</code> by version hash. Evidence pointers are <code>{node, version}</code> or <code>{session}</code>. Lines are ordered by time, then ID, so two machines' journals join by union. Older <code>proposal</code> and <code>decision</code> lines are read and change nothing. No line records what an agent read.</p>
+        </section>
+
         <nav class="page-pager" aria-label="Docs pages">
           <a rel="prev" href="/identity"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Identity and access</a>
           <a rel="next" href="/protocols">Mirror and publish<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
@@ -235,6 +328,10 @@
         <li><a href="#attachments">Attachments</a></li>
         <li><a href="#mapping">From vault to record</a></li>
         <li><a href="#storage">Storage</a></li>
+        <li><a href="#nodes">Vault folder nodes</a></li>
+        <li><a href="#edges">Evidence edges</a></li>
+        <li><a href="#index">The index</a></li>
+        <li><a href="#journal">The cortex journal</a></li>
       </ul>
     </nav>
   </body>

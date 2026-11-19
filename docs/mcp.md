@@ -146,6 +146,15 @@ Some service requests are deliberately not available to an agent.
 | `account.get`, `account.connect`, `account.disconnect` | They require an ohm session, which an agent does not have |
 | `identity.findAccount`, `identity.whoAmI` | They are steps of signing in |
 
+<a id="other"></a>
+
+## Other servers
+
+These tools work on posts in the vault service only.
+
+- **A vault folder** has no MCP tools yet. Tools that search, read, follow connections, capture and collect blocks through `.vault/index.sqlite` are planned. Until then the `ohm vault` command reads the folder, and makes no network calls. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md)
+- **ohm-cortex** is a separate MCP server, over standard input and output or HTTP, with twenty `cortex_*` tools. An agent connected to both keeps its conclusions there, never as edges between blocks. [The cortex](https://docs.ohmmmm.com/cortex.md)
+
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.
 All pages: https://docs.ohmmmm.com/llms.txt

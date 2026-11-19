@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -252,6 +264,15 @@
           </div>
         </section>
 
+        <section aria-labelledby="other">
+          <h2 id="other">Other servers</h2>
+          <p>These tools work on posts in the vault service only.</p>
+          <ul>
+            <li><strong>A vault folder</strong> has no MCP tools yet. Tools that search, read, follow connections, capture and collect blocks through <code>.vault/index.sqlite</code> are planned. Until then the <code>ohm vault</code> command reads the folder, and makes no network calls. <a href="/roots-and-index">Other folders and the index</a></li>
+            <li><strong>ohm-cortex</strong> is a separate MCP server, over standard input and output or HTTP, with twenty <code>cortex_*</code> tools. An agent connected to both keeps its conclusions there, never as edges between blocks. <a href="/cortex">The cortex</a></li>
+          </ul>
+        </section>
+
         <nav class="page-pager" aria-label="Docs pages">
           <a rel="prev" href="/protocols"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Mirror and publish</a>
           <a rel="next" href="/api">Service API<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
@@ -271,6 +292,7 @@
         <li><a href="#confirmation">Confirmation</a></li>
         <li><a href="#safety">Safety model</a></li>
         <li><a href="#excluded">Requests without a tool</a></li>
+        <li><a href="#other">Other servers</a></li>
       </ul>
     </nav>
   </body>

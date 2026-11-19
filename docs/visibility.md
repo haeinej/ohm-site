@@ -45,6 +45,14 @@ Private means private from other people. Two things still read a private post.
 
 [Where your things live](https://docs.ohmmmm.com/where-things-live.md)
 
+<a id="blocks"></a>
+
+## Blocks that are not posts
+
+Only a post has a visibility. A block of any other kind, in a vault folder on your computer, is not sent anywhere: indexing it never reaches ohm or publishes it. Its `intent` property only records who you mean it for, if you publish it one day. [Blocks and channels](https://docs.ohmmmm.com/blocks-and-channels.md#properties)
+
+Your cortex is private in the same way: it is a folder of your own, and nothing in it is published.
+
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.
 All pages: https://docs.ohmmmm.com/llms.txt

@@ -10,7 +10,14 @@ ohm does not run a background agent for you. Your agent is the one you already u
 
 The tools work in the same vault you see in the browser. A post your agent saves is there when you open it, even though the agent does not keep running.
 
-Agent memory is not part of ohm's vault; it is a separate project, ohm-cortex.
+What your agent remembers about you is not kept in the vault. It is kept in a cortex, separate software with its own MCP server, which you connect beside the vault's. [The cortex](https://docs.ohmmmm.com/cortex.md)
+
+| Server | What it works in | Its tools |
+| --- | --- | --- |
+| `ohm-vault` | Your posts, in the vault service | Ten `vault_*` tools. [MCP reference](https://docs.ohmmmm.com/mcp.md#tools) |
+| ohm-cortex | Your cortex folder | Twenty `cortex_*` tools. [The cortex](https://docs.ohmmmm.com/cortex.md) |
+
+Agent tools for a vault folder on your computer, with blocks of every kind, are planned and not built. Until then an agent can run the `vault search` and `vault inspect` commands in that folder like any other command. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md#index)
 
 <a id="need"></a>
 
@@ -62,6 +69,27 @@ Whatever your agent reads is also seen by the company that runs the model it use
 
 The rule behind the table: reading is free, and anything that changes what other people see, or removes something, is shown to you first. The first answer says exactly what would happen. Only your yes to that exact answer does it.
 
+The vault service does not record which saves your agent made, and keeps no earlier versions of a post. [History](https://docs.ohmmmm.com/history.md#where)
+
+<a id="cortex"></a>
+
+## In your cortex, it edits and you revert
+
+Your cortex works the other way round, because nothing in it is ever shown to anyone else.
+
+- **It edits directly.** It writes memories, its own working memory, and what each channel of your vault means, without asking first.
+- **Every change is marked with its name,** its reason, and the versions before and after. You read them with `cortex history`, and undo any of them with `cortex revert` or `cortex restore`.
+- **What needs your trust waits.** An identity fact is only proposed until you confirm it; a skill waits for your approval; a tool is only asked for.
+- **It never connects two blocks.** If it sees that two belong together, it writes a note or a memory that cites both, and may suggest the connection to you. [Connections](https://docs.ohmmmm.com/connections.md#not)
+
+[History](https://docs.ohmmmm.com/history.md)
+
+<a id="session"></a>
+
+## Finishing a task
+
+When your agent finishes a task in your cortex, or gives it up, it records a session with `cortex_session`: one line of what it did, the changes it made, and its dead ends, each with why it was dropped and how to check whether it still holds. The next agent that starts in the same folder is shown those dead ends, so it does not try them again. [Sessions and dead ends](https://docs.ohmmmm.com/history.md#sessions)
+
 <a id="tools"></a>
 
 ## The tools
@@ -94,6 +122,8 @@ These controls apply to ohm's tools. They do not control other tools your coding
 - "Bring in my posts." Then: "File the ones under other."
 - "Make that one public." Then: "Publish."
 - "What is not published yet?"
+- "Remember that I prefer short titles." With a cortex connected.
+- "What did you change in my cortex today?"
 
 <a id="together"></a>
 

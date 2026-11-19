@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="Keep your drafts and published work in one workspace, and let your own agent work in it with you. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.">
+    <meta name="description" content="Keep what you think and make in one vault of blocks and channels, publish what you choose, and let your own agent work in it with you, with a cortex that records every change it makes. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.">
     <link rel="canonical" href="https://docs.ohmmmm.com/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="ohm docs">
-    <meta property="og:description" content="Keep your drafts and published work in one workspace, and let your own agent work in it with you. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.">
+    <meta property="og:description" content="Keep what you think and make in one vault of blocks and channels, publish what you choose, and let your own agent work in it with you, with a cortex that records every change it makes. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.">
     <meta property="og:url" content="https://docs.ohmmmm.com/">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -89,7 +101,7 @@
       <article aria-labelledby="title">
         <header>
           <h1 id="title">Docs</h1>
-          <p class="introduction">Keep your drafts and published work in one workspace, and let your own agent work in it with you. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.</p>
+          <p class="introduction">Keep what you think and make in one vault of blocks and channels, publish what you choose, and let your own agent work in it with you, with a cortex that records every change it makes. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.</p>
           <p class="introduction">For people: <a href="/quick-start">start with why and your first private post</a>. For agents: <a href="/agent-guide">read the working contract</a>, or use <a href="/llms.txt">llms.txt</a> for the Markdown references.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
@@ -97,17 +109,36 @@
         <section aria-labelledby="get-started">
           <h2 id="get-started">Get started</h2>
           <ul class="pages">
-            <li><a href="/quick-start">Quick start</a>. Keep your drafts and published work in one place, while choosing what becomes public.</li>
+            <li><a href="/quick-start">Quick start</a>. Keep what you think and make in one vault, while choosing what becomes public.</li>
             <li><a href="/sign-in">Sign in</a>. You sign in to ohm with an ohm account, made with Google, Microsoft or Bluesky.</li>
           </ul>
         </section>
 
-        <section aria-labelledby="workspace">
-          <h2 id="workspace">Workspace</h2>
+        <section aria-labelledby="your-vault">
+          <h2 id="your-vault">Your vault</h2>
           <ul class="pages">
-            <li><a href="/workspace">The workspace</a>. Your posts sit in a tree of labels beside the rail, and the post you open fills the rest.</li>
-            <li><a href="/posts">Posts</a>. Everything you make in the vault is a post.</li>
-            <li><a href="/labels">Labels</a>. Labels are the sections of your work, in your own words.</li>
+            <li><a href="/workspace">The workspace</a>. The workspace, at app.ohmmmm.com/vault, is where you write and file your posts in a browser.</li>
+            <li><a href="/blocks-and-channels">Blocks and channels</a>. A block is one unit of thought, and a channel is an ordered collection of blocks.</li>
+            <li><a href="/posts">Posts</a>. A post is a block you publish, or mean to.</li>
+            <li><a href="/labels">Labels</a>. Labels are the sections of your site, in your own words.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="connections-and-the-graph">
+          <h2 id="connections-and-the-graph">Connections and the graph</h2>
+          <ul class="pages">
+            <li><a href="/connections">Connections</a>. A connection says that one thing in your vault relates to another.</li>
+            <li><a href="/graph">The graph</a>. Your vault and your cortex form one graph around you.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="your-folder">
+          <h2 id="your-folder">Your folder</h2>
+          <ul class="pages">
+            <li><a href="/sync">Sync with a folder</a>. The command-line sync brings your posts and a local folder of Markdown files into line.</li>
+            <li><a href="/files">Your vault as files</a>. In a vault folder, every block, channel and entity is a Markdown file, and a source is a small folder of its own.</li>
+            <li><a href="/roots-and-index">Other folders and the index</a>. Your vault can read folders you already keep, such as Google Drive, an Obsidian vault or a folder of code, where they are.</li>
+            <li><a href="/export">Export and leaving</a>. You can export your vault posts as Markdown files, to keep or to take elsewhere.</li>
           </ul>
         </section>
 
@@ -120,12 +151,11 @@
           </ul>
         </section>
 
-        <section aria-labelledby="folder">
-          <h2 id="folder">Folder</h2>
+        <section aria-labelledby="cortex-and-history">
+          <h2 id="cortex-and-history">Cortex and history</h2>
           <ul class="pages">
-            <li><a href="/sync">Sync with a folder</a>. The command-line sync brings your posts and a local folder of Markdown files into line.</li>
-            <li><a href="/files">Posts as files</a>. In your folder, each post is one Markdown file.</li>
-            <li><a href="/export">Export and leaving</a>. You can export your vault posts as Markdown files, to keep or to take elsewhere.</li>
+            <li><a href="/cortex">The cortex</a>. ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read.</li>
+            <li><a href="/history">History</a>. Every change to your cortex is one line in one journal, marked with who made it.</li>
           </ul>
         </section>
 
@@ -141,7 +171,7 @@
           <h2 id="architecture">For agents</h2>
           <ul class="pages">
             <li><a href="/agent-guide">Agent working guide</a>. The entry contract for an agent working in ohm.</li>
-            <li><a href="/architecture">System overview</a>. ohm keeps a vault of posts.</li>
+            <li><a href="/architecture">System overview</a>. ohm has three parts.</li>
             <li><a href="/identity">Identity and access</a>. A member has two identities.</li>
             <li><a href="/data-model">Data model</a>. A post maps to a vault row, a public repository record and a Markdown file.</li>
             <li><a href="/protocols">Mirror and publish</a>. Two exchanges connect a vault to its member's repository.</li>
@@ -154,7 +184,7 @@
           <h2 id="reference">Reference</h2>
           <ul class="pages">
             <li><a href="/where-things-live">Where your things live</a>. Public posts live in your AT Protocol repository.</li>
-            <li><a href="/limits">Status and limits</a>. What is built, what has been tested and what remains planned.</li>
+            <li><a href="/limits">Status and limits</a>. What is built, what has been tested and what remains planned, for the vault service, the vault folder, the cortex and the workspace's design.</li>
           </ul>
         </section>
 
@@ -168,9 +198,11 @@
       <p id="toc-title">On this page</p>
       <ul>
         <li><a href="#get-started">Get started</a></li>
-        <li><a href="#workspace">Workspace</a></li>
+        <li><a href="#your-vault">Your vault</a></li>
+        <li><a href="#connections-and-the-graph">Connections and the graph</a></li>
+        <li><a href="#your-folder">Your folder</a></li>
         <li><a href="#sharing">Sharing</a></li>
-        <li><a href="#folder">Folder</a></li>
+        <li><a href="#cortex-and-history">Cortex and history</a></li>
         <li><a href="#agent">Agent</a></li>
         <li><a href="#architecture">For agents</a></li>
         <li><a href="#reference">Reference</a></li>

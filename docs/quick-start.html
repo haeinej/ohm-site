@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.">
+    <meta name="description" content="Keep what you think and make in one vault, while choosing what becomes public. Start by saving one private post in the workspace, or by indexing a folder you already keep; add publishing and an agent when you need them.">
     <link rel="canonical" href="https://docs.ohmmmm.com/quick-start">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Quick start · ohm docs">
-    <meta property="og:description" content="Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.">
+    <meta property="og:description" content="Keep what you think and make in one vault, while choosing what becomes public. Start by saving one private post in the workspace, or by indexing a folder you already keep; add publishing and an agent when you need them.">
     <meta property="og:url" content="https://docs.ohmmmm.com/quick-start">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -41,11 +41,24 @@
         <li><a href="/quick-start" aria-current="page">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -90,13 +102,21 @@
         <header>
           <p class="group">Get started</p>
           <h1 id="title">Quick start</h1>
-          <p class="introduction">Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.</p>
+          <p class="introduction">Keep what you think and make in one vault, while choosing what becomes public. Start by saving one private post in the workspace, or by indexing a folder you already keep; add publishing and an agent when you need them.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
         <section aria-labelledby="why">
           <h2 id="why">Why the pieces are separate</h2>
           <p>An idea can become a draft, then a public post. You need somewhere to work on it before it is ready, and a way to publish it without making every draft public. Your vault is that working space. Your own account on the open network holds what you publish.</p>
+          <p>A few words are used everywhere in these docs.</p>
+          <ul>
+            <li><strong>A block</strong> is one unit of thought: a note, a passage you kept, a photograph, a link, a query.</li>
+            <li><strong>A channel</strong> is an ordered collection of blocks. A block can be in many channels.</li>
+            <li><strong>A post</strong> is a block you publish. Its first channel, its home, gives it its address on your site; in the workspace that channel is called its label.</li>
+          </ul>
+          <p><a href="/blocks-and-channels">Blocks and channels</a> explains them with examples.</p>
+          <p>Today the workspace in your browser holds posts. Blocks of other kinds, and channels of your own, live in a vault folder on your computer. You can start from either.</p>
         </section>
 
         <section aria-labelledby="need">
@@ -113,6 +133,7 @@
                 <tr><th scope="row">A website</th><td>Gives public records a page with your own design</td><td>Optional for saving private work; connecting its content is separate work</td></tr>
                 <tr><th scope="row">A coding agent</th><td>Reads and writes your posts with you</td><td>Optional; the browser editor works without one</td></tr>
                 <tr><th scope="row">A local folder</th><td>Gives you a separate copy of your posts</td><td>Optional; export or command-line sync when you want one</td></tr>
+                <tr><th scope="row">A vault folder</th><td>Holds blocks of every kind, channels, sources and entities as Markdown files, and can read Google Drive or Obsidian folders where they are</td><td>Optional; needs Node 22 or newer, and no account</td></tr>
               </tbody>
             </table>
           </div>
@@ -140,7 +161,7 @@
           <p>The workspace has three parts.</p>
           <ul>
             <li><strong>A narrow rail on the left,</strong> with you at the foot of it.</li>
-            <li><strong>Your repository beside it:</strong> your labels as folders, with your posts inside them. Labels are the sections of your work, in your own words: Writings, Photographs, Things I make.</li>
+            <li><strong>Your repository beside it:</strong> your labels as folders, with your posts inside them. Labels are the sections of your work, in your own words: Writings, Photographs, Things I make. A label is a post's home channel, the one its address on your site comes from.</li>
             <li><strong>The post you have open,</strong> filling the rest.</li>
           </ul>
           <p><a href="/workspace">More about the workspace</a></p>
@@ -181,6 +202,17 @@
           <h2 id="agent">8. Bring in your agent</h2>
           <p>Connect the coding agent you already use, and it can read and write in your workspace. It reads your private posts too, which is how it knows what you are working on.</p>
           <p>Anything that changes what other people see is shown to you first, publishing included. <a href="/agent">More about your agent</a></p>
+          <p>If you want your agent to remember what it learns about you between sessions, give it a cortex: a separate folder where every change it makes is marked with its name, and you undo what you do not want. <a href="/cortex">The cortex</a></p>
+        </section>
+
+        <section aria-labelledby="folder-start">
+          <h2 id="folder-start">Or start from a folder you already keep</h2>
+          <p>You do not need an account to begin. A vault folder is a folder of Markdown files on your computer, and the vault can also read folders you already keep, such as Google Drive or an Obsidian vault, without copying them or writing to them.</p>
+          <p>From inside the folder you want as your vault, run:</p>
+          <pre>npx github:haeinej/ohm-vault vault init
+npx github:haeinej/ohm-vault vault index
+npx github:haeinej/ohm-vault vault search rain</pre>
+          <p>The first makes <code>.vault/config.json</code>, where you can name other folders to read. The second reads everything and keeps an index beside it, in <code>.vault/index.sqlite</code>. The third finds blocks by their words. Nothing here signs in, reaches ohm, or publishes anything. <a href="/roots-and-index">Other folders and the index</a></p>
         </section>
 
         <section aria-labelledby="next">
@@ -213,6 +245,7 @@
         <li><a href="#publish">6. Publish when you want to share</a></li>
         <li><a href="#folder">7. Keep a copy of your posts</a></li>
         <li><a href="#agent">8. Bring in your agent</a></li>
+        <li><a href="#folder-start">Or start from a folder you already keep</a></li>
         <li><a href="#next">Things to ask your agent first</a></li>
       </ul>
     </nav>

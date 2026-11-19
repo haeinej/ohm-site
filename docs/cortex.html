@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fafaf9">
+    <meta name="description" content="ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.">
+    <link rel="canonical" href="https://docs.ohmmmm.com/cortex">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ohm">
+    <meta property="og:title" content="The cortex · ohm docs">
+    <meta property="og:description" content="ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.">
+    <meta property="og:url" content="https://docs.ohmmmm.com/cortex">
+    <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="ohm — An agentic social network">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="preload" href="/assets/fonts/coconat-regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="alternate" type="text/markdown" href="/cortex.md">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/reader.js" defer></script>
+    <title>The cortex · ohm docs</title>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+
+    <!-- Header-free docs shell. The sidebar lists every page; a control in normal
+         document flow opens it on narrow screens. Icons are Lucide. -->
+    <input class="menu-toggle" type="checkbox" id="menu" aria-label="Show docs navigation" aria-controls="docs-navigation">
+    <label class="menu-button" for="menu"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></svg><span>Menu</span></label>
+
+    <nav class="site-sidebar" id="docs-navigation" aria-label="Docs">
+      <ul>
+        <li><a href="/">Docs</a></li>
+      </ul>
+      <p class="sidebar-group">Get started</p>
+      <ul>
+        <li><a href="/quick-start">Quick start</a></li>
+        <li><a href="/sign-in">Sign in</a></li>
+      </ul>
+      <p class="sidebar-group">Your vault</p>
+      <ul>
+        <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
+        <li><a href="/posts">Posts</a></li>
+        <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
+      </ul>
+      <p class="sidebar-group">Sharing</p>
+      <ul>
+        <li><a href="/visibility">Who sees a post</a></li>
+        <li><a href="/publish">Publish</a></li>
+        <li><a href="/friends">Friends</a></li>
+      </ul>
+      <p class="sidebar-group">Cortex and history</p>
+      <ul>
+        <li><a href="/cortex" aria-current="page">The cortex</a></li>
+        <li><a href="/history">History</a></li>
+      </ul>
+      <p class="sidebar-group">Agent</p>
+      <ul>
+        <li><a href="/agent">Connect your agent</a></li>
+        <li><a href="/finding-people">Finding people</a></li>
+      </ul>
+      <p class="sidebar-group">For agents</p>
+      <ul>
+        <li><a href="/agent-guide">Start here as an agent</a></li>
+        <li><a href="/architecture">Overview</a></li>
+        <li><a href="/identity">Identity and access</a></li>
+        <li><a href="/data-model">Data model</a></li>
+        <li><a href="/protocols">Mirror and publish</a></li>
+        <li><a href="/mcp">Agent integration</a></li>
+        <li><a href="/api">Service API</a></li>
+      </ul>
+      <p class="sidebar-group">Reference</p>
+      <ul>
+        <li><a href="/where-things-live">Where your things live</a></li>
+        <li><a href="/limits">Status and limits</a></li>
+      </ul>
+      <p class="sidebar-group">Source</p>
+      <ul>
+        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
+      </ul>
+    </nav>
+
+    <main id="content">
+      <article aria-labelledby="title">
+        <header>
+          <p class="group">Cortex and history</p>
+          <h1 id="title">The cortex</h1>
+          <p class="introduction">ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.</p>
+          <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
+        </header>
+
+        <section aria-labelledby="why">
+          <h2 id="why">Why a cortex</h2>
+          <p>A coding agent forgets you between sessions. Each new session learns again how you name things, what you tried last week, and what you asked it never to do. Where an agent does remember, the memory is usually kept somewhere you cannot read or correct.</p>
+          <p>A cortex is that memory as a folder of Markdown files you can open. Your agent writes to it as it works, and every change it makes is recorded with its name, so you can see what it did and undo what you do not want.</p>
+          <p>It holds no content of yours. Your writing stays in your vault; the cortex points at blocks by their ID and version, and never copies them.</p>
+        </section>
+
+        <section aria-labelledby="need">
+          <h2 id="need">What you need, and why</h2>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>You need</th><th>Why</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">A checkout of <a href="https://github.com/haeinej/ohm-cortex">ohm-cortex</a> and Node</th><td>It runs on your own computer. Its tests run on Node 20 and 22</td></tr>
+                <tr><th scope="row">A folder for the cortex</th><td>The cortex is the folder. <code>~/cortex</code> unless you name another</td></tr>
+                <tr><th scope="row">A coding agent that speaks MCP</th><td>It reads and writes the cortex through twenty <code>cortex_*</code> tools. Claude Code and Codex can also run its hooks</td></tr>
+                <tr><th scope="row">A vault folder</th><td>Optional. It lets memories point at your blocks, and tells the agent what each channel means</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Cortex does not need ohm, an ohm account or a vault. ohm does not store or sync it.</p>
+        </section>
+
+        <section aria-labelledby="folder">
+          <h2 id="folder">The folder</h2>
+          <pre>cortex/
+├── agents/         AGENTS.md, the rules for keeping this cortex, and secrets/
+├── identity.md     whose cortex it is, read in full every session
+├── vault.md        how to read your vault: each channel, what it means, how blocks there are filed
+├── memory/         one thing learned per file, and an index of them
+├── skills/         &lt;name&gt;/SKILL.md, in the form coding agents already read
+├── tools/          what the agent can use, each on or off
+└── .cortex/        the journal, earlier versions, working memory</pre>
+          <p>For you it is three folders: what your agent has learned, what it knows how to do, and what it is able to use. <code>agents/</code> says how the cortex is kept, and <code>identity.md</code> says whose it is.</p>
+        </section>
+
+        <section aria-labelledby="layers">
+          <h2 id="layers">Who may change what</h2>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Part</th><th>Where</th><th>Changed by</th><th>Read</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Rules</th><td><code>agents/AGENTS.md</code></td><td>Cortex itself, and your own additions</td><td>Every session</td></tr>
+                <tr><th scope="row">Secrets</th><td><code>agents/secrets/</code></td><td>You only</td><td>Never by the agent. Never committed</td></tr>
+                <tr><th scope="row">Identity</th><td><code>identity.md</code></td><td>You confirm; an agent only proposes, with evidence</td><td>Every session, in full</td></tr>
+                <tr><th scope="row">Memory</th><td><code>memory/</code></td><td>An agent, at once, as its own change. You revert or edit any time</td><td>The index every session; a memory when it fits</td></tr>
+                <tr><th scope="row">Working memory</th><td><code>.cortex/working/</code></td><td>Each agent its own, at once</td><td>Every session</td></tr>
+                <tr><th scope="row">What a channel means</th><td><code>vault.md</code></td><td>An agent or you, at once. What you wrote by hand stands</td><td>Every session</td></tr>
+                <tr><th scope="row">Skills</th><td><code>skills/</code></td><td>An agent proposes; you approve</td><td>Descriptions every session; a skill when it fits</td></tr>
+                <tr><th scope="row">Tools</th><td><code>tools/</code></td><td>You only. An agent may ask for one</td><td>The list every session</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="first-use">
+          <h2 id="first-use">Your first use</h2>
+          <p>From your checkout of ohm-cortex, start a cortex:</p>
+          <pre>node bin/cortex.mjs init ~/cortex</pre>
+          <p>Then give your agent this as an MCP server's command:</p>
+          <pre>node /path/to/cortex/bin/cortex.mjs mcp ~/cortex</pre>
+          <p>When it connects, the agent is told to call <code>cortex_start</code>, which hands it the rules, your identity, its memories and what is waiting for you. Ask it something about yourself, then ask it to remember one thing. Run <code>cortex history</code> and you see the memory it wrote, under its name.</p>
+          <p><code>cortex status</code> lists everything waiting for you or broken, and how to clear each. For a client that connects to a server rather than starting one, <code>cortex serve</code> offers the same tools over HTTP on your own machine, with a token from <code>cortex token</code>.</p>
+        </section>
+
+        <section aria-labelledby="edits">
+          <h2 id="edits">Agents edit; you revert</h2>
+          <p>An agent does not ask before it writes a memory, its own working memory, or what a channel means. It writes, and the write is recorded as a change under its name, with its reason. You read what each agent did in the history, and revert or restore what you do not want. Nothing is lost: what a change replaced is kept. <a href="/history">History</a></p>
+        </section>
+
+        <section aria-labelledby="waits">
+          <h2 id="waits">What waits for you</h2>
+          <p>Some things need your trust, so an agent can only propose them.</p>
+          <ul>
+            <li><strong>An identity fact</strong> is proposed with its evidence, and set only when you run <code>cortex confirm</code>. <code>cortex reject</code> turns it down, and that value is not proposed again.</li>
+            <li><strong>A skill</strong> an agent writes waits until you run <code>cortex approve</code>, and is not used before.</li>
+            <li><strong>A tool</strong> is only asked for. You build it, add it to <code>tools/</code> and switch it on.</li>
+          </ul>
+          <p>Confirming and approving are done from the command line only, because an MCP client cannot prove that it is you. An agent never writes the rules, your identity, a skill or a tool, not even by restoring an earlier version, and never another agent's working memory.</p>
+        </section>
+
+        <section aria-labelledby="hooks">
+          <h2 id="hooks">Hooks for Claude Code and Codex</h2>
+          <p>With the hooks installed, your agent does not have to remember to start from the cortex. <code>cortex install-hooks claude-code</code> or <code>cortex install-hooks codex</code> prints what to add to that client's settings, and writes nothing.</p>
+          <div class="table">
+            <table>
+              <thead>
+                <tr><th>Moment</th><th>What the hook does</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Session start</th><td>Hands the agent the rules, your identity, memories marked always, working memory, and the open dead ends recorded near its folder</td></tr>
+                <tr><th scope="row">A prompt</th><td>Nothing yet</td></tr>
+                <tr><th scope="row">The end of a turn</th><td>Asks the agent to distill its working memory, once for each change not distilled</td></tr>
+                <tr><th scope="row">Session end</th><td>Records nothing</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>A hook never fails a session: on any error it writes nothing and lets the session go on. The hooks are tested with synthetic inputs and have not yet been tried in a real Claude Code or Codex session.</p>
+        </section>
+
+        <section aria-labelledby="sessions">
+          <h2 id="sessions">Sessions and dead ends</h2>
+          <p>Nothing is captured on an agent's behalf. When it finishes a task, or gives up, it writes a session with <code>cortex_session</code>, like a commit message: one line of what it did, the changes it made, and its dead ends.</p>
+          <p>A dead end is what it tried and dropped, why, and a command that would show whether it still holds. The next session that starts in that folder is shown the open dead ends, so it does not try the same thing again. A later session marks a dead end resolved when it no longer holds. Cortex never runs the command itself. <a href="/history#sessions">History</a></p>
+        </section>
+
+        <section aria-labelledby="evidence">
+          <h2 id="evidence">Evidence</h2>
+          <p>A note or a memory says what it was drawn from, as a list of pointers: a node at the version read, such as a block in your vault or another memory, or a session.</p>
+          <ul>
+            <li><strong>Something you said</strong> rests on the session you said it in, and becomes a memory at once.</li>
+            <li><strong>Something inferred about you</strong> rests on two or more sessions.</li>
+            <li><strong>Something inferred about your work</strong> rests on two or more distinct blocks, each at the version read.</li>
+            <li><strong>A skill</strong> rests on three sessions where the same method was used.</li>
+          </ul>
+          <p>Cortex checks that each pointer is well formed and that what it cites exists. How much is enough is judgement, written in the rules as guidance. This is how inference joins the graph without touching your blocks. <a href="/graph#inference">The graph</a></p>
+        </section>
+
+        <section aria-labelledby="vault">
+          <h2 id="vault">Connecting a vault</h2>
+          <p><code>cortex vault connect &lt;folder&gt;</code> connects a vault kept in a folder and writes <code>vault.md</code>, where the agent records what each channel means and how blocks there are filed. Each session, cortex brings <code>vault.md</code> in step: counts, what moved or left, and memories pointing at blocks no longer there.</p>
+          <p>Cortex's own folder reader is simpler than the vault format: it reads each Markdown file as a block in the one channel of its folder. Reading a vault's blocks in many channels, through the vault's index, is planned.</p>
+        </section>
+
+        <section aria-labelledby="not">
+          <h2 id="not">What the cortex does not do</h2>
+          <ul>
+            <li><strong>It does not record what an agent reads.</strong> Only what it changes, and what it says it did.</li>
+            <li><strong>It does not sync with ohm.</strong> It stays a folder of its own; keep it in git if you want it on two machines.</li>
+            <li><strong>It does not mark memories out of date</strong> when a block they point at changes. That is planned.</li>
+            <li><strong>It does not yet serve ChatGPT's or Claude's web connectors,</strong> which need OAuth.</li>
+          </ul>
+        </section>
+
+        <nav class="page-pager" aria-label="Docs pages">
+          <a rel="prev" href="/friends"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Friends</a>
+          <a rel="next" href="/history">History<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </nav>
+      </article>
+    </main>
+
+    <nav class="site-toc" aria-labelledby="toc-title">
+      <p id="toc-title">On this page</p>
+      <ul>
+        <li><a href="#why">Why a cortex</a></li>
+        <li><a href="#need">What you need, and why</a></li>
+        <li><a href="#folder">The folder</a></li>
+        <li><a href="#layers">Who may change what</a></li>
+        <li><a href="#first-use">Your first use</a></li>
+        <li><a href="#edits">Agents edit; you revert</a></li>
+        <li><a href="#waits">What waits for you</a></li>
+        <li><a href="#hooks">Hooks for Claude Code and Codex</a></li>
+        <li><a href="#sessions">Sessions and dead ends</a></li>
+        <li><a href="#evidence">Evidence</a></li>
+        <li><a href="#vault">Connecting a vault</a></li>
+        <li><a href="#not">What the cortex does not do</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>

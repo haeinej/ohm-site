@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync" aria-current="page">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync" aria-current="page">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -88,7 +100,7 @@
     <main id="content">
       <article aria-labelledby="title">
         <header>
-          <p class="group">Folder</p>
+          <p class="group">Your folder</p>
           <h1 id="title">Sync with a folder</h1>
           <p class="introduction">The command-line sync brings your posts and a local folder of Markdown files into line. Browser and direct cloud-storage sync are planned.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
@@ -106,7 +118,7 @@
 
         <section aria-labelledby="connect">
           <h2 id="connect">Connect one</h2>
-          <p>Use the ohm command-line sync with a folder on your computer. It writes posts as Markdown files under their labels. Run it again to exchange edits. <a href="/files">How posts look as files</a></p>
+          <p>Use the ohm command-line sync with a folder on your computer. It writes posts as Markdown files under their labels: each post in the folder of its home channel. Run it again to exchange edits. <a href="/files">How posts look as files</a></p>
           <p>A locally synced cloud-storage folder is still a local folder to this command. Choosing a folder and pressing Sync in the workspace is a planned flow.</p>
         </section>
 
@@ -172,9 +184,21 @@
           <p>Run it again. A sync can be repeated safely, and it picks up where things stand.</p>
         </section>
 
+        <section aria-labelledby="blocks">
+          <h2 id="blocks">Sync knows posts, not other blocks</h2>
+          <p>Sync was built for posts, and it has not learned blocks of other kinds yet.</p>
+          <ul>
+            <li><strong>Every Markdown file is read as a post.</strong> Outside folders whose names start with <code>_</code> or <code>.</code>, sync reads each <code>.md</code> file as a post, private unless it says otherwise. A block you wrote as a query or a passage would arrive in your workspace as a private post.</li>
+            <li><strong>A file more than two folders deep is reported,</strong> because a post sits under a label and at most one sublabel.</li>
+            <li>**<code>_channel.md</code>, <code>_entities/</code> and <code>_sources/</code> are left alone,** as is <code>.vault/</code>.</li>
+          </ul>
+          <p>Until sync knows blocks, keep the folder you sync for posts apart from a vault folder that holds other blocks, or expect every Markdown file in it to become a post. The <code>vault index</code> command reads both kinds and never sends anything. <a href="/roots-and-index">Other folders and the index</a></p>
+          <p>Two-way sync with a folder the vault reads, such as an Obsidian vault, is planned and not built.</p>
+        </section>
+
         <nav class="page-pager" aria-label="Docs pages">
-          <a rel="prev" href="/friends"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Friends</a>
-          <a rel="next" href="/files">Posts as files<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a rel="prev" href="/graph"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>The graph</a>
+          <a rel="next" href="/files">Your vault as files<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
         </nav>
       </article>
     </main>
@@ -190,6 +214,7 @@
         <li><a href="#obsidian">What you do in the folder, and what Sync makes of it</a></li>
         <li><a href="#leaves">What Sync leaves alone</a></li>
         <li><a href="#interrupted">If a sync is interrupted</a></li>
+        <li><a href="#blocks">Sync knows posts, not other blocks</a></li>
       </ul>
     </nav>
   </body>

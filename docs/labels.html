@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="Labels are the sections of your work, in your own words. Every post sits under one label, and the post&#x27;s address comes from it.">
+    <meta name="description" content="Labels are the sections of your site, in your own words. A post&#x27;s label, and its sublabel if it has one, is its home channel: the channel its address comes from.">
     <link rel="canonical" href="https://docs.ohmmmm.com/labels">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Labels · ohm docs">
-    <meta property="og:description" content="Labels are the sections of your work, in your own words. Every post sits under one label, and the post&#x27;s address comes from it.">
+    <meta property="og:description" content="Labels are the sections of your site, in your own words. A post&#x27;s label, and its sublabel if it has one, is its home channel: the channel its address comes from.">
     <meta property="og:url" content="https://docs.ohmmmm.com/labels">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -41,11 +41,24 @@
         <li><a href="/quick-start">Quick start</a></li>
         <li><a href="/sign-in">Sign in</a></li>
       </ul>
-      <p class="sidebar-group">Workspace</p>
+      <p class="sidebar-group">Your vault</p>
       <ul>
         <li><a href="/workspace">The workspace</a></li>
+        <li><a href="/blocks-and-channels">Blocks and channels</a></li>
         <li><a href="/posts">Posts</a></li>
         <li><a href="/labels" aria-current="page">Labels</a></li>
+      </ul>
+      <p class="sidebar-group">Connections and the graph</p>
+      <ul>
+        <li><a href="/connections">Connections</a></li>
+        <li><a href="/graph">The graph</a></li>
+      </ul>
+      <p class="sidebar-group">Your folder</p>
+      <ul>
+        <li><a href="/sync">Sync with a folder</a></li>
+        <li><a href="/files">Your vault as files</a></li>
+        <li><a href="/roots-and-index">Other folders and the index</a></li>
+        <li><a href="/export">Export and leaving</a></li>
       </ul>
       <p class="sidebar-group">Sharing</p>
       <ul>
@@ -53,11 +66,10 @@
         <li><a href="/publish">Publish</a></li>
         <li><a href="/friends">Friends</a></li>
       </ul>
-      <p class="sidebar-group">Folder</p>
+      <p class="sidebar-group">Cortex and history</p>
       <ul>
-        <li><a href="/sync">Sync with a folder</a></li>
-        <li><a href="/files">Posts as files</a></li>
-        <li><a href="/export">Export and leaving</a></li>
+        <li><a href="/cortex">The cortex</a></li>
+        <li><a href="/history">History</a></li>
       </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
@@ -88,11 +100,22 @@
     <main id="content">
       <article aria-labelledby="title">
         <header>
-          <p class="group">Workspace</p>
+          <p class="group">Your vault</p>
           <h1 id="title">Labels</h1>
-          <p class="introduction">Labels are the sections of your work, in your own words. Every post sits under one label, and the post's address comes from it.</p>
+          <p class="introduction">Labels are the sections of your site, in your own words. A post's label, and its sublabel if it has one, is its home channel: the channel its address comes from.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
+
+        <section aria-labelledby="channels">
+          <h2 id="channels">Labels and channels</h2>
+          <p>A block can be in many channels. When it is published as a post, one of them has to decide where it lives on your site: its first channel, its home. On your site, and in the workspace, that home channel is called the post's <strong>label</strong>, and a channel inside it the <strong>sublabel</strong>.</p>
+          <ul>
+            <li><strong>In a vault folder,</strong> the label is the post's first folder and the sublabel the folder inside it.</li>
+            <li><strong>Other channels a post is in</strong> do not change its label or its address.</li>
+            <li><strong>A channel that is not a post's home</strong> never appears on your site.</li>
+          </ul>
+          <p><a href="/blocks-and-channels#home">Blocks and channels</a></p>
+        </section>
 
         <section aria-labelledby="labels">
           <h2 id="labels">Labels are your sections</h2>
@@ -159,7 +182,7 @@
 
         <nav class="page-pager" aria-label="Docs pages">
           <a rel="prev" href="/posts"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Posts</a>
-          <a rel="next" href="/visibility">Who sees a post<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a rel="next" href="/connections">Connections<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
         </nav>
       </article>
     </main>
@@ -167,6 +190,7 @@
     <nav class="site-toc" aria-labelledby="toc-title">
       <p id="toc-title">On this page</p>
       <ul>
+        <li><a href="#channels">Labels and channels</a></li>
         <li><a href="#labels">Labels are your sections</a></li>
         <li><a href="#sublabels">Sublabels are groups inside a label</a></li>
         <li><a href="#address">The address follows the label</a></li>

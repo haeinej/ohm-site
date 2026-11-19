@@ -1,6 +1,18 @@
 # Labels
 
-Labels are the sections of your work, in your own words. Every post sits under one label, and the post's address comes from it.
+Labels are the sections of your site, in your own words. A post's label, and its sublabel if it has one, is its home channel: the channel its address comes from.
+
+<a id="channels"></a>
+
+## Labels and channels
+
+A block can be in many channels. When it is published as a post, one of them has to decide where it lives on your site: its first channel, its home. On your site, and in the workspace, that home channel is called the post's **label**, and a channel inside it the **sublabel**.
+
+- **In a vault folder,** the label is the post's first folder and the sublabel the folder inside it.
+- **Other channels a post is in** do not change its label or its address.
+- **A channel that is not a post's home** never appears on your site.
+
+[Blocks and channels](https://docs.ohmmmm.com/blocks-and-channels.md#home)
 
 <a id="labels"></a>
 
