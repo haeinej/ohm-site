@@ -16,9 +16,9 @@ There are three working surfaces, with different contracts.
 | --- | --- | --- | --- |
 | The vault service | Posts | The `ohm-vault` MCP server, the workspace, command-line sync | Versioned writes; confirmation for anything others can see. This guide |
 | A vault folder | Blocks, channels, sources, entities; posts among them | Files, and `ohm vault init, index, status, inspect, search` | Read and write files exactly; evidence only. [Data model](https://docs.ohmmmm.com/data-model.md#nodes) |
-| An ohm-cortex folder | Identity, memories, working memory, notes, skills, tools, the journal | Its own MCP server, CLI and hooks | Edit directly, marked as yours; inference must cite evidence. [The cortex](https://docs.ohmmmm.com/cortex.md) |
+| A cortex folder | Identity, memories, working memory, observations, skills, tools, the journal | Its own MCP server, CLI and hooks | Edit directly, marked as yours; inference must cite evidence. [The cortex](https://docs.ohmmmm.com/cortex.md) |
 
-Never draw an edge between two blocks. Evidence is what the content shows and only the member makes it; what you conclude belongs in the cortex, as a note or memory that cites the blocks. [The graph](https://docs.ohmmmm.com/graph.md#two)
+Never draw an edge between two blocks. Evidence is what the content shows and only the member makes it; what you conclude belongs in the cortex, as an observation or memory that cites the blocks. [The graph](https://docs.ohmmmm.com/graph.md#two)
 
 <a id="dependencies"></a>
 
@@ -39,7 +39,7 @@ The MCP path is agent → local MCP server → member's PDS for a service token 
 
 ## Connect and start
 
-From a source checkout, use Node 22 or later and install root runtime dependencies with `npm ci`, then supply a site configuration already established for the member. This runs the local MCP client; extending or testing the service also requires its separate locked dependencies, as described under [verification](https://docs.ohmmmm.com/agent-guide.md#verify). The packaged CLI includes the same shared publish helper and does not need the service backend installed locally. The [repository setup guide](https://github.com/haeinej/ohm-vault/blob/main/docs/set-up-with-an-agent.md) describes account and site setup. Supply the app password through the MCP process's private environment; do not request it in a post, commit it, or put it in documentation.
+From a source checkout of haeinej/ohmmmm, work in its `vault/` folder: use Node 22 or later and install its runtime dependencies with `npm ci`, then supply a site configuration already established for the member. This runs the local MCP client; extending or testing the service also requires its separate locked dependencies, as described under [verification](https://docs.ohmmmm.com/agent-guide.md#verify). The packaged CLI includes the same shared publish helper and does not need the service backend installed locally. The [repository setup guide](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/set-up-with-an-agent.md) describes account and site setup. Supply the app password through the MCP process's private environment; do not request it in a post, commit it, or put it in documentation.
 
 The stdio server entry point is:
 
@@ -88,34 +88,34 @@ The [data model](https://docs.ohmmmm.com/data-model.md), [MCP reference](https:/
 
 ## Implementation map
 
-These are the authoritative sources in [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault):
+These are the authoritative sources in [haeinej/ohmmmm](https://github.com/haeinej/ohmmmm), where the vault is the `vault/` folder:
 
-- [mcp/server.mjs](https://github.com/haeinej/ohm-vault/blob/main/mcp/server.mjs): configuration, PDS sign-in and stdio entry point.
-- [scripts/vault-client.mjs](https://github.com/haeinej/ohm-vault/blob/main/scripts/vault-client.mjs): per-method tokens and request renewal.
-- [mcp/tools.mjs](https://github.com/haeinej/ohm-vault/blob/main/mcp/tools.mjs): schemas, composition and confirmations.
-- [service/src/capabilities/](https://github.com/haeinej/ohm-vault/tree/main/service/src/capabilities): request contracts and authorization; [service/CAPABILITIES.md](https://github.com/haeinej/ohm-vault/blob/main/service/CAPABILITIES.md) is generated from these tables.
-- [service/public/vault/](https://github.com/haeinej/ohm-vault/tree/main/service/public/vault): member-visible editor, publish review and account-scope behavior.
+- [vault/mcp/server.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/mcp/server.mjs): configuration, PDS sign-in and stdio entry point.
+- [vault/scripts/vault-client.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/scripts/vault-client.mjs): per-method tokens and request renewal.
+- [vault/mcp/tools.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/mcp/tools.mjs): schemas, composition and confirmations.
+- [vault/service/src/capabilities/](https://github.com/haeinej/ohmmmm/tree/main/vault/service/src/capabilities): request contracts and authorization; [vault/service/CAPABILITIES.md](https://github.com/haeinej/ohmmmm/blob/main/vault/service/CAPABILITIES.md) is generated from these tables.
+- [vault/service/public/vault/](https://github.com/haeinej/ohmmmm/tree/main/vault/service/public/vault): member-visible editor, publish review and account-scope behavior.
 - [docs/build.py in ohm-site](https://github.com/haeinej/ohm-site/blob/main/docs/build.py): authored public documentation and generated HTML, Markdown and LLM outputs. The public sites live in their own repository, haeinej/ohm-site.
-- [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs): the vault folder format, its checks and its evidence edges. [docs/agents/vault-format.md](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) is its contract.
-- [vault/roots.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/roots.mjs) and [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs): `.vault/config.json` roots and `.vault/index.sqlite`; [scripts/vault.mjs](https://github.com/haeinej/ohm-vault/blob/main/scripts/vault.mjs) is the command.
-- [plans/vault.md](https://github.com/haeinej/ohm-vault/blob/main/plans/vault.md): the split between vault and cortex, and the steps not yet built.
+- [vault/vault/node.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/node.mjs): the vault folder format, its checks and its evidence edges. [vault/docs/agents/vault-format.md](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/agents/vault-format.md) is its contract.
+- [vault/vault/roots.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/roots.mjs) and [vault/vault/indexer.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/indexer.mjs): `.vault/config.json` roots and `.vault/index.sqlite`; [vault/scripts/vault.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/scripts/vault.mjs) is the command.
+- [vault/plans/vault.md](https://github.com/haeinej/ohmmmm/blob/main/vault/plans/vault.md): the split between vault and cortex, and the steps not yet built.
 
-The cortex is a separate repository, haeinej/ohm-cortex, not public yet. Its `src/tools.mjs` defines the `cortex_*` tools and `docs/guide.md` explains the journal. The vault never imports cortex, and cortex never imports the vault.
+The cortex is the `cortex/` folder of the same repository, formerly haeinej/ohm-cortex. [cortex/src/tools.mjs](https://github.com/haeinej/ohmmmm/blob/main/cortex/src/tools.mjs) defines the `cortex_*` tools, [cortex/docs/guide.md](https://github.com/haeinej/ohmmmm/blob/main/cortex/docs/guide.md) explains the journal, and [contract/vault-reader.mjs](https://github.com/haeinej/ohmmmm/blob/main/contract/vault-reader.mjs) is all cortex may ask of a vault. The vault never imports cortex, and cortex reads a vault only through that contract.
 
 <a id="verify"></a>
 
 ## Verify and document a change
 
-For module ownership, dependency reasons and state transitions, read the [human repository guide](https://github.com/haeinej/ohm-vault/blob/main/docs/repository-map.md) and [agent repository map](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/repository-map.md). They explain retained compatibility paths, account and draft guards, mirror checkpoints, renderer sidecars and recovery at each boundary.
+For module ownership, dependency reasons and state transitions, read the [human repository guide](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/repository-map.md) and [agent repository map](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/agents/repository-map.md). They explain retained compatibility paths, account and draft guards, mirror checkpoints, renderer sidecars and recovery at each boundary.
 
-For contributor verification, start from the repository root with Node 22 or later and install both locked dependency sets explicitly:
+For contributor verification, start from the `vault/` folder of haeinej/ohmmmm with Node 22 or later and install both locked dependency sets explicitly:
 
 ```
 npm ci
 npm --prefix service ci
 ```
 
-The root dependencies supply the CLI, Markdown renderer, public-site tooling and test runner inputs. The separate service package supplies its pinned signature-verification library for the backend and integration tests. Root `npm ci` does not install it. If tests cannot find `service/node_modules/@noble/curves`, run the service install, not an import workaround. Tests and package-install hooks never install these dependencies for you. This is source-checkout setup, not a prerequisite for a site owner using the packaged CLI. The [human contributor guide](https://github.com/haeinej/ohm-vault/blob/main/README.md#work-on-this-repository) explains the same boundary.
+The root dependencies supply the CLI, Markdown renderer, public-site tooling and test runner inputs. The separate service package supplies its pinned signature-verification library for the backend and integration tests. Root `npm ci` does not install it. If tests cannot find `service/node_modules/@noble/curves`, run the service install, not an import workaround. Tests and package-install hooks never install these dependencies for you. This is source-checkout setup, not a prerequisite for a site owner using the packaged CLI. The [human contributor guide](https://github.com/haeinej/ohmmmm/blob/main/vault/README.md#work-on-this-repository) explains the same boundary.
 
 Then verify the implementation:
 
@@ -129,7 +129,7 @@ For the vault folder format and the index alone, `node --test test/node.test.mjs
 
 The capability reference must match its registered tables. The docs build checks HTML page links and anchors; tests also check Markdown/LLM outbound fragments, static-page IDs, the six-route SEO contract, offline script routing and MCP initialization from an extracted package with only locked runtime dependencies. The broader tests exercise service boundaries, member isolation, versions and tool composition using local fixtures. Passing them is not evidence of a successful live member sign-in or deployment.
 
-For a local public-site preview, run `npm run home:dev` or `npm run docs:dev` from the root of haeinej/ohm-site (loopback ports 8790 and 8791). Run `npm run home:seo -- http://127.0.0.1:8790` against the home preview, not production, to check this checkout. [Public site ownership](https://github.com/haeinej/ohm-vault/blob/main/public/README.md) explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.
+For a local public-site preview, run `npm run home:dev` or `npm run docs:dev` from the root of haeinej/ohm-site (loopback ports 8790 and 8791). Run `npm run home:seo -- http://127.0.0.1:8790` against the home preview, not production, to check this checkout. [Public site ownership](https://github.com/haeinej/ohm-site/blob/main/README.md) explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.
 
 Use the bundled `document-work` skill for each coherent completed outcome. Update the canonical human guide with purpose, dependency reasons and recognizable first use; update this guide or the precise reference with contracts and recovery. Regenerate outputs from their source. Use synthetic examples and keep private member material out of public docs. Report implementation, local test evidence and live verification separately. [Status and limits](https://docs.ohmmmm.com/limits.md) records the remaining product boundaries.
 

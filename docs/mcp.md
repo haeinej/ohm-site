@@ -70,7 +70,7 @@ Listing the tools needs no configuration and no sign-in. The server signs in at 
 Start the server directly, or through a client configuration that loads it:
 
 ```
-npx github:haeinej/ohm-vault mcp
+npx github:haeinej/ohmmmm mcp
 ```
 
 This exposes the MCP tools.
@@ -153,7 +153,7 @@ Some service requests are deliberately not available to an agent.
 These tools work on posts in the vault service only.
 
 - **A vault folder** has no MCP tools yet. Tools that search, read, follow connections, capture and collect blocks through `.vault/index.sqlite` are planned. Until then the `ohm vault` command reads the folder, and makes no network calls. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md)
-- **ohm-cortex** is a separate MCP server, over standard input and output or HTTP, with twenty `cortex_*` tools. An agent connected to both keeps its conclusions there, never as edges between blocks. [The cortex](https://docs.ohmmmm.com/cortex.md)
+- **The cortex** is a separate MCP server, `cortex`, over standard input and output or HTTP, with twenty `cortex_*` tools. An agent connected to both keeps its conclusions there, never as edges between blocks. [The cortex](https://docs.ohmmmm.com/cortex.md)
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.

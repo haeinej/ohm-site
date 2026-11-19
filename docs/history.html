@@ -98,7 +98,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohmmmm">GitHub</a></li>
       </ul>
     </nav>
 
@@ -124,7 +124,7 @@
                 <tr><th>What</th><th>History</th><th>Status</th></tr>
               </thead>
               <tbody>
-                <tr><th scope="row">Your cortex</th><td>Every change, with who made it; every earlier version; saves; restore and revert; agents' sessions and dead ends</td><td>Built, in ohm-cortex</td></tr>
+                <tr><th scope="row">Your cortex</th><td>Every change, with who made it; every earlier version; saves; restore and revert; agents' sessions and dead ends</td><td>Built, in the cortex</td></tr>
                 <tr><th scope="row">Posts in the vault service</th><td>A version per post, so two saves never overwrite each other unseen. Earlier versions are not kept, and a removed post cannot be brought back</td><td>Version history not built</td></tr>
                 <tr><th scope="row">Your vault folder</th><td>Your own files. Keep them in git, or your own backup, for history. The index keeps none</td><td>Not part of ohm</td></tr>
                 <tr><th scope="row">The workspace's history view</th><td>Dates, You and Agents, over everything</td><td>Designed, not built</td></tr>
@@ -143,8 +143,8 @@
               </thead>
               <tbody>
                 <tr><th scope="row"><code>change</code></th><td>A node changes, by you or an agent</td><td>The node, what was done, the versions before and after, why, and the evidence</td></tr>
-                <tr><th scope="row"><code>note</code></th><td>An agent observes something</td><td>One line, with evidence. It changes no file</td></tr>
-                <tr><th scope="row"><code>settled</code></th><td>Notes are settled</td><td>What became of a note: kept, dropped, or the memory it went into</td></tr>
+                <tr><th scope="row"><code>observation</code></th><td>An agent observes something</td><td>One line, with evidence. It changes no file</td></tr>
+                <tr><th scope="row"><code>settled</code></th><td>Observations are settled</td><td>What became of an observation: kept, dropped, or the memory it went into</td></tr>
                 <tr><th scope="row"><code>session</code></th><td>An agent finishes or gives up a task</td><td>What was done, the changes it made, and its dead ends</td></tr>
                 <tr><th scope="row"><code>save</code></th><td>Someone names a point in history</td><td>A name and a note. It changes nothing</td></tr>
               </tbody>
@@ -230,11 +230,11 @@ Change 41 is undone: memory/likes-short-titles is back as it was. What it replac
             <li><strong>One line per change,</strong> as a verb and a page: Created, Edited, Moved, Filed, Connected, Restored, Reverted, Deleted. An icon says whether you or an agent made it.</li>
             <li><strong>Open a line</strong> to see who made it, when and why, and what it touched. From there: Revert this change, Restore this version, or open the page.</li>
             <li><strong>A page's versions,</strong> from a clock in its toolbar.</li>
-            <li><strong>Daily autosaves:</strong> every page as it was at the end of each day with changes. ohm-cortex does not write these yet.</li>
+            <li><strong>Daily autosaves:</strong> every page as it was at the end of each day with changes. The cortex does not write these yet.</li>
             <li><strong>Edits close together join one line,</strong> when the same person or agent types within five minutes.</li>
             <li><strong>A page others can see</strong> is read only here: changing what others see asks first.</li>
           </ul>
-          <p>In this design, reverting a change undoes only the parts that change touched, and is refused if a later change touched the same part. ohm-cortex today reverts a whole node, and refuses if the node has changed since.</p>
+          <p>In this design, reverting a change undoes only the parts that change touched, and is refused if a later change touched the same part. The cortex today reverts a whole node, and refuses if the node has changed since.</p>
         </section>
 
         <nav class="page-pager" aria-label="Docs pages">

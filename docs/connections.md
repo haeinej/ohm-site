@@ -8,7 +8,7 @@ A connection says that one thing in your vault relates to another. Every connect
 
 Two blocks belong together because you put them together: you filed them in one channel, linked one from the other, or quoted the same source. That is something anyone can check by reading your files, and it stays true until you change them.
 
-What an agent concludes about your blocks is different. It may be useful, and it may be wrong. So it is never stored as a connection. It is kept in your cortex, as a note or a memory that points at the blocks it was drawn from, and your blocks are not changed by it. [The graph](https://docs.ohmmmm.com/graph.md)
+What an agent concludes about your blocks is different. It may be useful, and it may be wrong. So it is never stored as a connection. It is kept in your cortex, as an observation or a memory that points at the blocks it was drawn from, and your blocks are not changed by it. [The graph](https://docs.ohmmmm.com/graph.md)
 
 <a id="kinds"></a>
 
@@ -54,7 +54,7 @@ When the post is published, each entry becomes an address in the record's `conne
 `vault index` reads every block and keeps every connection in `.vault/index.sqlite`, with the line it was found on, or the property it came from.
 
 ```
-npx github:haeinej/ohm-vault vault inspect churn-query
+npx github:haeinej/ohmmmm vault inspect churn-query
 ```
 
 `vault inspect` shows one block with what links to it and what it links to, besides where its original is and its size. Nothing is written into your files. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md#index)
@@ -63,7 +63,7 @@ npx github:haeinej/ohm-vault vault inspect churn-query
 
 ## What a connection is not
 
-- **Not a guess.** If an agent sees that two blocks belong together, it writes a note or a memory in your cortex that cites both, and it may suggest the connection to you in words. If you agree and connect them, the connection is yours, like any other.
+- **Not a guess.** If an agent sees that two blocks belong together, it writes an observation or a memory in your cortex that cites both, and it may suggest the connection to you in words. If you agree and connect them, the connection is yours, like any other.
 - **Not a tag.** A `#tag` is indexed for search, and is not a connection.
 - **Not shared on their own.** Connections live in your files and your index. Only what a published post links to goes out, with the post, as addresses in its record.
 

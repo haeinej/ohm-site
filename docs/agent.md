@@ -15,7 +15,7 @@ What your agent remembers about you is not kept in the vault. It is kept in a co
 | Server | What it works in | Its tools |
 | --- | --- | --- |
 | `ohm-vault` | Your posts, in the vault service | Ten `vault_*` tools. [MCP reference](https://docs.ohmmmm.com/mcp.md#tools) |
-| ohm-cortex | Your cortex folder | Twenty `cortex_*` tools. [The cortex](https://docs.ohmmmm.com/cortex.md) |
+| `cortex` | Your cortex folder | Twenty `cortex_*` tools. [The cortex](https://docs.ohmmmm.com/cortex.md) |
 
 Agent tools for a vault folder on your computer, with blocks of every kind, are planned and not built. Until then an agent can run the `vault search` and `vault inspect` commands in that folder like any other command. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md#index)
 
@@ -80,7 +80,7 @@ Your cortex works the other way round, because nothing in it is ever shown to an
 - **It edits directly.** It writes memories, its own working memory, and what each channel of your vault means, without asking first.
 - **Every change is marked with its name,** its reason, and the versions before and after. You read them with `cortex history`, and undo any of them with `cortex revert` or `cortex restore`.
 - **What needs your trust waits.** An identity fact is only proposed until you confirm it; a skill waits for your approval; a tool is only asked for.
-- **It never connects two blocks.** If it sees that two belong together, it writes a note or a memory that cites both, and may suggest the connection to you. [Connections](https://docs.ohmmmm.com/connections.md#not)
+- **It never connects two blocks.** If it sees that two belong together, it writes an observation or a memory that cites both, and may suggest the connection to you. [Connections](https://docs.ohmmmm.com/connections.md#not)
 
 [History](https://docs.ohmmmm.com/history.md)
 

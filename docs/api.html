@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.">
+    <meta name="description" content="The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.">
     <link rel="canonical" href="https://docs.ohmmmm.com/api">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Service API · ohm docs">
-    <meta property="og:description" content="The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.">
+    <meta property="og:description" content="The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.">
     <meta property="og:url" content="https://docs.ohmmmm.com/api">
     <meta property="og:image" content="https://docs.ohmmmm.com/assets/og-docs-v2.png">
     <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
     <meta property="og:image:alt" content="ohm docs — Your workspace, step by step">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Service API · ohm docs">
-    <meta name="twitter:description" content="The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.">
+    <meta name="twitter:description" content="The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.">
     <meta name="twitter:image" content="https://docs.ohmmmm.com/assets/og-docs-v2.png">
     <meta name="twitter:image:alt" content="ohm docs — Your workspace, step by step">
     <meta property="og:image:type" content="image/png">
@@ -98,7 +98,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohmmmm">GitHub</a></li>
       </ul>
     </nav>
 
@@ -107,7 +107,7 @@
         <header>
           <p class="group">For agents</p>
           <h1 id="title">Service API</h1>
-          <p class="introduction">The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.</p>
+          <p class="introduction">The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
@@ -350,6 +350,206 @@
           </div>
         </section>
 
+        <section aria-labelledby="private">
+          <h2 id="private">Private</h2>
+          <p>The private layer: private blocks, kept only as ciphertext sealed on the member's devices. The service stores and syncs them and cannot read them; no friend or agent can be given their contents by the service. Each is <code>{ id, ciphertext, version }</code>, with an opaque ID and compare-and-swap on the version. Several change together or not at all; every version is kept for restoring; the journal is sealed too; and a key rotation re-wraps every kept version and journal entry.</p>
+          <h3><code>com.ohmmmm.vault.listPrivateBlocks</code></h3>
+          <p>Every private block, by opaque ID, with its version, size and the generation of the master key that wraps its key. With <code>since</code>, only what changed after an earlier list, removals included. With <code>below</code>, only blocks wrapped by an older generation than that, for finishing a key rotation.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>since</code>: optional: the <code>cursor</code> of an earlier list<br><code>below</code>: optional: a generation</td></tr>
+                <tr><th scope="row">Returns</th><td><code>blocks</code> (id, version, generation, size), <code>cursor</code>, and <code>more</code> when there is another page</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.getPrivateBlock</code></h3>
+          <p>One private block's ciphertext and version. Only the member's devices can open it.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the block's opaque ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>ciphertext</code>, <code>version</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.putPrivateBlock</code></h3>
+          <p>Saves one private block's ciphertext. Anything that is not a sealed file is refused, so readable text is never kept, and so is a block sealed under an older master key than a rotation started. <code>replaces</code> is the version being replaced and is left out for a new block. Sent twice, it ends the same as sent once.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>block</code>: <code>id</code> and <code>ciphertext</code> (the sealed file)<br><code>replaces</code>: optional: the version it replaces<br><code>journal</code>: optional: a sealed journal entry describing the change</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>version</code>, <code>rev</code> (the kept version it made), and <code>unchanged</code> when nothing differed</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.putPrivateBlocks</code></h3>
+          <p>Changes several private blocks together, all or none, as moving a block between channels changes the block and two channel files. Each change is a write (<code>id</code>, <code>ciphertext</code>, <code>replaces</code>) or a removal (<code>id</code>, <code>remove: true</code>, <code>replaces</code>); one stale version, or one block sealed under a key older than a rotation started, refuses them all. <code>batchId</code> makes it safe to send again: a repeat answers what the first did and changes nothing.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>changes</code>: the changes, 1 to 100<br><code>batchId</code>: a key the device makes for this batch<br><code>journal</code>: optional: a sealed journal entry describing them</td></tr>
+                <tr><th scope="row">Returns</th><td><code>blocks</code> (id, version and rev, or removed), and <code>replayed</code> for a repeat</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listPrivateVersions</code></h3>
+          <p>A private block's kept versions, newest first, each by a <code>rev</code> that never changes. The device opens one to show or restore it; restoring is a new change.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the block's opaque ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>versions</code> (rev, version, generation, size, created)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.getPrivateVersion</code></h3>
+          <p>One kept version of a private block, as ciphertext.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the block's opaque ID<br><code>rev</code>: the version's rev</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>rev</code>, <code>version</code>, <code>ciphertext</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listPrivateJournal</code></h3>
+          <p>The private layer's journal: sealed entries, oldest first, after <code>since</code>. Only the member's devices can read what each says.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>since</code>: optional: the <code>cursor</code> of an earlier list</td></tr>
+                <tr><th scope="row">Returns</th><td><code>entries</code> (seq, entry, created), <code>cursor</code>, and <code>more</code> when there is another page</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.beginPrivateRotation</code></h3>
+          <p>Starts a rotation of the member's master key to generation <code>target</code>, as the private store sees it: from now on a block sealed under an older generation is refused. The re-wrap happens on the member's device. The same target again changes nothing.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>target</code>: the generation being rotated to</td></tr>
+                <tr><th scope="row">Returns</th><td><code>target</code>, <code>state</code>, <code>remaining</code> (blocks still below it), and <code>unchanged</code> when it was already started</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.getPrivateRotation</code></h3>
+          <p>The member's latest key rotation, and how many private blocks are still below its target, so any device can resume it.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td>None</td></tr>
+                <tr><th scope="row">Returns</th><td><code>rotation</code> (target, state, remaining, started, finished) or null</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listPrivateBelow</code></h3>
+          <p>What a rotation to <code>target</code> still has to re-wrap: every kept version (by block and rev) and journal entry (by seq) sealed under an older key.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>target</code>: the generation being rotated to</td></tr>
+                <tr><th scope="row">Returns</th><td><code>target</code>, <code>versions</code> (id, rev, generation), <code>journal</code> (seq, generation), and <code>more</code> when there is more</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.rewrapPrivate</code></h3>
+          <p>Re-wrapped copies of kept versions and journal entries, for a rotation under way to <code>target</code>. Each must keep exactly the contents it replaces, with only its file key re-wrapped; a version that is its block's latest moves the block with it. All are kept or none. Safe to send again.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>target</code>: the generation being rotated to<br><code>versions</code>: <code>id</code>, <code>rev</code>, <code>ciphertext</code> for each<br><code>journal</code>: <code>seq</code>, <code>entry</code> for each</td></tr>
+                <tr><th scope="row">Returns</th><td><code>target</code>, <code>remaining</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.finishPrivateRotation</code></h3>
+          <p>Finishes the rotation to <code>target</code>, only if no kept version or journal entry is still below it, checked in the same statement. The account deletes the old key's copies only after this.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>target</code>: the generation being rotated to</td></tr>
+                <tr><th scope="row">Returns</th><td><code>target</code>, <code>state</code>, and <code>unchanged</code> when it was already finished</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.deletePrivateBlock</code></h3>
+          <p>Removes one private block. Its kept versions stay, so it can be restored.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the block's opaque ID<br><code>replaces</code>: the version being removed<br><code>journal</code>: optional: a sealed journal entry</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>removed</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
         <section aria-labelledby="structure">
           <h2 id="structure">Structure</h2>
           <p>The shape of a vault: its labels, the sublabels inside them, and a line for each post. Enough to draw it or decide where something belongs, without reading any post in full.</p>
@@ -572,13 +772,17 @@
                 <tr><th scope="row"><code>WrongMethod</code></th><td>405</td><td>The request is the other of GET and POST</td></tr>
                 <tr><th scope="row"><code>InvalidRequest</code></th><td>400</td><td>The request is not JSON, or something it says is not what that request takes</td></tr>
                 <tr><th scope="row"><code>InvalidPost</code></th><td>400</td><td>The post is not one the vault can hold. The message lists every reason</td></tr>
-                <tr><th scope="row"><code>InvalidBlock</code></th><td>400</td><td>The block is not one the friends layer can hold: it is private or public, a post, or its file has problems. The message lists every reason</td></tr>
+                <tr><th scope="row"><code>InvalidBlock</code></th><td>400</td><td>The block is not one the layer can hold: for the friends layer, it is private or public, a post, or its file has problems; for the private layer, it is not a sealed file under an opaque ID. The message says why</td></tr>
                 <tr><th scope="row"><code>InvalidCursor</code></th><td>400</td><td><code>since</code> is not a value an earlier list returned</td></tr>
                 <tr><th scope="row"><code>NotFound</code></th><td>404</td><td>There is no such post, block or saved version, or nothing there is shared with the asker</td></tr>
-                <tr><th scope="row"><code>Changed</code></th><td>409</td><td>The post or block has changed since the version the request names. The answer carries the current version</td></tr>
+                <tr><th scope="row"><code>Changed</code></th><td>409</td><td>The post, block or private block has changed since the version the request names. The answer carries the current version</td></tr>
                 <tr><th scope="row"><code>SlugTaken</code></th><td>409</td><td>Another post in the vault already has that slug</td></tr>
                 <tr><th scope="row"><code>PathTaken</code></th><td>409</td><td>Another block in the friends layer is already at that path</td></tr>
-                <tr><th scope="row"><code>TooLarge</code></th><td>413</td><td>The post is more than 600 KB of text, or a file it places is empty or larger than 25 MB</td></tr>
+                <tr><th scope="row"><code>OlderKey</code></th><td>409</td><td>The private block is sealed under an older master key than the member is rotating, or rotated, to</td></tr>
+                <tr><th scope="row"><code>NoRotation</code></th><td>409</td><td>No rotation to that generation is under way</td></tr>
+                <tr><th scope="row"><code>RotationAhead</code></th><td>409</td><td>The member already rotated to a later master key than the one asked for</td></tr>
+                <tr><th scope="row"><code>RotationRemaining</code></th><td>409</td><td>A rotation cannot finish while some kept versions or journal entries are still sealed under the older key. The answer says how many</td></tr>
+                <tr><th scope="row"><code>TooLarge</code></th><td>413</td><td>The post or block is more than 600 KB of text, a sealed private block is more than 1 MB, or a file it places is empty or larger than 25 MB</td></tr>
                 <tr><th scope="row"><code>FileUnreachable</code></th><td>502</td><td>A file a post places could not be fetched from where the post says it is</td></tr>
                 <tr><th scope="row"><code>AccountNotFound</code></th><td>404</td><td>No AT Protocol account answers to that handle or DID</td></tr>
                 <tr><th scope="row"><code>NoRepository</code></th><td>400</td><td>The account's DID document does not say where its repository is kept</td></tr>
@@ -632,6 +836,7 @@
         <li><a href="#conventions">Conventions</a></li>
         <li><a href="#posts">Posts</a></li>
         <li><a href="#friends">Friends</a></li>
+        <li><a href="#private">Private</a></li>
         <li><a href="#structure">Structure</a></li>
         <li><a href="#search">Search</a></li>
         <li><a href="#mirror">Mirror</a></li>

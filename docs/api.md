@@ -1,6 +1,6 @@
 # Service API
 
-The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.
+The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.
 
 <a id="conventions"></a>
 
@@ -180,6 +180,155 @@ One friends-only block or post another member shares with the asker, as its file
 | Access | Any authenticated account |
 | Parameters | `owner`: the DID whose friends layer to read<br>`id`: the block's or post's ID |
 | Returns | `block` (id, path, text), `version` |
+
+<a id="private"></a>
+
+## Private
+
+The private layer: private blocks, kept only as ciphertext sealed on the member's devices. The service stores and syncs them and cannot read them; no friend or agent can be given their contents by the service. Each is `{ id, ciphertext, version }`, with an opaque ID and compare-and-swap on the version. Several change together or not at all; every version is kept for restoring; the journal is sealed too; and a key rotation re-wraps every kept version and journal entry.
+
+### `com.ohmmmm.vault.listPrivateBlocks`
+
+Every private block, by opaque ID, with its version, size and the generation of the master key that wraps its key. With `since`, only what changed after an earlier list, removals included. With `below`, only blocks wrapped by an older generation than that, for finishing a key rotation.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `since`: optional: the `cursor` of an earlier list<br>`below`: optional: a generation |
+| Returns | `blocks` (id, version, generation, size), `cursor`, and `more` when there is another page |
+
+### `com.ohmmmm.vault.getPrivateBlock`
+
+One private block's ciphertext and version. Only the member's devices can open it.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `id`: the block's opaque ID |
+| Returns | `id`, `ciphertext`, `version` |
+
+### `com.ohmmmm.vault.putPrivateBlock`
+
+Saves one private block's ciphertext. Anything that is not a sealed file is refused, so readable text is never kept, and so is a block sealed under an older master key than a rotation started. `replaces` is the version being replaced and is left out for a new block. Sent twice, it ends the same as sent once.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `block`: `id` and `ciphertext` (the sealed file)<br>`replaces`: optional: the version it replaces<br>`journal`: optional: a sealed journal entry describing the change |
+| Returns | `id`, `version`, `rev` (the kept version it made), and `unchanged` when nothing differed |
+
+### `com.ohmmmm.vault.putPrivateBlocks`
+
+Changes several private blocks together, all or none, as moving a block between channels changes the block and two channel files. Each change is a write (`id`, `ciphertext`, `replaces`) or a removal (`id`, `remove: true`, `replaces`); one stale version, or one block sealed under a key older than a rotation started, refuses them all. `batchId` makes it safe to send again: a repeat answers what the first did and changes nothing.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `changes`: the changes, 1 to 100<br>`batchId`: a key the device makes for this batch<br>`journal`: optional: a sealed journal entry describing them |
+| Returns | `blocks` (id, version and rev, or removed), and `replayed` for a repeat |
+
+### `com.ohmmmm.vault.listPrivateVersions`
+
+A private block's kept versions, newest first, each by a `rev` that never changes. The device opens one to show or restore it; restoring is a new change.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `id`: the block's opaque ID |
+| Returns | `id`, `versions` (rev, version, generation, size, created) |
+
+### `com.ohmmmm.vault.getPrivateVersion`
+
+One kept version of a private block, as ciphertext.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `id`: the block's opaque ID<br>`rev`: the version's rev |
+| Returns | `id`, `rev`, `version`, `ciphertext` |
+
+### `com.ohmmmm.vault.listPrivateJournal`
+
+The private layer's journal: sealed entries, oldest first, after `since`. Only the member's devices can read what each says.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `since`: optional: the `cursor` of an earlier list |
+| Returns | `entries` (seq, entry, created), `cursor`, and `more` when there is another page |
+
+### `com.ohmmmm.vault.beginPrivateRotation`
+
+Starts a rotation of the member's master key to generation `target`, as the private store sees it: from now on a block sealed under an older generation is refused. The re-wrap happens on the member's device. The same target again changes nothing.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `target`: the generation being rotated to |
+| Returns | `target`, `state`, `remaining` (blocks still below it), and `unchanged` when it was already started |
+
+### `com.ohmmmm.vault.getPrivateRotation`
+
+The member's latest key rotation, and how many private blocks are still below its target, so any device can resume it.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | None |
+| Returns | `rotation` (target, state, remaining, started, finished) or null |
+
+### `com.ohmmmm.vault.listPrivateBelow`
+
+What a rotation to `target` still has to re-wrap: every kept version (by block and rev) and journal entry (by seq) sealed under an older key.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `target`: the generation being rotated to |
+| Returns | `target`, `versions` (id, rev, generation), `journal` (seq, generation), and `more` when there is more |
+
+### `com.ohmmmm.vault.rewrapPrivate`
+
+Re-wrapped copies of kept versions and journal entries, for a rotation under way to `target`. Each must keep exactly the contents it replaces, with only its file key re-wrapped; a version that is its block's latest moves the block with it. All are kept or none. Safe to send again.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `target`: the generation being rotated to<br>`versions`: `id`, `rev`, `ciphertext` for each<br>`journal`: `seq`, `entry` for each |
+| Returns | `target`, `remaining` |
+
+### `com.ohmmmm.vault.finishPrivateRotation`
+
+Finishes the rotation to `target`, only if no kept version or journal entry is still below it, checked in the same statement. The account deletes the old key's copies only after this.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `target`: the generation being rotated to |
+| Returns | `target`, `state`, and `unchanged` when it was already finished |
+
+### `com.ohmmmm.vault.deletePrivateBlock`
+
+Removes one private block. Its kept versions stay, so it can be restored.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `id`: the block's opaque ID<br>`replaces`: the version being removed<br>`journal`: optional: a sealed journal entry |
+| Returns | `id`, `removed` |
 
 <a id="structure"></a>
 
@@ -365,13 +514,17 @@ A refusal is JSON with an `error` code from the table below and a `message` writ
 | `WrongMethod` | 405 | The request is the other of GET and POST |
 | `InvalidRequest` | 400 | The request is not JSON, or something it says is not what that request takes |
 | `InvalidPost` | 400 | The post is not one the vault can hold. The message lists every reason |
-| `InvalidBlock` | 400 | The block is not one the friends layer can hold: it is private or public, a post, or its file has problems. The message lists every reason |
+| `InvalidBlock` | 400 | The block is not one the layer can hold: for the friends layer, it is private or public, a post, or its file has problems; for the private layer, it is not a sealed file under an opaque ID. The message says why |
 | `InvalidCursor` | 400 | `since` is not a value an earlier list returned |
 | `NotFound` | 404 | There is no such post, block or saved version, or nothing there is shared with the asker |
-| `Changed` | 409 | The post or block has changed since the version the request names. The answer carries the current version |
+| `Changed` | 409 | The post, block or private block has changed since the version the request names. The answer carries the current version |
 | `SlugTaken` | 409 | Another post in the vault already has that slug |
 | `PathTaken` | 409 | Another block in the friends layer is already at that path |
-| `TooLarge` | 413 | The post is more than 600 KB of text, or a file it places is empty or larger than 25 MB |
+| `OlderKey` | 409 | The private block is sealed under an older master key than the member is rotating, or rotated, to |
+| `NoRotation` | 409 | No rotation to that generation is under way |
+| `RotationAhead` | 409 | The member already rotated to a later master key than the one asked for |
+| `RotationRemaining` | 409 | A rotation cannot finish while some kept versions or journal entries are still sealed under the older key. The answer says how many |
+| `TooLarge` | 413 | The post or block is more than 600 KB of text, a sealed private block is more than 1 MB, or a file it places is empty or larger than 25 MB |
 | `FileUnreachable` | 502 | A file a post places could not be fetched from where the post says it is |
 | `AccountNotFound` | 404 | No AT Protocol account answers to that handle or DID |
 | `NoRepository` | 400 | The account's DID document does not say where its repository is kept |

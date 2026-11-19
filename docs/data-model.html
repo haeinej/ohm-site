@@ -98,7 +98,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohmmmm">GitHub</a></li>
       </ul>
     </nav>
 
@@ -238,7 +238,7 @@
 
         <section aria-labelledby="nodes">
           <h2 id="nodes">Vault folder nodes</h2>
-          <p>A vault folder is read as four kinds of node by <a href="https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs">vault/node.mjs</a>, which is pure: callers pass <code>{ path, text }</code> and write what they get back. The lexicons in <code>lexicons/com/ohmmmm/vault/</code> (<code>block</code>, <code>channel</code>, <code>entity</code>, <code>source</code>, all keyed by TID) describe file contents; none is written to a PDS.</p>
+          <p>A vault folder is read as four kinds of node by <a href="https://github.com/haeinej/ohmmmm/blob/main/vault/vault/node.mjs">vault/vault/node.mjs</a>, which is pure: callers pass <code>{ path, text }</code> and write what they get back. The lexicons in <code>lexicons/com/ohmmmm/vault/</code> (<code>block</code>, <code>channel</code>, <code>entity</code>, <code>source</code>, all keyed by TID) describe file contents; none is written to a PDS.</p>
           <div class="table">
             <table>
               <thead>
@@ -294,12 +294,12 @@
 
         <section aria-labelledby="index">
           <h2 id="index">The index</h2>
-          <p><code>.vault/index.sqlite</code>, written only by <code>scan</code> in <a href="https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs">vault/indexer.mjs</a>, holds the tables <code>meta</code>, <code>files</code>, <code>nodes</code>, <code>edges</code>, <code>terms</code> and <code>problems</code>. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a <code>reference</code> root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. <a href="https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md">The agent reference</a> has the full contract.</p>
+          <p><code>.vault/index.sqlite</code>, written only by <code>scan</code> in <a href="https://github.com/haeinej/ohmmmm/blob/main/vault/vault/indexer.mjs">vault/vault/indexer.mjs</a>, holds the tables <code>meta</code>, <code>files</code>, <code>nodes</code>, <code>edges</code>, <code>terms</code> and <code>problems</code>. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a <code>reference</code> root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. <a href="https://github.com/haeinej/ohmmmm/blob/main/vault/docs/agents/vault-format.md">The agent reference</a> has the full contract.</p>
         </section>
 
         <section aria-labelledby="journal">
           <h2 id="journal">The cortex journal</h2>
-          <p>ohm-cortex keeps one append-only file, <code>.cortex/journal.jsonl</code>. Every line has <code>seq</code>, a unique <code>id</code>, <code>at</code>, <code>actor</code> (<code>{kind: "human" or "agent", name}</code>), sometimes <code>session</code>, and a <code>type</code>.</p>
+          <p>The cortex keeps one append-only file, <code>.cortex/journal.jsonl</code>. Every line has <code>seq</code>, a unique <code>id</code>, <code>at</code>, <code>actor</code> (<code>{kind: "human" or "agent", name}</code>), sometimes <code>session</code>, and a <code>type</code>.</p>
           <div class="table">
             <table>
               <thead>
@@ -307,14 +307,14 @@
               </thead>
               <tbody>
                 <tr><th scope="row"><code>change</code></th><td><code>node</code>, <code>op</code> (create, update, remove, restore), <code>before</code> and <code>after</code> versions, <code>reason</code>, <code>evidence</code>; <code>proposedBy</code> for a confirmed identity fact or an approved skill</td></tr>
-                <tr><th scope="row"><code>note</code></th><td>One observation, with <code>evidence</code>. Changes no file</td></tr>
-                <tr><th scope="row"><code>settled</code></th><td>What became of a note</td></tr>
+                <tr><th scope="row"><code>observation</code></th><td>One observation, with <code>evidence</code>. Changes no file</td></tr>
+                <tr><th scope="row"><code>settled</code></th><td>What became of an observation: kept, dropped, or a memory's name</td></tr>
                 <tr><th scope="row"><code>session</code></th><td><code>summary</code>, <code>outcome</code>, <code>made</code> (change IDs), <code>project</code>, <code>deadEnds</code> (<code>tried</code>, <code>why</code>, <code>check</code>), <code>resolved</code></td></tr>
                 <tr><th scope="row"><code>save</code></th><td>A name and a note. Changes nothing</td></tr>
               </tbody>
             </table>
           </div>
-          <p>Nodes are named <code>identity</code>, <code>playbook</code>, <code>memory/&lt;name&gt;</code>, <code>working/&lt;agent&gt;</code>, <code>skill/&lt;name&gt;</code>, <code>tool/&lt;name&gt;</code> and <code>channel/&lt;path&gt;</code>. Earlier versions are kept in <code>.cortex/history/</code> by version hash. Evidence pointers are <code>{node, version}</code> or <code>{session}</code>. Lines are ordered by time, then ID, so two machines' journals join by union. Older <code>proposal</code> and <code>decision</code> lines are read and change nothing. No line records what an agent read.</p>
+          <p>Nodes are named <code>identity</code>, <code>playbook</code>, <code>memory/&lt;name&gt;</code>, <code>working/&lt;agent&gt;</code>, <code>skill/&lt;name&gt;</code>, <code>tool/&lt;name&gt;</code> and <code>channel/&lt;path&gt;</code>. Earlier versions are kept in <code>.cortex/history/</code> by version hash. Evidence pointers are <code>{node, version}</code> or <code>{session}</code>. Lines are ordered by time, then ID, so two machines' journals join by union. Older <code>note</code> lines read as observations, <code>stamp</code> lines as saves, and <code>proposal</code> and <code>decision</code> lines are read and change nothing. No line records what an agent read.</p>
         </section>
 
         <nav class="page-pager" aria-label="Docs pages">

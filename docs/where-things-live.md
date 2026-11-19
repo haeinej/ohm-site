@@ -26,7 +26,7 @@ Public posts live in your AT Protocol repository. ohm keeps the working copy of 
 | `.vault/index.sqlite` | Every block, channel, entity, source and connection the vault found, the words for search, each file's size, date and content address | Yes: delete it, and `vault index` makes it again |
 | `.vault/cache/` | Copies of files from folders set to keep them in full | Yes, while the originals are there |
 | `_entities/`, `_sources/` | Entities, and what you captured from outside | No: they are your content |
-| `.cortex/journal.jsonl` | Every change to your cortex, with who made it; notes, sessions, saves | No: it is the cortex's history |
+| `.cortex/journal.jsonl` | Every change to your cortex, with who made it; observations, sessions, saves | No: it is the cortex's history |
 | `.cortex/history/` | Every earlier version of every part of your cortex | No |
 | `.cortex/working/` | Each agent's working memory | No |
 | `agents/secrets/` | Secrets, such as the token for the cortex over HTTP | No. Never read by the agent, never committed |

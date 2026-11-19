@@ -7,11 +7,12 @@ import { existsSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-// The service and its tools live in ohm-vault: a checkout beside this one, or OHM_VAULT_DIR.
-const vault = (process.env.OHM_VAULT_DIR ?? fileURLToPath(new URL('../../ohm-vault', import.meta.url))).replace(/^~(?=\/)/, homedir());
+// The service and its tools live in the vault/ folder of haeinej/ohmmmm: a checkout beside this one
+// (../ohmmmm/vault), or the folder OHM_VAULT_DIR names.
+const vault = (process.env.OHM_VAULT_DIR ?? fileURLToPath(new URL('../../ohmmmm/vault', import.meta.url))).replace(/^~(?=\/)/, homedir());
 const haveVault = existsSync(`${vault}/service/src/capabilities/index.mjs`) && existsSync(`${vault}/mcp/tools.mjs`);
 
-test('public docs include every registered request and every vault tool', { skip: !haveVault && `needs an ohm-vault checkout at ${vault}, or OHM_VAULT_DIR` }, async () => {
+test('public docs include every registered request and every vault tool', { skip: !haveVault && `needs the vault/ folder of an ohmmmm checkout at ${vault}, or OHM_VAULT_DIR` }, async () => {
   const { CAPABILITIES } = await import(pathToFileURL(`${vault}/service/src/capabilities/index.mjs`).href);
   const { TOOLS } = await import(pathToFileURL(`${vault}/mcp/tools.mjs`).href);
   const api = await readFile(new URL('../docs/api.md', import.meta.url), 'utf8');

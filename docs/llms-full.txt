@@ -1,6 +1,6 @@
 # ohm docs
 
-> ohm is an agentic social network that extends a person's own website: a vault of blocks in channels, kept as a folder, whose posts are private, for friends or public, with public posts published to the person's own AT Protocol account; MCP tools for the person's own coding agent; and ohm-cortex, a separate folder where that agent keeps what it knows, every change marked with who made it. Evidence comes from content; inference lives in the cortex.
+> ohm is an agentic social network that extends a person's own website: a vault of blocks in channels, kept as a folder, whose posts are private, for friends or public, with public posts published to the person's own AT Protocol account; MCP tools for the person's own coding agent; and a cortex, a separate folder where that agent keeps what it knows, every change marked with who made it. Evidence comes from content; inference lives in the cortex.
 
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.
 
@@ -22,9 +22,9 @@ There are three working surfaces, with different contracts.
 | --- | --- | --- | --- |
 | The vault service | Posts | The `ohm-vault` MCP server, the workspace, command-line sync | Versioned writes; confirmation for anything others can see. This guide |
 | A vault folder | Blocks, channels, sources, entities; posts among them | Files, and `ohm vault init, index, status, inspect, search` | Read and write files exactly; evidence only. [Data model](https://docs.ohmmmm.com/data-model.md#nodes) |
-| An ohm-cortex folder | Identity, memories, working memory, notes, skills, tools, the journal | Its own MCP server, CLI and hooks | Edit directly, marked as yours; inference must cite evidence. [The cortex](https://docs.ohmmmm.com/cortex.md) |
+| A cortex folder | Identity, memories, working memory, observations, skills, tools, the journal | Its own MCP server, CLI and hooks | Edit directly, marked as yours; inference must cite evidence. [The cortex](https://docs.ohmmmm.com/cortex.md) |
 
-Never draw an edge between two blocks. Evidence is what the content shows and only the member makes it; what you conclude belongs in the cortex, as a note or memory that cites the blocks. [The graph](https://docs.ohmmmm.com/graph.md#two)
+Never draw an edge between two blocks. Evidence is what the content shows and only the member makes it; what you conclude belongs in the cortex, as an observation or memory that cites the blocks. [The graph](https://docs.ohmmmm.com/graph.md#two)
 
 <a id="dependencies"></a>
 
@@ -45,7 +45,7 @@ The MCP path is agent → local MCP server → member's PDS for a service token 
 
 ### Connect and start
 
-From a source checkout, use Node 22 or later and install root runtime dependencies with `npm ci`, then supply a site configuration already established for the member. This runs the local MCP client; extending or testing the service also requires its separate locked dependencies, as described under [verification](https://docs.ohmmmm.com/agent-guide.md#verify). The packaged CLI includes the same shared publish helper and does not need the service backend installed locally. The [repository setup guide](https://github.com/haeinej/ohm-vault/blob/main/docs/set-up-with-an-agent.md) describes account and site setup. Supply the app password through the MCP process's private environment; do not request it in a post, commit it, or put it in documentation.
+From a source checkout of haeinej/ohmmmm, work in its `vault/` folder: use Node 22 or later and install its runtime dependencies with `npm ci`, then supply a site configuration already established for the member. This runs the local MCP client; extending or testing the service also requires its separate locked dependencies, as described under [verification](https://docs.ohmmmm.com/agent-guide.md#verify). The packaged CLI includes the same shared publish helper and does not need the service backend installed locally. The [repository setup guide](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/set-up-with-an-agent.md) describes account and site setup. Supply the app password through the MCP process's private environment; do not request it in a post, commit it, or put it in documentation.
 
 The stdio server entry point is:
 
@@ -94,34 +94,34 @@ The [data model](https://docs.ohmmmm.com/data-model.md), [MCP reference](https:/
 
 ### Implementation map
 
-These are the authoritative sources in [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault):
+These are the authoritative sources in [haeinej/ohmmmm](https://github.com/haeinej/ohmmmm), where the vault is the `vault/` folder:
 
-- [mcp/server.mjs](https://github.com/haeinej/ohm-vault/blob/main/mcp/server.mjs): configuration, PDS sign-in and stdio entry point.
-- [scripts/vault-client.mjs](https://github.com/haeinej/ohm-vault/blob/main/scripts/vault-client.mjs): per-method tokens and request renewal.
-- [mcp/tools.mjs](https://github.com/haeinej/ohm-vault/blob/main/mcp/tools.mjs): schemas, composition and confirmations.
-- [service/src/capabilities/](https://github.com/haeinej/ohm-vault/tree/main/service/src/capabilities): request contracts and authorization; [service/CAPABILITIES.md](https://github.com/haeinej/ohm-vault/blob/main/service/CAPABILITIES.md) is generated from these tables.
-- [service/public/vault/](https://github.com/haeinej/ohm-vault/tree/main/service/public/vault): member-visible editor, publish review and account-scope behavior.
+- [vault/mcp/server.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/mcp/server.mjs): configuration, PDS sign-in and stdio entry point.
+- [vault/scripts/vault-client.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/scripts/vault-client.mjs): per-method tokens and request renewal.
+- [vault/mcp/tools.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/mcp/tools.mjs): schemas, composition and confirmations.
+- [vault/service/src/capabilities/](https://github.com/haeinej/ohmmmm/tree/main/vault/service/src/capabilities): request contracts and authorization; [vault/service/CAPABILITIES.md](https://github.com/haeinej/ohmmmm/blob/main/vault/service/CAPABILITIES.md) is generated from these tables.
+- [vault/service/public/vault/](https://github.com/haeinej/ohmmmm/tree/main/vault/service/public/vault): member-visible editor, publish review and account-scope behavior.
 - [docs/build.py in ohm-site](https://github.com/haeinej/ohm-site/blob/main/docs/build.py): authored public documentation and generated HTML, Markdown and LLM outputs. The public sites live in their own repository, haeinej/ohm-site.
-- [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs): the vault folder format, its checks and its evidence edges. [docs/agents/vault-format.md](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) is its contract.
-- [vault/roots.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/roots.mjs) and [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs): `.vault/config.json` roots and `.vault/index.sqlite`; [scripts/vault.mjs](https://github.com/haeinej/ohm-vault/blob/main/scripts/vault.mjs) is the command.
-- [plans/vault.md](https://github.com/haeinej/ohm-vault/blob/main/plans/vault.md): the split between vault and cortex, and the steps not yet built.
+- [vault/vault/node.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/node.mjs): the vault folder format, its checks and its evidence edges. [vault/docs/agents/vault-format.md](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/agents/vault-format.md) is its contract.
+- [vault/vault/roots.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/roots.mjs) and [vault/vault/indexer.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/indexer.mjs): `.vault/config.json` roots and `.vault/index.sqlite`; [vault/scripts/vault.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/scripts/vault.mjs) is the command.
+- [vault/plans/vault.md](https://github.com/haeinej/ohmmmm/blob/main/vault/plans/vault.md): the split between vault and cortex, and the steps not yet built.
 
-The cortex is a separate repository, haeinej/ohm-cortex, not public yet. Its `src/tools.mjs` defines the `cortex_*` tools and `docs/guide.md` explains the journal. The vault never imports cortex, and cortex never imports the vault.
+The cortex is the `cortex/` folder of the same repository, formerly haeinej/ohm-cortex. [cortex/src/tools.mjs](https://github.com/haeinej/ohmmmm/blob/main/cortex/src/tools.mjs) defines the `cortex_*` tools, [cortex/docs/guide.md](https://github.com/haeinej/ohmmmm/blob/main/cortex/docs/guide.md) explains the journal, and [contract/vault-reader.mjs](https://github.com/haeinej/ohmmmm/blob/main/contract/vault-reader.mjs) is all cortex may ask of a vault. The vault never imports cortex, and cortex reads a vault only through that contract.
 
 <a id="verify"></a>
 
 ### Verify and document a change
 
-For module ownership, dependency reasons and state transitions, read the [human repository guide](https://github.com/haeinej/ohm-vault/blob/main/docs/repository-map.md) and [agent repository map](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/repository-map.md). They explain retained compatibility paths, account and draft guards, mirror checkpoints, renderer sidecars and recovery at each boundary.
+For module ownership, dependency reasons and state transitions, read the [human repository guide](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/repository-map.md) and [agent repository map](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/agents/repository-map.md). They explain retained compatibility paths, account and draft guards, mirror checkpoints, renderer sidecars and recovery at each boundary.
 
-For contributor verification, start from the repository root with Node 22 or later and install both locked dependency sets explicitly:
+For contributor verification, start from the `vault/` folder of haeinej/ohmmmm with Node 22 or later and install both locked dependency sets explicitly:
 
 ```
 npm ci
 npm --prefix service ci
 ```
 
-The root dependencies supply the CLI, Markdown renderer, public-site tooling and test runner inputs. The separate service package supplies its pinned signature-verification library for the backend and integration tests. Root `npm ci` does not install it. If tests cannot find `service/node_modules/@noble/curves`, run the service install, not an import workaround. Tests and package-install hooks never install these dependencies for you. This is source-checkout setup, not a prerequisite for a site owner using the packaged CLI. The [human contributor guide](https://github.com/haeinej/ohm-vault/blob/main/README.md#work-on-this-repository) explains the same boundary.
+The root dependencies supply the CLI, Markdown renderer, public-site tooling and test runner inputs. The separate service package supplies its pinned signature-verification library for the backend and integration tests. Root `npm ci` does not install it. If tests cannot find `service/node_modules/@noble/curves`, run the service install, not an import workaround. Tests and package-install hooks never install these dependencies for you. This is source-checkout setup, not a prerequisite for a site owner using the packaged CLI. The [human contributor guide](https://github.com/haeinej/ohmmmm/blob/main/vault/README.md#work-on-this-repository) explains the same boundary.
 
 Then verify the implementation:
 
@@ -135,26 +135,26 @@ For the vault folder format and the index alone, `node --test test/node.test.mjs
 
 The capability reference must match its registered tables. The docs build checks HTML page links and anchors; tests also check Markdown/LLM outbound fragments, static-page IDs, the six-route SEO contract, offline script routing and MCP initialization from an extracted package with only locked runtime dependencies. The broader tests exercise service boundaries, member isolation, versions and tool composition using local fixtures. Passing them is not evidence of a successful live member sign-in or deployment.
 
-For a local public-site preview, run `npm run home:dev` or `npm run docs:dev` from the root of haeinej/ohm-site (loopback ports 8790 and 8791). Run `npm run home:seo -- http://127.0.0.1:8790` against the home preview, not production, to check this checkout. [Public site ownership](https://github.com/haeinej/ohm-vault/blob/main/public/README.md) explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.
+For a local public-site preview, run `npm run home:dev` or `npm run docs:dev` from the root of haeinej/ohm-site (loopback ports 8790 and 8791). Run `npm run home:seo -- http://127.0.0.1:8790` against the home preview, not production, to check this checkout. [Public site ownership](https://github.com/haeinej/ohm-site/blob/main/README.md) explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.
 
 Use the bundled `document-work` skill for each coherent completed outcome. Update the canonical human guide with purpose, dependency reasons and recognizable first use; update this guide or the precise reference with contracts and recovery. Regenerate outputs from their source. Use synthetic examples and keep private member material out of public docs. Report implementation, local test evidence and live verification separately. [Status and limits](https://docs.ohmmmm.com/limits.md) records the remaining product boundaries.
 
 ## System overview
 
-ohm has three parts. ohm-vault holds what a member knows and makes, ohm-cortex holds what agents know about the member, and the member's PDS owns public records. The vault service stores the working copy of posts; clients on the member's device perform approved publication.
+ohm has three parts. The vault holds what a member knows and makes, the cortex holds what agents know about the member, and the member's PDS owns public records. The vault service stores the working copy of posts; clients on the member's device perform approved publication.
 
 <a id="parts"></a>
 
 ### Vault, cortex and PDS
 
-| | ohm-vault | ohm-cortex | The member's PDS |
+| | Vault | Cortex | The member's PDS |
 | --- | --- | --- | --- |
-| Holds | Blocks, channels, sources, entities; posts among them | Identity, memories, working memory, notes, skills, tools, the journal | Public `com.ohmmmm.post` records, identity, files |
+| Holds | Blocks, channels, sources, entities; posts among them | Identity, memories, working memory, observations, skills, tools, the journal | Public `com.ohmmmm.post` records, identity, files |
 | Edges | Evidence only: what the content shows | Inference: cortex nodes pointing at vault blocks (`grounds`, `observes`, `learned`, `acts`) | None of ohm's |
 | Kept as | A folder on the member's machine, and for posts, the vault service's working copy | A folder on the member's machine | A repository at the member's host |
-| Repository | [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault) | haeinej/ohm-cortex (not public yet) | External |
+| Repository | `vault/` in [haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/vault) | `cortex/` in [haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/cortex), formerly ohm-cortex | External |
 
-The vault never imports cortex, and cortex never imports the vault. Cortex refers to blocks by ID and version only, through a small read-only vault contract: today its own folder reader, and planned, a reader over the vault's index. The cortex is not synced with ohm or stored by the vault service.
+The two share one repository and still never import each other. Cortex refers to blocks by ID and version only, through a small read-only vault contract, [contract/vault-reader.mjs](https://github.com/haeinej/ohmmmm/blob/main/contract/vault-reader.mjs): in a home, the vault's own reader of its folder; elsewhere, cortex's own folder reader; planned, a reader over the vault's index. The cortex is not synced with ohm or stored by the vault service.
 
 <a id="how"></a>
 
@@ -196,7 +196,7 @@ Diagram: the parts of ohm and what passes between them.
 | Agent tools | An MCP server, `ohm-vault`, on the member's machine | Vault tools composed from service requests. [Agent integration](https://docs.ohmmmm.com/mcp.md) | Implemented |
 | Folder sync | A command-line client on the member's machine | Two-way sync between the vault and a folder of Markdown files, for posts | Implemented |
 | Vault folder and index | The `ohm vault` command on the member's machine | Reads blocks, channels, sources and entities, and read-only roots; keeps `.vault/index.sqlite`. No network calls | Implemented |
-| ohm-cortex | The member's machine: MCP over stdio or HTTP, CLI, hooks | Agent memory, the journal, history. Separate software | Implemented, outside this repository |
+| Cortex | The member's machine: MCP over stdio or HTTP, CLI, hooks | Agent memory, the journal, history. Separate from the vault | Implemented, in `cortex/` |
 | Vault service | Cloudflare Workers and D1 | Stores posts; checks versions; computes mirror and publish plans | Implemented |
 | ohm sign-in | Cloudflare Workers and D1 | ohm accounts and sessions, with Google, Microsoft and Bluesky as identity providers | Implemented |
 | Personal Data Server (PDS) | The member's host: self-hosted, or Bluesky | The account's DID, signing key, and repository of public records and files | External |
@@ -470,7 +470,7 @@ The database enforces unique keys and conditional updates.
 
 ### Vault folder nodes
 
-A vault folder is read as four kinds of node by [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs), which is pure: callers pass `{ path, text }` and write what they get back. The lexicons in `lexicons/com/ohmmmm/vault/` (`block`, `channel`, `entity`, `source`, all keyed by TID) describe file contents; none is written to a PDS.
+A vault folder is read as four kinds of node by [vault/vault/node.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/node.mjs), which is pure: callers pass `{ path, text }` and write what they get back. The lexicons in `lexicons/com/ohmmmm/vault/` (`block`, `channel`, `entity`, `source`, all keyed by TID) describe file contents; none is written to a PDS.
 
 | Node | Path | Fields |
 | --- | --- | --- |
@@ -513,23 +513,23 @@ A block's folder is its home channel. A file with `kind: post`, or with no `kind
 
 ### The index
 
-`.vault/index.sqlite`, written only by `scan` in [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs), holds the tables `meta`, `files`, `nodes`, `edges`, `terms` and `problems`. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a `reference` root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. [The agent reference](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) has the full contract.
+`.vault/index.sqlite`, written only by `scan` in [vault/vault/indexer.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/indexer.mjs), holds the tables `meta`, `files`, `nodes`, `edges`, `terms` and `problems`. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a `reference` root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. [The agent reference](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/agents/vault-format.md) has the full contract.
 
 <a id="journal"></a>
 
 ### The cortex journal
 
-ohm-cortex keeps one append-only file, `.cortex/journal.jsonl`. Every line has `seq`, a unique `id`, `at`, `actor` (`{kind: "human" or "agent", name}`), sometimes `session`, and a `type`.
+The cortex keeps one append-only file, `.cortex/journal.jsonl`. Every line has `seq`, a unique `id`, `at`, `actor` (`{kind: "human" or "agent", name}`), sometimes `session`, and a `type`.
 
 | `type` | Holds |
 | --- | --- |
 | `change` | `node`, `op` (create, update, remove, restore), `before` and `after` versions, `reason`, `evidence`; `proposedBy` for a confirmed identity fact or an approved skill |
-| `note` | One observation, with `evidence`. Changes no file |
-| `settled` | What became of a note |
+| `observation` | One observation, with `evidence`. Changes no file |
+| `settled` | What became of an observation: kept, dropped, or a memory's name |
 | `session` | `summary`, `outcome`, `made` (change IDs), `project`, `deadEnds` (`tried`, `why`, `check`), `resolved` |
 | `save` | A name and a note. Changes nothing |
 
-Nodes are named `identity`, `playbook`, `memory/<name>`, `working/<agent>`, `skill/<name>`, `tool/<name>` and `channel/<path>`. Earlier versions are kept in `.cortex/history/` by version hash. Evidence pointers are `{node, version}` or `{session}`. Lines are ordered by time, then ID, so two machines' journals join by union. Older `proposal` and `decision` lines are read and change nothing. No line records what an agent read.
+Nodes are named `identity`, `playbook`, `memory/<name>`, `working/<agent>`, `skill/<name>`, `tool/<name>` and `channel/<path>`. Earlier versions are kept in `.cortex/history/` by version hash. Evidence pointers are `{node, version}` or `{session}`. Lines are ordered by time, then ID, so two machines' journals join by union. Older `note` lines read as observations, `stamp` lines as saves, and `proposal` and `decision` lines are read and change nothing. No line records what an agent read.
 
 ## Mirror and publish
 
@@ -698,7 +698,7 @@ Listing the tools needs no configuration and no sign-in. The server signs in at 
 Start the server directly, or through a client configuration that loads it:
 
 ```
-npx github:haeinej/ohm-vault mcp
+npx github:haeinej/ohmmmm mcp
 ```
 
 This exposes the MCP tools.
@@ -781,11 +781,11 @@ Some service requests are deliberately not available to an agent.
 These tools work on posts in the vault service only.
 
 - **A vault folder** has no MCP tools yet. Tools that search, read, follow connections, capture and collect blocks through `.vault/index.sqlite` are planned. Until then the `ohm vault` command reads the folder, and makes no network calls. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md)
-- **ohm-cortex** is a separate MCP server, over standard input and output or HTTP, with twenty `cortex_*` tools. An agent connected to both keeps its conclusions there, never as edges between blocks. [The cortex](https://docs.ohmmmm.com/cortex.md)
+- **The cortex** is a separate MCP server, `cortex`, over standard input and output or HTTP, with twenty `cortex_*` tools. An agent connected to both keeps its conclusions there, never as edges between blocks. [The cortex](https://docs.ohmmmm.com/cortex.md)
 
 ## Service API
 
-The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.
+The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.
 
 <a id="conventions"></a>
 
@@ -965,6 +965,155 @@ One friends-only block or post another member shares with the asker, as its file
 | Access | Any authenticated account |
 | Parameters | `owner`: the DID whose friends layer to read<br>`id`: the block's or post's ID |
 | Returns | `block` (id, path, text), `version` |
+
+<a id="private"></a>
+
+### Private
+
+The private layer: private blocks, kept only as ciphertext sealed on the member's devices. The service stores and syncs them and cannot read them; no friend or agent can be given their contents by the service. Each is `{ id, ciphertext, version }`, with an opaque ID and compare-and-swap on the version. Several change together or not at all; every version is kept for restoring; the journal is sealed too; and a key rotation re-wraps every kept version and journal entry.
+
+#### `com.ohmmmm.vault.listPrivateBlocks`
+
+Every private block, by opaque ID, with its version, size and the generation of the master key that wraps its key. With `since`, only what changed after an earlier list, removals included. With `below`, only blocks wrapped by an older generation than that, for finishing a key rotation.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `since`: optional: the `cursor` of an earlier list<br>`below`: optional: a generation |
+| Returns | `blocks` (id, version, generation, size), `cursor`, and `more` when there is another page |
+
+#### `com.ohmmmm.vault.getPrivateBlock`
+
+One private block's ciphertext and version. Only the member's devices can open it.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `id`: the block's opaque ID |
+| Returns | `id`, `ciphertext`, `version` |
+
+#### `com.ohmmmm.vault.putPrivateBlock`
+
+Saves one private block's ciphertext. Anything that is not a sealed file is refused, so readable text is never kept, and so is a block sealed under an older master key than a rotation started. `replaces` is the version being replaced and is left out for a new block. Sent twice, it ends the same as sent once.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `block`: `id` and `ciphertext` (the sealed file)<br>`replaces`: optional: the version it replaces<br>`journal`: optional: a sealed journal entry describing the change |
+| Returns | `id`, `version`, `rev` (the kept version it made), and `unchanged` when nothing differed |
+
+#### `com.ohmmmm.vault.putPrivateBlocks`
+
+Changes several private blocks together, all or none, as moving a block between channels changes the block and two channel files. Each change is a write (`id`, `ciphertext`, `replaces`) or a removal (`id`, `remove: true`, `replaces`); one stale version, or one block sealed under a key older than a rotation started, refuses them all. `batchId` makes it safe to send again: a repeat answers what the first did and changes nothing.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `changes`: the changes, 1 to 100<br>`batchId`: a key the device makes for this batch<br>`journal`: optional: a sealed journal entry describing them |
+| Returns | `blocks` (id, version and rev, or removed), and `replayed` for a repeat |
+
+#### `com.ohmmmm.vault.listPrivateVersions`
+
+A private block's kept versions, newest first, each by a `rev` that never changes. The device opens one to show or restore it; restoring is a new change.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `id`: the block's opaque ID |
+| Returns | `id`, `versions` (rev, version, generation, size, created) |
+
+#### `com.ohmmmm.vault.getPrivateVersion`
+
+One kept version of a private block, as ciphertext.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `id`: the block's opaque ID<br>`rev`: the version's rev |
+| Returns | `id`, `rev`, `version`, `ciphertext` |
+
+#### `com.ohmmmm.vault.listPrivateJournal`
+
+The private layer's journal: sealed entries, oldest first, after `since`. Only the member's devices can read what each says.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `since`: optional: the `cursor` of an earlier list |
+| Returns | `entries` (seq, entry, created), `cursor`, and `more` when there is another page |
+
+#### `com.ohmmmm.vault.beginPrivateRotation`
+
+Starts a rotation of the member's master key to generation `target`, as the private store sees it: from now on a block sealed under an older generation is refused. The re-wrap happens on the member's device. The same target again changes nothing.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `target`: the generation being rotated to |
+| Returns | `target`, `state`, `remaining` (blocks still below it), and `unchanged` when it was already started |
+
+#### `com.ohmmmm.vault.getPrivateRotation`
+
+The member's latest key rotation, and how many private blocks are still below its target, so any device can resume it.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | None |
+| Returns | `rotation` (target, state, remaining, started, finished) or null |
+
+#### `com.ohmmmm.vault.listPrivateBelow`
+
+What a rotation to `target` still has to re-wrap: every kept version (by block and rev) and journal entry (by seq) sealed under an older key.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `target`: the generation being rotated to |
+| Returns | `target`, `versions` (id, rev, generation), `journal` (seq, generation), and `more` when there is more |
+
+#### `com.ohmmmm.vault.rewrapPrivate`
+
+Re-wrapped copies of kept versions and journal entries, for a rotation under way to `target`. Each must keep exactly the contents it replaces, with only its file key re-wrapped; a version that is its block's latest moves the block with it. All are kept or none. Safe to send again.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `target`: the generation being rotated to<br>`versions`: `id`, `rev`, `ciphertext` for each<br>`journal`: `seq`, `entry` for each |
+| Returns | `target`, `remaining` |
+
+#### `com.ohmmmm.vault.finishPrivateRotation`
+
+Finishes the rotation to `target`, only if no kept version or journal entry is still below it, checked in the same statement. The account deletes the old key's copies only after this.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `target`: the generation being rotated to |
+| Returns | `target`, `state`, and `unchanged` when it was already finished |
+
+#### `com.ohmmmm.vault.deletePrivateBlock`
+
+Removes one private block. Its kept versions stay, so it can be restored.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `id`: the block's opaque ID<br>`replaces`: the version being removed<br>`journal`: optional: a sealed journal entry |
+| Returns | `id`, `removed` |
 
 <a id="structure"></a>
 
@@ -1150,13 +1299,17 @@ A refusal is JSON with an `error` code from the table below and a `message` writ
 | `WrongMethod` | 405 | The request is the other of GET and POST |
 | `InvalidRequest` | 400 | The request is not JSON, or something it says is not what that request takes |
 | `InvalidPost` | 400 | The post is not one the vault can hold. The message lists every reason |
-| `InvalidBlock` | 400 | The block is not one the friends layer can hold: it is private or public, a post, or its file has problems. The message lists every reason |
+| `InvalidBlock` | 400 | The block is not one the layer can hold: for the friends layer, it is private or public, a post, or its file has problems; for the private layer, it is not a sealed file under an opaque ID. The message says why |
 | `InvalidCursor` | 400 | `since` is not a value an earlier list returned |
 | `NotFound` | 404 | There is no such post, block or saved version, or nothing there is shared with the asker |
-| `Changed` | 409 | The post or block has changed since the version the request names. The answer carries the current version |
+| `Changed` | 409 | The post, block or private block has changed since the version the request names. The answer carries the current version |
 | `SlugTaken` | 409 | Another post in the vault already has that slug |
 | `PathTaken` | 409 | Another block in the friends layer is already at that path |
-| `TooLarge` | 413 | The post is more than 600 KB of text, or a file it places is empty or larger than 25 MB |
+| `OlderKey` | 409 | The private block is sealed under an older master key than the member is rotating, or rotated, to |
+| `NoRotation` | 409 | No rotation to that generation is under way |
+| `RotationAhead` | 409 | The member already rotated to a later master key than the one asked for |
+| `RotationRemaining` | 409 | A rotation cannot finish while some kept versions or journal entries are still sealed under the older key. The answer says how many |
+| `TooLarge` | 413 | The post or block is more than 600 KB of text, a sealed private block is more than 1 MB, or a file it places is empty or larger than 25 MB |
 | `FileUnreachable` | 502 | A file a post places could not be fetched from where the post says it is |
 | `AccountNotFound` | 404 | No AT Protocol account answers to that handle or DID |
 | `NoRepository` | 400 | The account's DID document does not say where its repository is kept |
@@ -1314,9 +1467,9 @@ You do not need an account to begin. A vault folder is a folder of Markdown file
 From inside the folder you want as your vault, run:
 
 ```
-npx github:haeinej/ohm-vault vault init
-npx github:haeinej/ohm-vault vault index
-npx github:haeinej/ohm-vault vault search rain
+npx github:haeinej/ohmmmm vault init
+npx github:haeinej/ohmmmm vault index
+npx github:haeinej/ohmmmm vault search rain
 ```
 
 The first makes `.vault/config.json`, where you can name other folders to read. The second reads everything and keeps an index beside it, in `.vault/index.sqlite`. The third finds blocks by their words. Nothing here signs in, reaches ohm, or publishes anything. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md)
@@ -1824,7 +1977,7 @@ A connection says that one thing in your vault relates to another. Every connect
 
 Two blocks belong together because you put them together: you filed them in one channel, linked one from the other, or quoted the same source. That is something anyone can check by reading your files, and it stays true until you change them.
 
-What an agent concludes about your blocks is different. It may be useful, and it may be wrong. So it is never stored as a connection. It is kept in your cortex, as a note or a memory that points at the blocks it was drawn from, and your blocks are not changed by it. [The graph](https://docs.ohmmmm.com/graph.md)
+What an agent concludes about your blocks is different. It may be useful, and it may be wrong. So it is never stored as a connection. It is kept in your cortex, as an observation or a memory that points at the blocks it was drawn from, and your blocks are not changed by it. [The graph](https://docs.ohmmmm.com/graph.md)
 
 <a id="kinds"></a>
 
@@ -1870,7 +2023,7 @@ When the post is published, each entry becomes an address in the record's `conne
 `vault index` reads every block and keeps every connection in `.vault/index.sqlite`, with the line it was found on, or the property it came from.
 
 ```
-npx github:haeinej/ohm-vault vault inspect churn-query
+npx github:haeinej/ohmmmm vault inspect churn-query
 ```
 
 `vault inspect` shows one block with what links to it and what it links to, besides where its original is and its size. Nothing is written into your files. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md#index)
@@ -1879,7 +2032,7 @@ npx github:haeinej/ohm-vault vault inspect churn-query
 
 ### What a connection is not
 
-- **Not a guess.** If an agent sees that two blocks belong together, it writes a note or a memory in your cortex that cites both, and it may suggest the connection to you in words. If you agree and connect them, the connection is yours, like any other.
+- **Not a guess.** If an agent sees that two blocks belong together, it writes an observation or a memory in your cortex that cites both, and it may suggest the connection to you in words. If you agree and connect them, the connection is yours, like any other.
 - **Not a tag.** A `#tag` is indexed for search, and is not a connection.
 - **Not shared on their own.** Connections live in your files and your index. Only what a published post links to goes out, with the post, as addresses in its record.
 
@@ -1906,7 +2059,7 @@ Your vault and your cortex form one graph around you. Its edges are of two kinds
 ### Two kinds of edge
 
 - **Evidence** is what the content shows: a channel contains a block, a block links to another, mentions a person, or came from a source. You make it by writing and filing. Anyone can check it, and it can always be rebuilt from your files. **A model never makes evidence.**
-- **Inference** is what your cortex concludes: a memory, a note, a skill or a tool, each pointing at what it was drawn from. Remove an inference and the evidence under it is untouched.
+- **Inference** is what your cortex concludes: a memory, an observation, a skill or a tool, each pointing at what it was drawn from. Remove an inference and the evidence under it is untouched.
 
 **A model never draws an edge between two blocks.** It writes a cortex node that points at both.
 
@@ -1933,7 +2086,7 @@ Each part of the cortex joins the graph by pointing down at what it was drawn fr
 | Cortex node | Edge | Points at | Its evidence |
 | --- | --- | --- | --- |
 | Memory | `grounds` | The blocks, channels or sessions it rests on | Two or more distinct blocks, each at the version read; or the session where you said it |
-| Note | `observes` | What it saw it in | One session, or a node at a version |
+| Observation | `observes` | What it saw it in | One session, or a node at a version |
 | Skill | `learned` | The channels and blocks it was used on | Three or more sessions |
 | Tool | `acts` | What it reads and writes | Its declaration, which you write |
 | Identity fact | `about` | You | Your words, or the block and passage that state it |
@@ -1941,10 +2094,10 @@ Each part of the cortex joins the graph by pointing down at what it was drawn fr
 The counts are guidance in the cortex's playbook, not rules in code: the cortex checks that each pointer is well formed and that what it cites exists. [The cortex](https://docs.ohmmmm.com/cortex.md#evidence)
 
 Diagram: inference in the cortex points down at evidence in the vault.
-- Cortex (inference): a skill, a memory, a note and a tool.
+- Cortex (inference): a skill, a memory, an observation and a tool.
 - Vault (evidence): the channel "essays", the blocks "On slowness" and "Bridge at dusk", a source (a book) and an entity (the Thames).
 - Evidence, made by the person: the channel contains "On slowness"; "On slowness" links to "Bridge at dusk"; "On slowness" is from the book; "Bridge at dusk" mentions the Thames.
-- Inference, drawn by the cortex: the skill was learned on the channel; the memory grounds on "On slowness"; the note observes "Bridge at dusk"; the tool acts on "Bridge at dusk".
+- Inference, drawn by the cortex: the skill was learned on the channel; the memory grounds on "On slowness"; the observation observes "Bridge at dusk"; the tool acts on "Bridge at dusk".
 - No line joins two blocks except one the person made.
 
 <a id="layers"></a>
@@ -1954,7 +2107,7 @@ Diagram: inference in the cortex points down at evidence in the vault.
 The workspace draws the graph centred on you, a layer at a time.
 
 1. **You.**
-2. **Your cortex:** memories, notes, skills and tools, close around you. It is only ever yours.
+2. **Your cortex:** memories, observations, skills and tools, close around you. It is only ever yours.
 3. **Your channels,** then the channels inside them.
 4. **Blocks.** A block can be in any number of channels.
 5. **Sources and entities** the blocks came from and mention.
@@ -1964,8 +2117,8 @@ The workspace draws the graph centred on you, a layer at a time.
 ### What is built
 
 - **Evidence edges are built,** in the vault's index on your computer. `vault inspect` lists them for one block.
-- **Inference is built,** in ohm-cortex: notes and memories carry their evidence as pointers to a node at a version, or to a session.
-- **The cortex reads your vault through a simpler reader today.** Connecting a vault folder with `cortex vault connect` reads each Markdown file as a block in the one channel of its folder. Reading the vault's full format, through its index, is planned.
+- **Inference is built,** in the cortex: observations and memories carry their evidence as pointers to a node at a version, or to a session.
+- **The cortex reads your vault through a simpler reader today.** In a home, the cortex reads its sibling vault through the vault's own reader; a folder connected with `cortex vault connect` is read by cortex's own. Both read each Markdown file as a block in the one channel of its folder. Reading the vault's full format, through its index, is planned.
 
 <a id="designed"></a>
 
@@ -2246,7 +2399,7 @@ Each one is a **root**, and its files appear as blocks in a channel of their own
 **Start the configuration,** from inside your vault folder:
 
 ```
-npx github:haeinej/ohm-vault vault init
+npx github:haeinej/ohmmmm vault init
 ```
 
 **Name the folders it should read,** in `.vault/config.json`:
@@ -2264,14 +2417,14 @@ npx github:haeinej/ohm-vault vault init
 **Read everything,** and keep what was found:
 
 ```
-npx github:haeinej/ohm-vault vault index
+npx github:haeinej/ohmmmm vault index
 ```
 
 **Look for something,** and look at one block closely:
 
 ```
-npx github:haeinej/ohm-vault vault search 서울 rain
-npx github:haeinej/ohm-vault vault inspect churn-query
+npx github:haeinej/ohmmmm vault search 서울 rain
+npx github:haeinej/ohmmmm vault inspect churn-query
 ```
 
 You have succeeded when `vault search` finds a file from one of your roots. Each command prints what it did as JSON, and says in a sentence what it could not do.
@@ -2575,7 +2728,7 @@ Who follows whom is public, as it is on Bluesky. That is what lets an agent see 
 
 ## The cortex
 
-ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.
+The cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate from the vault: it points at your blocks and never changes them.
 
 <a id="why"></a>
 
@@ -2593,7 +2746,7 @@ It holds no content of yours. Your writing stays in your vault; the cortex point
 
 | You need | Why |
 | --- | --- |
-| A checkout of ohm-cortex and Node | It runs on your own computer. Its tests run on Node 20 and 22. Its repository is not public yet |
+| Node, and [haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/cortex) | It runs on your own computer, on Node 20 or later. It is the `cortex/` folder of that public repository, formerly ohm-cortex |
 | A folder for the cortex | The cortex is the folder. `~/cortex` unless you name another |
 | A coding agent that speaks MCP | It reads and writes the cortex through twenty `cortex_*` tools. Claude Code and Codex can also run its hooks |
 | A vault folder | Optional. It lets memories point at your blocks, and tells the agent what each channel means |
@@ -2636,17 +2789,19 @@ For you it is three folders: what your agent has learned, what it knows how to d
 
 ### Your first use
 
-From your checkout of ohm-cortex, start a cortex:
+From a checkout of haeinej/ohmmmm, start a cortex:
 
 ```
-node bin/cortex.mjs init ~/cortex
+node cortex/bin/cortex.mjs init ~/cortex
 ```
 
 Then give your agent this as an MCP server's command:
 
 ```
-node /path/to/cortex/bin/cortex.mjs mcp ~/cortex
+node /path/to/ohmmmm/cortex/bin/cortex.mjs mcp ~/cortex
 ```
+
+`npx github:haeinej/ohmmmm init <handle>` makes a home instead: a folder with your vault and a cortex side by side, where each finds the other by itself.
 
 When it connects, the agent is told to call `cortex_start`, which hands it the rules, your identity, its memories and what is waiting for you. Ask it something about yourself, then ask it to remember one thing. Run `cortex history` and you see the memory it wrote, under its name.
 
@@ -2697,7 +2852,7 @@ A dead end is what it tried and dropped, why, and a command that would show whet
 
 ### Evidence
 
-A note or a memory says what it was drawn from, as a list of pointers: a node at the version read, such as a block in your vault or another memory, or a session.
+An observation or a memory says what it was drawn from, as a list of pointers: a node at the version read, such as a block in your vault or another memory, or a session.
 
 - **Something you said** rests on the session you said it in, and becomes a memory at once.
 - **Something inferred about you** rests on two or more sessions.
@@ -2712,7 +2867,7 @@ Cortex checks that each pointer is well formed and that what it cites exists. Ho
 
 `cortex vault connect <folder>` connects a vault kept in a folder and writes `vault.md`, where the agent records what each channel means and how blocks there are filed. Each session, cortex brings `vault.md` in step: counts, what moved or left, and memories pointing at blocks no longer there.
 
-Cortex's own folder reader is simpler than the vault format: it reads each Markdown file as a block in the one channel of its folder. Reading a vault's blocks in many channels, through the vault's index, is planned.
+In a home, there is nothing to connect: the cortex reads the vault beside it through the vault's own reader, unless you connected another. Both readers are simpler than the vault format: they read each Markdown file as a block in the one channel of its folder. Reading a vault's blocks in many channels, through the vault's index, is planned.
 
 <a id="not"></a>
 
@@ -2739,7 +2894,7 @@ When agents edit directly, you need to see what each one did, and to take back w
 
 | What | History | Status |
 | --- | --- | --- |
-| Your cortex | Every change, with who made it; every earlier version; saves; restore and revert; agents' sessions and dead ends | Built, in ohm-cortex |
+| Your cortex | Every change, with who made it; every earlier version; saves; restore and revert; agents' sessions and dead ends | Built, in the cortex |
 | Posts in the vault service | A version per post, so two saves never overwrite each other unseen. Earlier versions are not kept, and a removed post cannot be brought back | Version history not built |
 | Your vault folder | Your own files. Keep them in git, or your own backup, for history. The index keeps none | Not part of ohm |
 | The workspace's history view | Dates, You and Agents, over everything | Designed, not built |
@@ -2753,8 +2908,8 @@ Everything that happens in a cortex is a line in one append-only file, `.cortex/
 | Line | Written when | It holds |
 | --- | --- | --- |
 | `change` | A node changes, by you or an agent | The node, what was done, the versions before and after, why, and the evidence |
-| `note` | An agent observes something | One line, with evidence. It changes no file |
-| `settled` | Notes are settled | What became of a note: kept, dropped, or the memory it went into |
+| `observation` | An agent observes something | One line, with evidence. It changes no file |
+| `settled` | Observations are settled | What became of an observation: kept, dropped, or the memory it went into |
 | `session` | An agent finishes or gives up a task | What was done, the changes it made, and its dead ends |
 | `save` | Someone names a point in history | A name and a note. It changes nothing |
 
@@ -2846,11 +3001,11 @@ Showing history in the workspace is designed in the ohm-ux wireframe, and **not 
 - **One line per change,** as a verb and a page: Created, Edited, Moved, Filed, Connected, Restored, Reverted, Deleted. An icon says whether you or an agent made it.
 - **Open a line** to see who made it, when and why, and what it touched. From there: Revert this change, Restore this version, or open the page.
 - **A page's versions,** from a clock in its toolbar.
-- **Daily autosaves:** every page as it was at the end of each day with changes. ohm-cortex does not write these yet.
+- **Daily autosaves:** every page as it was at the end of each day with changes. The cortex does not write these yet.
 - **Edits close together join one line,** when the same person or agent types within five minutes.
 - **A page others can see** is read only here: changing what others see asks first.
 
-In this design, reverting a change undoes only the parts that change touched, and is refused if a later change touched the same part. ohm-cortex today reverts a whole node, and refuses if the node has changed since.
+In this design, reverting a change undoes only the parts that change touched, and is refused if a later change touched the same part. The cortex today reverts a whole node, and refuses if the node has changed since.
 
 ## Your agent
 
@@ -2869,7 +3024,7 @@ What your agent remembers about you is not kept in the vault. It is kept in a co
 | Server | What it works in | Its tools |
 | --- | --- | --- |
 | `ohm-vault` | Your posts, in the vault service | Ten `vault_*` tools. [MCP reference](https://docs.ohmmmm.com/mcp.md#tools) |
-| ohm-cortex | Your cortex folder | Twenty `cortex_*` tools. [The cortex](https://docs.ohmmmm.com/cortex.md) |
+| `cortex` | Your cortex folder | Twenty `cortex_*` tools. [The cortex](https://docs.ohmmmm.com/cortex.md) |
 
 Agent tools for a vault folder on your computer, with blocks of every kind, are planned and not built. Until then an agent can run the `vault search` and `vault inspect` commands in that folder like any other command. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md#index)
 
@@ -2934,7 +3089,7 @@ Your cortex works the other way round, because nothing in it is ever shown to an
 - **It edits directly.** It writes memories, its own working memory, and what each channel of your vault means, without asking first.
 - **Every change is marked with its name,** its reason, and the versions before and after. You read them with `cortex history`, and undo any of them with `cortex revert` or `cortex restore`.
 - **What needs your trust waits.** An identity fact is only proposed until you confirm it; a skill waits for your approval; a tool is only asked for.
-- **It never connects two blocks.** If it sees that two belong together, it writes a note or a memory that cites both, and may suggest the connection to you. [Connections](https://docs.ohmmmm.com/connections.md#not)
+- **It never connects two blocks.** If it sees that two belong together, it writes an observation or a memory that cites both, and may suggest the connection to you. [Connections](https://docs.ohmmmm.com/connections.md#not)
 
 [History](https://docs.ohmmmm.com/history.md)
 
@@ -3075,7 +3230,7 @@ Public posts live in your AT Protocol repository. ohm keeps the working copy of 
 | `.vault/index.sqlite` | Every block, channel, entity, source and connection the vault found, the words for search, each file's size, date and content address | Yes: delete it, and `vault index` makes it again |
 | `.vault/cache/` | Copies of files from folders set to keep them in full | Yes, while the originals are there |
 | `_entities/`, `_sources/` | Entities, and what you captured from outside | No: they are your content |
-| `.cortex/journal.jsonl` | Every change to your cortex, with who made it; notes, sessions, saves | No: it is the cortex's history |
+| `.cortex/journal.jsonl` | Every change to your cortex, with who made it; observations, sessions, saves | No: it is the cortex's history |
 | `.cortex/history/` | Every earlier version of every part of your cortex | No |
 | `.cortex/working/` | Each agent's working memory | No |
 | `agents/secrets/` | Secrets, such as the token for the cortex over HTTP | No. Never read by the agent, never committed |
@@ -3164,12 +3319,12 @@ Each piece is one of: **Built**; **Built, not verified**, where tests pass but i
 
 | Area | Status | Notes |
 | --- | --- | --- |
-| The cortex folder, its MCP server over standard input and over HTTP | Built | Separate software, ohm-cortex; 119 tests, on Node 20 and 22 |
+| The cortex folder, its MCP server over standard input and over HTTP | Built | `cortex/` in haeinej/ohmmmm, formerly ohm-cortex; 126 tests, run in CI on Node 22 |
 | The journal: changes marked with who made them, history, as-of, save, restore, revert | Built | |
 | Sessions and dead ends | Built | Shown at session start near the folder they were recorded in |
-| Evidence on notes and memories | Built | Checked for shape and existence; how much is enough is guidance |
+| Evidence on observations and memories | Built | Checked for shape and existence; how much is enough is guidance |
 | Hooks for Claude Code and Codex | Built, not verified | Tested with synthetic inputs; not yet tried in a real session |
-| Reading a vault folder | Built | Through cortex's own folder reader: one channel per file |
+| Reading a vault folder | Built | Through the vault's own reader in a home, or cortex's folder reader: one channel per file |
 | Reading the vault's full format through its index | Planned | |
 | Memories marked out of date when their blocks change | Planned | |
 | ChatGPT and Claude web connectors | Not built | They need OAuth |
@@ -3185,7 +3340,7 @@ These are drawn in the ohm-ux wireframe with sample data. None is in the live ed
 | Connecting words, whole blocks and pulling a line; the connections card | Planned | [Connections](https://docs.ohmmmm.com/connections.md#designed) |
 | The graph, with evidence and inference | Planned | [The graph](https://docs.ohmmmm.com/graph.md#designed) |
 | Version history: Dates, You and Agents; revert, restore, save | Planned | [History](https://docs.ohmmmm.com/history.md#designed) |
-| Daily autosaves | Planned | ohm-cortex does not write them yet |
+| Daily autosaves | Planned | The cortex does not write them yet |
 
 <a id="for-good"></a>
 

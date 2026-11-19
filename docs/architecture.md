@@ -1,19 +1,19 @@
 # System overview
 
-ohm has three parts. ohm-vault holds what a member knows and makes, ohm-cortex holds what agents know about the member, and the member's PDS owns public records. The vault service stores the working copy of posts; clients on the member's device perform approved publication.
+ohm has three parts. The vault holds what a member knows and makes, the cortex holds what agents know about the member, and the member's PDS owns public records. The vault service stores the working copy of posts; clients on the member's device perform approved publication.
 
 <a id="parts"></a>
 
 ## Vault, cortex and PDS
 
-| | ohm-vault | ohm-cortex | The member's PDS |
+| | Vault | Cortex | The member's PDS |
 | --- | --- | --- | --- |
-| Holds | Blocks, channels, sources, entities; posts among them | Identity, memories, working memory, notes, skills, tools, the journal | Public `com.ohmmmm.post` records, identity, files |
+| Holds | Blocks, channels, sources, entities; posts among them | Identity, memories, working memory, observations, skills, tools, the journal | Public `com.ohmmmm.post` records, identity, files |
 | Edges | Evidence only: what the content shows | Inference: cortex nodes pointing at vault blocks (`grounds`, `observes`, `learned`, `acts`) | None of ohm's |
 | Kept as | A folder on the member's machine, and for posts, the vault service's working copy | A folder on the member's machine | A repository at the member's host |
-| Repository | [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault) | haeinej/ohm-cortex (not public yet) | External |
+| Repository | `vault/` in [haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/vault) | `cortex/` in [haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/cortex), formerly ohm-cortex | External |
 
-The vault never imports cortex, and cortex never imports the vault. Cortex refers to blocks by ID and version only, through a small read-only vault contract: today its own folder reader, and planned, a reader over the vault's index. The cortex is not synced with ohm or stored by the vault service.
+The two share one repository and still never import each other. Cortex refers to blocks by ID and version only, through a small read-only vault contract, [contract/vault-reader.mjs](https://github.com/haeinej/ohmmmm/blob/main/contract/vault-reader.mjs): in a home, the vault's own reader of its folder; elsewhere, cortex's own folder reader; planned, a reader over the vault's index. The cortex is not synced with ohm or stored by the vault service.
 
 <a id="how"></a>
 
@@ -55,7 +55,7 @@ Diagram: the parts of ohm and what passes between them.
 | Agent tools | An MCP server, `ohm-vault`, on the member's machine | Vault tools composed from service requests. [Agent integration](https://docs.ohmmmm.com/mcp.md) | Implemented |
 | Folder sync | A command-line client on the member's machine | Two-way sync between the vault and a folder of Markdown files, for posts | Implemented |
 | Vault folder and index | The `ohm vault` command on the member's machine | Reads blocks, channels, sources and entities, and read-only roots; keeps `.vault/index.sqlite`. No network calls | Implemented |
-| ohm-cortex | The member's machine: MCP over stdio or HTTP, CLI, hooks | Agent memory, the journal, history. Separate software | Implemented, outside this repository |
+| Cortex | The member's machine: MCP over stdio or HTTP, CLI, hooks | Agent memory, the journal, history. Separate from the vault | Implemented, in `cortex/` |
 | Vault service | Cloudflare Workers and D1 | Stores posts; checks versions; computes mirror and publish plans | Implemented |
 | ohm sign-in | Cloudflare Workers and D1 | ohm accounts and sessions, with Google, Microsoft and Bluesky as identity providers | Implemented |
 | Personal Data Server (PDS) | The member's host: self-hosted, or Bluesky | The account's DID, signing key, and repository of public records and files | External |

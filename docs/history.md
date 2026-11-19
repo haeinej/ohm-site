@@ -14,7 +14,7 @@ When agents edit directly, you need to see what each one did, and to take back w
 
 | What | History | Status |
 | --- | --- | --- |
-| Your cortex | Every change, with who made it; every earlier version; saves; restore and revert; agents' sessions and dead ends | Built, in ohm-cortex |
+| Your cortex | Every change, with who made it; every earlier version; saves; restore and revert; agents' sessions and dead ends | Built, in the cortex |
 | Posts in the vault service | A version per post, so two saves never overwrite each other unseen. Earlier versions are not kept, and a removed post cannot be brought back | Version history not built |
 | Your vault folder | Your own files. Keep them in git, or your own backup, for history. The index keeps none | Not part of ohm |
 | The workspace's history view | Dates, You and Agents, over everything | Designed, not built |
@@ -28,8 +28,8 @@ Everything that happens in a cortex is a line in one append-only file, `.cortex/
 | Line | Written when | It holds |
 | --- | --- | --- |
 | `change` | A node changes, by you or an agent | The node, what was done, the versions before and after, why, and the evidence |
-| `note` | An agent observes something | One line, with evidence. It changes no file |
-| `settled` | Notes are settled | What became of a note: kept, dropped, or the memory it went into |
+| `observation` | An agent observes something | One line, with evidence. It changes no file |
+| `settled` | Observations are settled | What became of an observation: kept, dropped, or the memory it went into |
 | `session` | An agent finishes or gives up a task | What was done, the changes it made, and its dead ends |
 | `save` | Someone names a point in history | A name and a note. It changes nothing |
 
@@ -121,11 +121,11 @@ Showing history in the workspace is designed in the ohm-ux wireframe, and **not 
 - **One line per change,** as a verb and a page: Created, Edited, Moved, Filed, Connected, Restored, Reverted, Deleted. An icon says whether you or an agent made it.
 - **Open a line** to see who made it, when and why, and what it touched. From there: Revert this change, Restore this version, or open the page.
 - **A page's versions,** from a clock in its toolbar.
-- **Daily autosaves:** every page as it was at the end of each day with changes. ohm-cortex does not write these yet.
+- **Daily autosaves:** every page as it was at the end of each day with changes. The cortex does not write these yet.
 - **Edits close together join one line,** when the same person or agent types within five minutes.
 - **A page others can see** is read only here: changing what others see asks first.
 
-In this design, reverting a change undoes only the parts that change touched, and is refused if a later change touched the same part. ohm-cortex today reverts a whole node, and refuses if the node has changed since.
+In this design, reverting a change undoes only the parts that change touched, and is refused if a later change touched the same part. The cortex today reverts a whole node, and refuses if the node has changed since.
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.
