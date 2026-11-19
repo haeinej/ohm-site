@@ -1,6 +1,6 @@
 # Sync with a folder
 
-The command-line sync brings your posts and a local folder of Markdown files into line. It does not sync the cortex. Browser and direct cloud-storage sync are planned.
+The command-line sync brings your posts and a local folder of Markdown files into line. Browser and direct cloud-storage sync are planned.
 
 <a id="why"></a>
 

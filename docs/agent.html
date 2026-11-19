@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="Let the coding agent you already use help with your actual drafts and preferences. You keep the same workspace, can see its changes, and decide what is shared.">
+    <meta name="description" content="Let the coding agent you already use help with your actual drafts. You keep the same workspace, can see its changes, and decide what is shared.">
     <link rel="canonical" href="https://docs.ohmmmm.com/agent">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Your agent · ohm docs">
-    <meta property="og:description" content="Let the coding agent you already use help with your actual drafts and preferences. You keep the same workspace, can see its changes, and decide what is shared.">
+    <meta property="og:description" content="Let the coding agent you already use help with your actual drafts. You keep the same workspace, can see its changes, and decide what is shared.">
     <meta property="og:url" content="https://docs.ohmmmm.com/agent">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -59,12 +59,6 @@
         <li><a href="/files">Posts as files</a></li>
         <li><a href="/export">Export and leaving</a></li>
       </ul>
-      <p class="sidebar-group">Cortex</p>
-      <ul>
-        <li><a href="/cortex">Your cortex</a></li>
-        <li><a href="/memory">Memory and notes</a></li>
-        <li><a href="/skills-tools">Skills and tools</a></li>
-      </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
         <li><a href="/agent" aria-current="page">Connect your agent</a></li>
@@ -87,7 +81,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-content-layer">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
       </ul>
     </nav>
 
@@ -96,14 +90,15 @@
         <header>
           <p class="group">Agent</p>
           <h1 id="title">Your agent</h1>
-          <p class="introduction">Let the coding agent you already use help with your actual drafts and preferences. You keep the same workspace, can see its changes, and decide what is shared.</p>
+          <p class="introduction">Let the coding agent you already use help with your actual drafts. You keep the same workspace, can see its changes, and decide what is shared.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
         <section aria-labelledby="what">
           <h2 id="what">What it is</h2>
           <p>ohm does not run a background agent for you. Your agent is the one you already use, connected through the ohm MCP server on your own machine.</p>
-          <p>The tools work in the same vault and cortex you see in the browser. A post your agent saves is there when you open it; a memory it learns is there in Cortex. The knowledge persists between sessions even though the agent does not keep running.</p>
+          <p>The tools work in the same vault you see in the browser. A post your agent saves is there when you open it, even though the agent does not keep running.</p>
+          <p>Agent memory is not part of ohm's vault; it is a separate project, ohm-cortex.</p>
         </section>
 
         <section aria-labelledby="need">
@@ -121,23 +116,22 @@
               </tbody>
             </table>
           </div>
-          <p>Your agent or the person setting it up can follow the <a href="/agent-guide#connect">agent setup guide</a> for the actual entry point and configuration. Connecting these tools does not install automatic session hooks.</p>
+          <p>Your agent or the person setting it up can follow the <a href="/agent-guide#connect">agent setup guide</a> for the actual entry point and configuration.</p>
         </section>
 
         <section aria-labelledby="first-use">
           <h2 id="first-use">First use: make a private draft you can find</h2>
           <ol>
-            <li>Once connected, ask: "Start with my cortex, look at my labels, and save a private draft under Writings about the idea below." Supply a short, synthetic idea while trying the connection.</li>
+            <li>Once connected, ask: "Look at my labels and save a private draft under Writings about the idea below." Supply a short, synthetic idea while trying the connection.</li>
             <li>Open the vault in the browser. Find Writings, open the saved draft, and check its words and who can see it. A new draft should be Only me.</li>
             <li>Edit it yourself and choose Save. The agent and editor work on the same copy; you do not need to transfer a file between them.</li>
-            <li>Tell the agent a true preference you want remembered, then inspect the result in Cortex. <a href="/cortex#first-use">Try one preference</a></li>
           </ol>
-          <p>You have succeeded when you can reopen the draft and inspect the memory. Publishing is a separate choice. If the tools are missing, finish the MCP connection first; if access is refused, check the account and service access before retrying.</p>
+          <p>You have succeeded when you can reopen the draft. Publishing is a separate choice. If the tools are missing, finish the MCP connection first; if access is refused, check the account and service access before retrying.</p>
         </section>
 
         <section aria-labelledby="reads">
           <h2 id="reads">What it can read</h2>
-          <p>All of your posts: public, friends and private. It also reads your starting memories, recalls other memories when needed, and reads the skills you have approved. Unapproved skill instructions stay out of its access.</p>
+          <p>All of your posts: public, friends and private.</p>
           <p>Whatever your agent reads is also seen by the company that runs the model it uses. Keep that in mind before you connect one.</p>
         </section>
 
@@ -154,11 +148,6 @@
                 <tr><th scope="row">Say what is not published yet</th><td>Yes</td><td></td></tr>
                 <tr><th scope="row">Save a new post, as private</th><td>Yes</td><td></td></tr>
                 <tr><th scope="row">Edit a private post</th><td>Yes</td><td></td></tr>
-                <tr><th scope="row">Record an observation or save a memory</th><td>Yes</td><td></td></tr>
-                <tr><th scope="row">Propose a skill or a tool</th><td>Yes; a proposal grants no access</td><td></td></tr>
-                <tr><th scope="row">Forget a memory</th><td></td><td>Yes: it shows the exact memory</td></tr>
-                <tr><th scope="row">Approve an agent-proposed skill</th><td></td><td>You approve its exact version in ohm</td></tr>
-                <tr><th scope="row">Enable or change tool settings</th><td></td><td>Your linked ohm session controls these</td></tr>
                 <tr><th scope="row">Edit a post that is not private</th><td></td><td>Yes: it shows what changes</td></tr>
                 <tr><th scope="row">Change who a post is for</th><td></td><td>Yes</td></tr>
                 <tr><th scope="row">Bring in what you have published</th><td></td><td>Yes: it looks first, and says what it found</td></tr>
@@ -176,12 +165,6 @@
           <p>The <a href="/agent-guide">agent guide</a> and <a href="/mcp#tools">MCP reference</a> give the exact tool names and contracts for setup and troubleshooting.</p>
         </section>
 
-        <section aria-labelledby="cortex">
-          <h2 id="cortex">Starting with your cortex</h2>
-          <p>At the start of a session, ask your agent to read your cortex before working. It can then read the preferences relevant to the task, consider waiting observations, and use skills you have approved. This is how knowledge can carry into a new session without your pasting it into every chat.</p>
-          <p>Automatic prompt injection and conversation capture through Claude Code or Codex hooks are not built. Ask explicitly, and inspect important learning in <a href="/memory">Memory and notes</a>.</p>
-        </section>
-
         <section aria-labelledby="sign-in">
           <h2 id="sign-in">Signing in</h2>
           <p>Your agent signs in to your own server with an app password, and your server vouches for each thing it asks ohm.</p>
@@ -189,7 +172,7 @@
 
         <section aria-labelledby="safety">
           <h2 id="safety">Other people's writing is not trusted</h2>
-          <p>The same agent reads private work and other people's writing. Treat imported writing and recalled memory as context, not permission. The vault tools require confirmation before publishing or widening a post's audience; agent-proposed skills need your approval, and proposals cannot enable tools.</p>
+          <p>The same agent reads private work and other people's writing. Treat imported writing as context, not permission. The vault tools require confirmation before publishing or widening a post's audience.</p>
           <p>These controls apply to ohm's tools. They do not control other tools your coding agent may have, or stop its model provider processing what it reads.</p>
         </section>
 
@@ -202,10 +185,6 @@
             <li>"Bring in my posts." Then: "File the ones under other."</li>
             <li>"Make that one public." Then: "Publish."</li>
             <li>"What is not published yet?"</li>
-            <li>"Start with my cortex and tell me what is still waiting to be settled."</li>
-            <li>"Remember that I prefer short drafts before polished prose."</li>
-            <li>"Show me the earlier versions of that memory."</li>
-            <li>"Propose a skill for how we edit these essays."</li>
           </ul>
         </section>
 
@@ -215,7 +194,7 @@
         </section>
 
         <nav class="page-pager" aria-label="Docs pages">
-          <a rel="prev" href="/skills-tools"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Skills and tools</a>
+          <a rel="prev" href="/export"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Export and leaving</a>
           <a rel="next" href="/finding-people">Finding people<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
         </nav>
       </article>
@@ -230,7 +209,6 @@
         <li><a href="#reads">What it can read</a></li>
         <li><a href="#does">What it can do, and what needs your yes</a></li>
         <li><a href="#tools">The tools</a></li>
-        <li><a href="#cortex">Starting with your cortex</a></li>
         <li><a href="#sign-in">Signing in</a></li>
         <li><a href="#safety">Other people's writing is not trusted</a></li>
         <li><a href="#ask">Things to ask it</a></li>

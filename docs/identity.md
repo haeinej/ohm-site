@@ -68,9 +68,9 @@ Each request declares one access level, and the router settles it before the req
 | Member | A service token from the member's own PDS, or an ohm session connected to that account | Every request that reads or changes a vault |
 | Member, with an ohm session | An ohm session only | Connecting and disconnecting an AT Protocol account |
 
-A member's vault and cortex are served to that member and to nobody else. The authenticated DID determines the scope; callers do not choose another member's store.
+A member's vault is served to that member and to nobody else. The authenticated DID determines the scope; callers do not choose another member's store.
 
-Approving or removing skills and changing tool settings require the linked member's ohm session. A PDS token can propose a skill or tool, but cannot grant itself these permissions. The editor binds requests to the account displayed and discards private state when that account changes.
+The editor binds requests to the account displayed and discards private state when that account changes.
 
 <a id="pds"></a>
 

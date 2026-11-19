@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="Keep your drafts and published work in one workspace, and give your agent private knowledge it can carry between sessions. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.">
+    <meta name="description" content="Keep your drafts and published work in one workspace, and let your own agent work in it with you. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.">
     <link rel="canonical" href="https://docs.ohmmmm.com/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="ohm docs">
-    <meta property="og:description" content="Keep your drafts and published work in one workspace, and give your agent private knowledge it can carry between sessions. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.">
+    <meta property="og:description" content="Keep your drafts and published work in one workspace, and let your own agent work in it with you. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.">
     <meta property="og:url" content="https://docs.ohmmmm.com/">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -59,12 +59,6 @@
         <li><a href="/files">Posts as files</a></li>
         <li><a href="/export">Export and leaving</a></li>
       </ul>
-      <p class="sidebar-group">Cortex</p>
-      <ul>
-        <li><a href="/cortex">Your cortex</a></li>
-        <li><a href="/memory">Memory and notes</a></li>
-        <li><a href="/skills-tools">Skills and tools</a></li>
-      </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
         <li><a href="/agent">Connect your agent</a></li>
@@ -87,7 +81,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-content-layer">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
       </ul>
     </nav>
 
@@ -95,7 +89,7 @@
       <article aria-labelledby="title">
         <header>
           <h1 id="title">Docs</h1>
-          <p class="introduction">Keep your drafts and published work in one workspace, and give your agent private knowledge it can carry between sessions. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.</p>
+          <p class="introduction">Keep your drafts and published work in one workspace, and let your own agent work in it with you. The human guides explain why the pieces are needed and how to reach a useful result. The agent guides explain the exact connections, contracts and recovery behind that experience.</p>
           <p class="introduction">For people: <a href="/quick-start">start with why and your first private post</a>. For agents: <a href="/agent-guide">read the working contract</a>, or use <a href="/llms.txt">llms.txt</a> for the Markdown references.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
@@ -103,7 +97,7 @@
         <section aria-labelledby="get-started">
           <h2 id="get-started">Get started</h2>
           <ul class="pages">
-            <li><a href="/quick-start">Quick start</a>. Keep your drafts, published work and agent knowledge connected, while choosing what becomes public.</li>
+            <li><a href="/quick-start">Quick start</a>. Keep your drafts and published work in one place, while choosing what becomes public.</li>
             <li><a href="/sign-in">Sign in</a>. You sign in to ohm with an ohm account, made with Google, Microsoft or Bluesky.</li>
           </ul>
         </section>
@@ -111,7 +105,7 @@
         <section aria-labelledby="workspace">
           <h2 id="workspace">Workspace</h2>
           <ul class="pages">
-            <li><a href="/workspace">The workspace</a>. Use the rail to switch between your vault of posts and your private cortex.</li>
+            <li><a href="/workspace">The workspace</a>. Your posts sit in a tree of labels beside the rail, and the post you open fills the rest.</li>
             <li><a href="/posts">Posts</a>. Everything you make in the vault is a post.</li>
             <li><a href="/labels">Labels</a>. Labels are the sections of your work, in your own words.</li>
           </ul>
@@ -131,23 +125,14 @@
           <ul class="pages">
             <li><a href="/sync">Sync with a folder</a>. The command-line sync brings your posts and a local folder of Markdown files into line.</li>
             <li><a href="/files">Posts as files</a>. In your folder, each post is one Markdown file.</li>
-            <li><a href="/export">Export and leaving</a>. You can export your vault posts as Markdown files.</li>
-          </ul>
-        </section>
-
-        <section aria-labelledby="cortex">
-          <h2 id="cortex">Cortex</h2>
-          <ul class="pages">
-            <li><a href="/cortex">Your cortex</a>. Give your agent a place to keep what it learns about your work, so you do not have to explain the same preferences every session.</li>
-            <li><a href="/memory">Memory and notes</a>. Keep useful knowledge without turning every passing observation into a fact about you.</li>
-            <li><a href="/skills-tools">Skills and tools</a>. A skill tells an agent how to do a task.</li>
+            <li><a href="/export">Export and leaving</a>. You can export your vault posts as Markdown files, to keep or to take elsewhere.</li>
           </ul>
         </section>
 
         <section aria-labelledby="agent">
           <h2 id="agent">Agent</h2>
           <ul class="pages">
-            <li><a href="/agent">Your agent</a>. Let the coding agent you already use help with your actual drafts and preferences.</li>
+            <li><a href="/agent">Your agent</a>. Let the coding agent you already use help with your actual drafts.</li>
             <li><a href="/finding-people">Finding people</a>. Finding people is planned.</li>
           </ul>
         </section>
@@ -156,12 +141,12 @@
           <h2 id="architecture">For agents</h2>
           <ul class="pages">
             <li><a href="/agent-guide">Agent working guide</a>. The entry contract for an agent working in ohm.</li>
-            <li><a href="/architecture">System overview</a>. ohm keeps a vault of posts and a private cortex for agent knowledge.</li>
+            <li><a href="/architecture">System overview</a>. ohm keeps a vault of posts.</li>
             <li><a href="/identity">Identity and access</a>. A member has two identities.</li>
-            <li><a href="/data-model">Data model</a>. Posts and cortex knowledge are separate data.</li>
+            <li><a href="/data-model">Data model</a>. A post maps to a vault row, a public repository record and a Markdown file.</li>
             <li><a href="/protocols">Mirror and publish</a>. Two exchanges connect a vault to its member's repository.</li>
             <li><a href="/mcp">Agent integration</a>. An agent reaches a vault through an MCP server that runs on the member's own machine.</li>
-            <li><a href="/api">Service API</a>. The vault and cortex service registers 38 requests in 15 capabilities.</li>
+            <li><a href="/api">Service API</a>. The vault service registers 15 requests in 8 capabilities.</li>
           </ul>
         </section>
 
@@ -186,7 +171,6 @@
         <li><a href="#workspace">Workspace</a></li>
         <li><a href="#sharing">Sharing</a></li>
         <li><a href="#folder">Folder</a></li>
-        <li><a href="#cortex">Cortex</a></li>
         <li><a href="#agent">Agent</a></li>
         <li><a href="#architecture">For agents</a></li>
         <li><a href="#reference">Reference</a></li>

@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="Keep your drafts, published work and agent knowledge connected, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.">
+    <meta name="description" content="Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.">
     <link rel="canonical" href="https://docs.ohmmmm.com/quick-start">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Quick start · ohm docs">
-    <meta property="og:description" content="Keep your drafts, published work and agent knowledge connected, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.">
+    <meta property="og:description" content="Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.">
     <meta property="og:url" content="https://docs.ohmmmm.com/quick-start">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -59,12 +59,6 @@
         <li><a href="/files">Posts as files</a></li>
         <li><a href="/export">Export and leaving</a></li>
       </ul>
-      <p class="sidebar-group">Cortex</p>
-      <ul>
-        <li><a href="/cortex">Your cortex</a></li>
-        <li><a href="/memory">Memory and notes</a></li>
-        <li><a href="/skills-tools">Skills and tools</a></li>
-      </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
         <li><a href="/agent">Connect your agent</a></li>
@@ -87,7 +81,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-content-layer">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
       </ul>
     </nav>
 
@@ -96,14 +90,13 @@
         <header>
           <p class="group">Get started</p>
           <h1 id="title">Quick start</h1>
-          <p class="introduction">Keep your drafts, published work and agent knowledge connected, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.</p>
+          <p class="introduction">Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
         <section aria-labelledby="why">
           <h2 id="why">Why the pieces are separate</h2>
           <p>An idea can become a draft, then a public post. You need somewhere to work on it before it is ready, and a way to publish it without making every draft public. Your vault is that working space. Your own account on the open network holds what you publish.</p>
-          <p>Your agent also learns how you work. That knowledge belongs in a private cortex beside your posts, so a preference about editing does not become part of your website. <a href="/cortex">Your cortex</a></p>
         </section>
 
         <section aria-labelledby="need">
@@ -116,9 +109,9 @@
               </thead>
               <tbody>
                 <tr><th scope="row">An ohm sign-in</th><td>Lets the workspace recognize you when you return</td><td>You sign in with a supported provider</td></tr>
-                <tr><th scope="row">A connected AT Protocol account</th><td>Proves which vault and cortex are yours and identifies where public posts belong</td><td>You connect your existing account; if you have none, create one first</td></tr>
+                <tr><th scope="row">A connected AT Protocol account</th><td>Proves which vault is yours and identifies where public posts belong</td><td>You connect your existing account; if you have none, create one first</td></tr>
                 <tr><th scope="row">A website</th><td>Gives public records a page with your own design</td><td>Optional for saving private work; connecting its content is separate work</td></tr>
-                <tr><th scope="row">A coding agent</th><td>Uses your work as context and carries learning between sessions</td><td>Optional; the browser editor works without one</td></tr>
+                <tr><th scope="row">A coding agent</th><td>Reads and writes your posts with you</td><td>Optional; the browser editor works without one</td></tr>
                 <tr><th scope="row">A local folder</th><td>Gives you a separate copy of your posts</td><td>Optional; export or command-line sync when you want one</td></tr>
               </tbody>
             </table>
@@ -181,20 +174,13 @@
         <section aria-labelledby="folder">
           <h2 id="folder">7. Keep a copy of your posts</h2>
           <p>Export your vault, or use the command-line folder sync. Each post becomes a Markdown file, filed under its label. Browser folder sync and direct cloud-storage connections are planned.</p>
-          <p>Syncing never publishes. It currently covers posts, not your cortex; cortex export is still planned. <a href="/sync">More about syncing</a></p>
+          <p>Syncing never publishes. <a href="/sync">More about syncing</a></p>
         </section>
 
         <section aria-labelledby="agent">
           <h2 id="agent">8. Bring in your agent</h2>
           <p>Connect the coding agent you already use, and it can read and write in your workspace. It reads your private posts too, which is how it knows what you are working on.</p>
-          <p>Ask it to start with your cortex. It reads standing memories and descriptions, then recalls the detail it needs. Automatic session hooks are not installed by connecting the MCP tools.</p>
           <p>Anything that changes what other people see is shown to you first, publishing included. <a href="/agent">More about your agent</a></p>
-        </section>
-
-        <section aria-labelledby="cortex">
-          <h2 id="cortex">9. See what your agent remembers</h2>
-          <p>Open Cortex in the rail. Memories, Notes and Skills are separate from your posts. You can edit a memory, inspect its earlier versions, restore one, and review an agent's proposed skill before approving it.</p>
-          <p>Your cortex stays private. Publish does not read it. <a href="/cortex">Your cortex</a></p>
         </section>
 
         <section aria-labelledby="next">
@@ -227,7 +213,6 @@
         <li><a href="#publish">6. Publish when you want to share</a></li>
         <li><a href="#folder">7. Keep a copy of your posts</a></li>
         <li><a href="#agent">8. Bring in your agent</a></li>
-        <li><a href="#cortex">9. See what your agent remembers</a></li>
         <li><a href="#next">Things to ask your agent first</a></li>
       </ul>
     </nav>

@@ -6,7 +6,7 @@ An agent reaches a vault through an MCP server that runs on the member's own mac
 
 ## Overview
 
-ohm does not run a background agent. It ships a Model Context Protocol (MCP) server, `ohm-vault`, that a member runs on their own machine and connects to the agent they already use. The server exposes 19 vault and cortex tools, composed from authenticated service requests made as that member.
+ohm does not run a background agent. It ships a Model Context Protocol (MCP) server, `ohm-vault`, that a member runs on their own machine and connects to the agent they already use. The server exposes 10 vault tools, composed from authenticated service requests made as that member.
 
 Diagram: the path of one tool call.
 1. Agent → MCP server: tools/call
@@ -29,17 +29,14 @@ The tools work in the same working copy the workspace shows. A post an agent sav
 
 ## What an agent should know
 
-Start with these rules, then use the supplied cortex settlement skill for learning decisions.
+Start with these rules.
 
-- **Start every session with Context.** Call `cortex_start` first. Read standing memories and the description indexes. Settle pending notes before continuing; recall full memories and approved skills when needed.
 - **The vault is one person's work,** as posts filed under labels and sublabels. Start with `vault_tree` to see its shape, then `vault_read` or `vault_search`.
 - **Every post is private, for friends, or public.** Private posts are context for helping the member. Nothing from one belongs in anything another person can see.
 - **A new post is saved private.** `vault_save` never shares anything. To change who a post is for, use `vault_set_visibility`, which always asks first.
 - **Saving is not publishing.** A post marked public reaches the member's website and the network only through `vault_publish`. `vault_status` says what is waiting.
 - **Changes are made from a version.** `vault_read` returns it, and `vault_save` passes it back. If the post changed in between, read it again.
-- **A two-call tool is asking for the member's decision.** Show the member what the first call returned, and make the second call only if they agree. `cortex_forget` removes a memory from current Context, not its preserved history.
-- **Learning is private.** Record observations with their real session and scope. Save explicit statements as stated; do not invent corroboration or counters. Memory writes need no review queue.
-- **Proposals are inert.** An agent cannot approve a skill or switch a tool on. Do not read or follow unapproved skill instructions.
+- **A two-call tool is asking for the member's decision.** Show the member what the first call returned, and make the second call only if they agree.
 - **Publishing cannot be recalled.** Other services copy a public post as soon as it is written.
 
 <a id="protocol"></a>
@@ -55,7 +52,7 @@ Start with these rules, then use the supplied cortex settlement skill for learni
 | Server name | `ohm-vault` |
 | Ordering | Calls are handled one at a time, in the order received, so two changes to the same post cannot cross |
 | Results | A tool's result is JSON, returned as text content. A refusal is a result marked `isError` with a message the agent can read and act on |
-| Annotations | Tools that only read carry `readOnlyHint`. `vault_delete` and `cortex_forget` carry `destructiveHint` |
+| Annotations | Tools that only read carry `readOnlyHint`. `vault_delete` carries `destructiveHint` |
 | Instructions | On `initialize`, the server states the rules of the vault to the agent: what private means, and that any change other people can see is shown to the member first |
 
 Listing the tools needs no configuration and no sign-in. The server signs in at the PDS the first time a tool is called.
@@ -66,17 +63,17 @@ Listing the tools needs no configuration and no sign-in. The server signs in at 
 
 | Setting | Source | Purpose |
 | --- | --- | --- |
-| The member's account | The site configuration file, found in the agent's working folder, or named with `--config` or `OHM_CONTENT_LAYER_CONFIG` | Which AT Protocol account the server acts as |
+| The member's account | The site configuration file, found in the agent's working folder, or named with `--config` or `OHM_VAULT_CONFIG` | Which AT Protocol account the server acts as |
 | `ATPROTO_APP_PASSWORD` | Environment | An app password for the member's PDS. It can be revoked at the PDS at any time |
 | `OHM_VAULT_URL`, `OHM_VAULT_DID` | Configuration, or the flags `--vault` and `--vault-did` | The vault service to use. Defaults to `https://vault.ohmmmm.com` and `did:web:vault.ohmmmm.com` |
 
 Start the server directly, or through a client configuration that loads it:
 
 ```
-npx github:haeinej/ohm-content-layer mcp
+npx github:haeinej/ohm-vault mcp
 ```
 
-This exposes the MCP tools. It does not install Claude Code or Codex session hooks. One unchanged plugin package working in both clients remains unverified.
+This exposes the MCP tools.
 
 <a id="authentication"></a>
 
@@ -95,15 +92,6 @@ The server holds one credential: the app password, in its own environment on the
 
 | Tool | Effect | Confirmation | Requests used |
 | --- | --- | --- | --- |
-| `cortex_start` | Read | None | `com.ohmmmm.cortex.getContext` |
-| `cortex_note` | Change | None | `com.ohmmmm.cortex.addNote` |
-| `cortex_settle` | Change | None | `com.ohmmmm.cortex.listNotes`, `com.ohmmmm.cortex.getMemory`, `com.ohmmmm.cortex.putMemory`, `com.ohmmmm.cortex.settleNotes` |
-| `cortex_recall` | Read | None | `com.ohmmmm.cortex.searchMemories`, `com.ohmmmm.cortex.getMemory` |
-| `cortex_remember` | Change | None | `com.ohmmmm.cortex.getMemory`, `com.ohmmmm.cortex.putMemory` |
-| `cortex_forget` | Change | Always; single-use confirmation of this memory version | `com.ohmmmm.cortex.getMemory`, `com.ohmmmm.cortex.deleteMemory` |
-| `cortex_skill` | Read | None | `com.ohmmmm.cortex.getSkill` |
-| `cortex_propose_skill` | Change | None | `com.ohmmmm.cortex.getSkill`, `com.ohmmmm.cortex.putSkill` |
-| `cortex_propose_tool` | Change | None | `com.ohmmmm.cortex.proposeTool` |
 | `vault_tree` | Read | None | `getTree` |
 | `vault_list` | Read | None | `getTree` |
 | `vault_read` | Read | None | `getTree`, `getPost` |
@@ -129,18 +117,6 @@ A vault tool that changes something other people can see, or removes a post, tak
 
 The `confirm` value is a digest of the request and of the state it was computed from: the post's current version, or the publish plan. If either has changed between the two calls, the value no longer matches and the call is refused. Vault confirmations need no server-side state and cannot authorize a different change.
 
-`cortex_forget` uses a different confirmation: an opaque single-use token held by the running server and bound to the memory name and version. Show the returned memory before confirming. Memory saves, notes and proposals do not use this review flow; approving a skill and changing tool settings require the member's linked ohm session.
-
-<a id="settlement"></a>
-
-## Cortex settlement
-
-Use `cortex_settle` without arguments to read pending observations and immutable receipt history. Submit judged memory rewrites and explicit note outcomes in batches, keeping current versions and project scope. Use fresh returned versions after settlement, because evidence updates advance memory revisions too.
-
-The service checks the supplied evidence and versions; it performs no model calls. The tool is not one transaction: memory saves can succeed before note settlement fails. On failure, reread both memories and receipts before deciding what to retry. Process remaining pending notes rather than treating one successful batch as the end.
-
-The tool `cortex_recall` already reads named memories or searches them. It does not use the reserved service request `com.ohmmmm.cortex.recall`, which is planned for automatic prompt recall.
-
 <a id="safety"></a>
 
 ## Safety model
@@ -153,9 +129,7 @@ The same agent reads the member's private posts and content written by other peo
 | Something is published without the member knowing | Saving never publishes. `vault_publish` always requires confirmation of the exact plan |
 | A post is overwritten | Every save names the version that was read. A stale save is refused |
 | A post is lost | `vault_delete` always requires confirmation |
-| Unapproved instructions reach the agent | Token reads of unapproved skills are refused; Context indexes approved versions only |
-| A proposal grants access | Skill approval and tool settings require the linked member's ohm session; tool proposals are inert |
-| Content leaves through an ohm tool | The tools target the member's own vault, cortex and repository; tool settings do not connect servers |
+| Content leaves through an ohm tool | The tools target only the member's own vault and repository |
 
 These controls do not govern other tools available to the coding agent. Whatever it reads is also processed by its model provider.
 
@@ -171,8 +145,6 @@ Some service requests are deliberately not available to an agent.
 | `exportFiles` | Export is for the command line and the workspace |
 | `account.get`, `account.connect`, `account.disconnect` | They require an ohm session, which an agent does not have |
 | `identity.findAccount`, `identity.whoAmI` | They are steps of signing in |
-| `approveSkill`, `deleteSkill`, `putTool`, `deleteTool` | Member decisions, requiring the linked ohm session |
-| Cortex `recall`, Turns and cortex `exportFiles` | Reserved, authenticated requests that return `NotBuiltYet` |
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.

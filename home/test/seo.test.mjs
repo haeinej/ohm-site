@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
@@ -28,7 +29,7 @@ test('the SEO command checks all six sitemap routes, their aliases and static me
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   try {
-    const { stdout } = await run(process.execPath, [new URL('../scripts/check-seo.mjs', import.meta.url).pathname,
+    const { stdout } = await run(process.execPath, [fileURLToPath(new URL('../scripts/check-seo.mjs', import.meta.url)),
       `http://127.0.0.1:${server.address().port}`]);
     assert.match(stdout, /PASS \/about:/);
     assert.equal((stdout.match(/crawlable, canonical/g) ?? []).length, 6);

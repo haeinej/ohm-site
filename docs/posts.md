@@ -1,6 +1,6 @@
 # Posts
 
-Everything you make in the vault is a post: an essay, a note to yourself, a photograph, a link. Agent memories, observations and skills live separately in the cortex.
+Everything you make in the vault is a post: an essay, a note to yourself, a photograph, a link.
 
 <a id="parts"></a>
 

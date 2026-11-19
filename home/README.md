@@ -2,7 +2,7 @@
 
 Static site served by Worker `ohm-web` (`src/worker.js`, config `wrangler.jsonc`). Everything in `public/` is public. This file is the map: read it before adding or moving any information.
 
-Run locally from the repository root: `npm run home:dev` (loopback port 8790). Follow the [source-checkout setup](../../README.md#work-on-this-repository) first; no private launcher configuration is needed. This folder is `public/home` in ohm-content-layer; paths below are relative to it.
+Run locally from the repository root: `npm run home:dev` (loopback port 8790). Follow the [source-checkout setup](../../README.md#work-on-this-repository) first; no private launcher configuration is needed. This folder is `public/home` in ohm-vault; paths below are relative to it.
 
 ## 1. Information hierarchy
 
@@ -86,7 +86,7 @@ Every page has the same three regions, in this source order:
 
 Rules:
 
-- The sidebar (and, on `/`, the footer) is copied into each page (there are no includes: the CSP runs only the site's own script files, and the one script, `/sw-register.js`, only starts the service worker). The homepage's JSON-LD is an inert structured-data block. When you change the sidebar, change it on every page in `public/*.html`. The draft beside this folder (`../home-draft`) is built by `../docs/build.py`, which writes the sidebar there.
+- The sidebar (and, on `/`, the footer) is copied into each page (there are no includes: the CSP runs only the site's own script files, and the one script, `/sw-register.js`, only starts the service worker). The homepage's JSON-LD is an inert structured-data block. When you change the sidebar, change it on every page in `public/*.html`.
 - In the directory, mark the current page with `aria-current="page"` (for screen readers; it is not styled).
 - `<head>` keeps: `charset`, `viewport`, `theme-color #fafaf9`, `description`, `canonical` (`https://ohmmmm.com/<slug>`), both favicon links (`/favicon.ico?v=2`, then `/assets/favicon.svg?v=2`), apple-touch-icon, the manifest (`/manifest.webmanifest`), the Coconat font preload (`<link rel="preload" … as="font" type="font/woff2" crossorigin>`: without `crossorigin` the browser downloads the font twice), `/styles.css`, `<script src="/sw-register.js" defer>`, `<title>Page · ohm</title>`.
 - Brand is always lowercase `ohm`.

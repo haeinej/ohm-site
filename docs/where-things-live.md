@@ -1,6 +1,6 @@
 # Where your things live
 
-Public posts live in your AT Protocol repository. ohm keeps your working vault and private cortex. Post sync can keep a copy with you; cortex export is still planned.
+Public posts live in your AT Protocol repository. ohm keeps your working vault. Sync or export can keep a copy with you.
 
 <a id="places"></a>
 
@@ -12,7 +12,6 @@ Public posts live in your AT Protocol repository. ohm keeps your working vault a
 | Your ohm account | Who you are when you sign in to ohm | Made with Google, Microsoft or Bluesky. It holds no posts |
 | Your folder, once synced | Your posts as Markdown files | Yours, on your machine or in locally synced storage |
 | Your vault on ohm | A working copy of every post | ohm holds it for you |
-| Your cortex on ohm | Memories, history, observations, skills and tool settings | Private to your connected DID; not included in post sync or export |
 
 <a id="by-visibility"></a>
 
@@ -41,8 +40,6 @@ The promise is not that ohm cannot read your posts. It is that nothing depends o
 ## With and without a folder
 
 With an up-to-date synced folder, you have a copy of your posts. Until you sync or export, ohm may hold the only copy of private and friends-only posts. [Sync with a folder](https://docs.ohmmmm.com/sync.md)
-
-Your cortex is separate. Post files do not back it up, and removing a memory from Context preserves its history. A complete cortex export and folder adapter remain planned. [Your cortex](https://docs.ohmmmm.com/cortex.md)
 
 <a id="identity"></a>
 

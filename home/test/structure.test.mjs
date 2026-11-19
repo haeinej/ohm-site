@@ -6,8 +6,8 @@ import test from 'node:test';
 const nodes = node => [node, ...(node.childNodes ?? []).flatMap(nodes)];
 const attr = (node, name) => node.attrs?.find(attribute => attribute.name === name)?.value;
 
-test('home, draft and docs HTML have unique IDs and valid local/ARIA targets', async () => {
-  for (const relative of ['../public/', '../../home-draft/', '../../docs/']) {
+test('home and docs HTML have unique IDs and valid local/ARIA targets', async () => {
+  for (const relative of ['../public/', '../../docs/']) {
     const directory = new URL(relative, import.meta.url);
     for (const file of (await readdir(directory)).filter(name => name.endsWith('.html'))) {
       const all = nodes(parse(await readFile(new URL(file, directory), 'utf8')));
@@ -33,12 +33,11 @@ test('home Wrangler schema resolves to the root installed dependency', async () 
   await access(new URL(path, config));
 });
 
-test('local docs and retained draft previews use repo-owned paths, not private launchers', async () => {
+test('local docs previews use repo-owned paths, not private launchers', async () => {
   const root = new URL('../../../', import.meta.url);
   const { scripts } = JSON.parse(await readFile(new URL('package.json', root), 'utf8'));
   for (const [name, option, path] of [
     ['docs:dev', '--config', 'public/docs/wrangler.jsonc'],
-    ['home-draft:dev', '--assets', 'public/home-draft'],
   ]) {
     assert.ok(scripts[name]?.includes(`${option} ${path}`));
     assert.match(scripts[name], /--ip 127\.0\.0\.1/);

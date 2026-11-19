@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="You can export your vault posts as Markdown files. Cortex export is not built yet, so a vault export is not a backup of everything your agent remembers.">
+    <meta name="description" content="You can export your vault posts as Markdown files, to keep or to take elsewhere.">
     <link rel="canonical" href="https://docs.ohmmmm.com/export">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Export and leaving · ohm docs">
-    <meta property="og:description" content="You can export your vault posts as Markdown files. Cortex export is not built yet, so a vault export is not a backup of everything your agent remembers.">
+    <meta property="og:description" content="You can export your vault posts as Markdown files, to keep or to take elsewhere.">
     <meta property="og:url" content="https://docs.ohmmmm.com/export">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -59,12 +59,6 @@
         <li><a href="/files">Posts as files</a></li>
         <li><a href="/export" aria-current="page">Export and leaving</a></li>
       </ul>
-      <p class="sidebar-group">Cortex</p>
-      <ul>
-        <li><a href="/cortex">Your cortex</a></li>
-        <li><a href="/memory">Memory and notes</a></li>
-        <li><a href="/skills-tools">Skills and tools</a></li>
-      </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
         <li><a href="/agent">Connect your agent</a></li>
@@ -87,7 +81,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-content-layer">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
       </ul>
     </nav>
 
@@ -96,14 +90,13 @@
         <header>
           <p class="group">Folder</p>
           <h1 id="title">Export and leaving</h1>
-          <p class="introduction">You can export your vault posts as Markdown files. Cortex export is not built yet, so a vault export is not a backup of everything your agent remembers.</p>
+          <p class="introduction">You can export your vault posts as Markdown files, to keep or to take elsewhere.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
         <section aria-labelledby="what">
           <h2 id="what">What you get</h2>
           <p>Every post: private, friends-only and public. Attachments remain references to their addresses; ohm does not yet keep a file store to include in an export.</p>
-          <p>Memories, memory history, observations, skills and tool settings are separate cortex data and are not included. Keep that distinction in mind before deleting anything. <a href="/cortex">Your cortex</a></p>
         </section>
 
         <section aria-labelledby="format">
@@ -118,7 +111,7 @@
             <li><strong>Into a folder,</strong> on your computer. Chrome and Edge can do this. Choose it when you want readable Markdown files immediately.</li>
             <li><strong>As one file,</strong> downloaded as <code>ohm-vault.json</code>. Choose it when your browser cannot write into a folder, or you want to keep the whole response in one file.</li>
           </ul>
-          <p>Open the chosen folder or download to check that your posts are present before deleting anything. Neither choice includes your cortex.</p>
+          <p>Open the chosen folder or download to check that your posts are present before deleting anything.</p>
           <p>If you already sync, your folder is your export, as of the last sync.</p>
         </section>
 
@@ -133,7 +126,6 @@
               <tbody>
                 <tr><th scope="row">Public posts</th><td>Still in your own account, and still on your website</td></tr>
                 <tr><th scope="row">Private and friends-only posts</th><td>In your folder, if you connected one or exported first. Otherwise gone</td></tr>
-                <tr><th scope="row">Cortex</th><td>Not covered by the post export. A complete cortex export is still planned</td></tr>
                 <tr><th scope="row">Your account and your handle</th><td>Unchanged. They were never ohm's</td></tr>
               </tbody>
             </table>
@@ -143,12 +135,12 @@
 
         <section aria-labelledby="back">
           <h2 id="back">Coming back</h2>
-          <p>Use command-line Sync with your exported Markdown folder and connected account to bring posts back. Browser folder sync and an import wizard for the JSON download are not built. This restores posts, not cortex knowledge. <a href="/sync">Sync with a folder</a></p>
+          <p>Use command-line Sync with your exported Markdown folder and connected account to bring posts back. Browser folder sync and an import wizard for the JSON download are not built. <a href="/sync">Sync with a folder</a></p>
         </section>
 
         <nav class="page-pager" aria-label="Docs pages">
           <a rel="prev" href="/files"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Posts as files</a>
-          <a rel="next" href="/cortex">Your cortex<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a rel="next" href="/agent">Your agent<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
         </nav>
       </article>
     </main>

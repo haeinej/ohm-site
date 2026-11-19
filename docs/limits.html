@@ -59,12 +59,6 @@
         <li><a href="/files">Posts as files</a></li>
         <li><a href="/export">Export and leaving</a></li>
       </ul>
-      <p class="sidebar-group">Cortex</p>
-      <ul>
-        <li><a href="/cortex">Your cortex</a></li>
-        <li><a href="/memory">Memory and notes</a></li>
-        <li><a href="/skills-tools">Skills and tools</a></li>
-      </ul>
       <p class="sidebar-group">Agent</p>
       <ul>
         <li><a href="/agent">Connect your agent</a></li>
@@ -87,7 +81,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-content-layer">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
       </ul>
     </nav>
 
@@ -113,34 +107,20 @@
                 <tr><th scope="row">Connecting a Bluesky account</th><td>Implemented</td><td>Not yet verified end to end</td></tr>
                 <tr><th scope="row">Accounts hosted by ohm</th><td>Planned</td><td></td></tr>
                 <tr><th scope="row">Access</th><td>Restricted</td><td>An allow list of accounts during testing</td></tr>
-                <tr><th scope="row">Workspace</th><td>Implemented</td><td>Vault editor and Cortex navigation; account switching clears private state</td></tr>
+                <tr><th scope="row">Workspace</th><td>Implemented</td><td>Vault editor; account switching clears private state</td></tr>
                 <tr><th scope="row">Mirror</th><td>Implemented</td><td>Runs automatically when an account is first connected</td></tr>
                 <tr><th scope="row">Publishing public posts</th><td>Implemented</td><td>Verified against a test PDS. Not yet run against a live account</td></tr>
                 <tr><th scope="row">Friends-only delivery</th><td>Planned</td><td></td></tr>
                 <tr><th scope="row">Attachments stored by ohm</th><td>Planned</td><td>A post references files by address, and a copy is made at publish</td></tr>
-                <tr><th scope="row">Cortex Memory and Context</th><td>Implemented and tested</td><td>Member isolation, stale writes, safe retries, preserved history and three seed memories; live deployment not established here</td></tr>
-                <tr><th scope="row">Cortex Notes</th><td>Implemented and tested</td><td>Explicit outcomes, project-scoped evidence, distinct-session counts and immutable settlement receipts</td></tr>
-                <tr><th scope="row">Cortex Skills</th><td>Implemented and tested</td><td>Review in the editor; approval bound to the exact version; tokens cannot read unapproved instructions</td></tr>
-                <tr><th scope="row">Cortex Tools</th><td>Implemented and tested</td><td>Member-controlled settings and inert proposals; no server connection or installation; no settings panel yet</td></tr>
-                <tr><th scope="row">Cortex editor</th><td>Implemented and tested</td><td>Memories, Notes and Skills; history, restore and exact-version skill approval</td></tr>
-                <tr><th scope="row">Agent tools</th><td>Implemented and tested</td><td>Ten vault tools and nine cortex tools; stand-in services and signed-token integration checks do not prove live sign-in</td></tr>
+                <tr><th scope="row">Agent tools</th><td>Implemented and tested</td><td>Ten vault tools; stand-in services and signed-token integration checks do not prove live sign-in</td></tr>
                 <tr><th scope="row">Folder sync</th><td>Implemented</td><td>Command line, local folders</td></tr>
                 <tr><th scope="row">Sync from the workspace, and with cloud storage</th><td>Planned</td><td></td></tr>
                 <tr><th scope="row">Deleting ohm's copy</th><td>Manual</td><td>Carried out on request</td></tr>
-                <tr><th scope="row">Cortex export and folder adapter</th><td>Not built</td><td>Vault post export and sync do not include cortex data</td></tr>
-                <tr><th scope="row">Automatic prompt recall and turn capture</th><td>Not built</td><td>The cortex <code>recall</code> request and Turns requests are authenticated placeholders returning <code>NotBuiltYet</code></td></tr>
-                <tr><th scope="row">Claude Code and Codex adapters</th><td>Not built</td><td>Probe recorded startup, prompt submission and session end; normal Stop and successful headless execution remain unverified</td></tr>
                 <tr><th scope="row">Agent keys</th><td>Planned</td><td>Until then an agent signs in with an app password from the member's PDS</td></tr>
                 <tr><th scope="row">Finding people</th><td>Planned</td><td></td></tr>
               </tbody>
             </table>
           </div>
-        </section>
-
-        <section aria-labelledby="probe">
-          <h2 id="probe">What the CLI probe established</h2>
-          <p>Isolated Linux runs used Claude Code 2.1.323 and Codex CLI 0.168.0. Both produced SessionStart, UserPromptSubmit and SessionEnd inputs. Neither had credentials, so neither produced a normal Stop payload or a successful headless model result. No successful token usage or billed cost was measured.</p>
-          <p>The plugin specifications were read, but no shared package was loaded in both clients. Portable skills and MCP configuration do not establish portable hooks: hook configuration is client-specific. Authentication, successful multi-turn runs, loop prevention and packaging still need adapter verification.</p>
         </section>
 
         <section aria-labelledby="for-good">
@@ -155,7 +135,7 @@
 
         <section aria-labelledby="ohm">
           <h2 id="ohm">ohm can read your private posts</h2>
-          <p>Your workspace includes them, and ohm holds your workspace and cortex. ohm serves this private data only to you. A synced folder protects your post copy; a complete cortex backup is not available yet.</p>
+          <p>Your workspace includes them, and ohm holds your workspace. ohm serves this private data only to you. A synced folder keeps a copy of your posts with you.</p>
         </section>
 
         <section aria-labelledby="not">
@@ -179,7 +159,6 @@
       <p id="toc-title">On this page</p>
       <ul>
         <li><a href="#status">Implementation status</a></li>
-        <li><a href="#probe">What the CLI probe established</a></li>
         <li><a href="#for-good">Anything you publish is public for good</a></li>
         <li><a href="#agent">Your agent reads your private posts</a></li>
         <li><a href="#ohm">ohm can read your private posts</a></li>

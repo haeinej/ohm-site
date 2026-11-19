@@ -70,7 +70,7 @@ An ohm account works in one account on the open network, and that account belong
 
 ## Leaving
 
-You can export your posts and ask for ohm's copy to be deleted. Cortex data is not included in that export yet. Your account on the open network and your published posts stay where they are hosted. [Export and leaving](https://docs.ohmmmm.com/export.md)
+You can export your posts and ask for ohm's copy to be deleted. Your account on the open network and your published posts stay where they are hosted. [Export and leaving](https://docs.ohmmmm.com/export.md)
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.

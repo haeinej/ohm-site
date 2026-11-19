@@ -1,14 +1,12 @@
 # Quick start
 
-Keep your drafts, published work and agent knowledge connected, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.
+Keep your drafts and published work in one place, while choosing what becomes public. Start by saving one private post; add publishing and an agent when you need them.
 
 <a id="why"></a>
 
 ## Why the pieces are separate
 
 An idea can become a draft, then a public post. You need somewhere to work on it before it is ready, and a way to publish it without making every draft public. Your vault is that working space. Your own account on the open network holds what you publish.
-
-Your agent also learns how you work. That knowledge belongs in a private cortex beside your posts, so a preference about editing does not become part of your website. [Your cortex](https://docs.ohmmmm.com/cortex.md)
 
 <a id="need"></a>
 
@@ -19,9 +17,9 @@ An AT Protocol account is your identity on the open network. A Personal Data Ser
 | You need | Why | Who sets it up |
 | --- | --- | --- |
 | An ohm sign-in | Lets the workspace recognize you when you return | You sign in with a supported provider |
-| A connected AT Protocol account | Proves which vault and cortex are yours and identifies where public posts belong | You connect your existing account; if you have none, create one first |
+| A connected AT Protocol account | Proves which vault is yours and identifies where public posts belong | You connect your existing account; if you have none, create one first |
 | A website | Gives public records a page with your own design | Optional for saving private work; connecting its content is separate work |
-| A coding agent | Uses your work as context and carries learning between sessions | Optional; the browser editor works without one |
+| A coding agent | Reads and writes your posts with you | Optional; the browser editor works without one |
 | A local folder | Gives you a separate copy of your posts | Optional; export or command-line sync when you want one |
 
 Access is restricted while ohm is being tested. These steps describe the implemented workspace; check [Status and limits](https://docs.ohmmmm.com/limits.md) for what remains unverified or unavailable.
@@ -94,7 +92,7 @@ A public post is now part of your published layer. Anything published is public 
 
 Export your vault, or use the command-line folder sync. Each post becomes a Markdown file, filed under its label. Browser folder sync and direct cloud-storage connections are planned.
 
-Syncing never publishes. It currently covers posts, not your cortex; cortex export is still planned. [More about syncing](https://docs.ohmmmm.com/sync.md)
+Syncing never publishes. [More about syncing](https://docs.ohmmmm.com/sync.md)
 
 <a id="agent"></a>
 
@@ -102,17 +100,7 @@ Syncing never publishes. It currently covers posts, not your cortex; cortex expo
 
 Connect the coding agent you already use, and it can read and write in your workspace. It reads your private posts too, which is how it knows what you are working on.
 
-Ask it to start with your cortex. It reads standing memories and descriptions, then recalls the detail it needs. Automatic session hooks are not installed by connecting the MCP tools.
-
 Anything that changes what other people see is shown to you first, publishing included. [More about your agent](https://docs.ohmmmm.com/agent.md)
-
-<a id="cortex"></a>
-
-## 9. See what your agent remembers
-
-Open Cortex in the rail. Memories, Notes and Skills are separate from your posts. You can edit a memory, inspect its earlier versions, restore one, and review an agent's proposed skill before approving it.
-
-Your cortex stays private. Publish does not read it. [Your cortex](https://docs.ohmmmm.com/cortex.md)
 
 <a id="next"></a>
 

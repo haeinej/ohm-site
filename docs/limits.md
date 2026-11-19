@@ -13,33 +13,17 @@ What is built, what has been tested and what remains planned. A merged implement
 | Connecting a Bluesky account | Implemented | Not yet verified end to end |
 | Accounts hosted by ohm | Planned | |
 | Access | Restricted | An allow list of accounts during testing |
-| Workspace | Implemented | Vault editor and Cortex navigation; account switching clears private state |
+| Workspace | Implemented | Vault editor; account switching clears private state |
 | Mirror | Implemented | Runs automatically when an account is first connected |
 | Publishing public posts | Implemented | Verified against a test PDS. Not yet run against a live account |
 | Friends-only delivery | Planned | |
 | Attachments stored by ohm | Planned | A post references files by address, and a copy is made at publish |
-| Cortex Memory and Context | Implemented and tested | Member isolation, stale writes, safe retries, preserved history and three seed memories; live deployment not established here |
-| Cortex Notes | Implemented and tested | Explicit outcomes, project-scoped evidence, distinct-session counts and immutable settlement receipts |
-| Cortex Skills | Implemented and tested | Review in the editor; approval bound to the exact version; tokens cannot read unapproved instructions |
-| Cortex Tools | Implemented and tested | Member-controlled settings and inert proposals; no server connection or installation; no settings panel yet |
-| Cortex editor | Implemented and tested | Memories, Notes and Skills; history, restore and exact-version skill approval |
-| Agent tools | Implemented and tested | Ten vault tools and nine cortex tools; stand-in services and signed-token integration checks do not prove live sign-in |
+| Agent tools | Implemented and tested | Ten vault tools; stand-in services and signed-token integration checks do not prove live sign-in |
 | Folder sync | Implemented | Command line, local folders |
 | Sync from the workspace, and with cloud storage | Planned | |
 | Deleting ohm's copy | Manual | Carried out on request |
-| Cortex export and folder adapter | Not built | Vault post export and sync do not include cortex data |
-| Automatic prompt recall and turn capture | Not built | The cortex `recall` request and Turns requests are authenticated placeholders returning `NotBuiltYet` |
-| Claude Code and Codex adapters | Not built | Probe recorded startup, prompt submission and session end; normal Stop and successful headless execution remain unverified |
 | Agent keys | Planned | Until then an agent signs in with an app password from the member's PDS |
 | Finding people | Planned | |
-
-<a id="probe"></a>
-
-## What the CLI probe established
-
-Isolated Linux runs used Claude Code 2.1.323 and Codex CLI 0.168.0. Both produced SessionStart, UserPromptSubmit and SessionEnd inputs. Neither had credentials, so neither produced a normal Stop payload or a successful headless model result. No successful token usage or billed cost was measured.
-
-The plugin specifications were read, but no shared package was loaded in both clients. Portable skills and MCP configuration do not establish portable hooks: hook configuration is client-specific. Authentication, successful multi-turn runs, loop prevention and packaging still need adapter verification.
 
 <a id="for-good"></a>
 
@@ -57,7 +41,7 @@ That is how it knows what you are working on. Whichever company runs the model y
 
 ## ohm can read your private posts
 
-Your workspace includes them, and ohm holds your workspace and cortex. ohm serves this private data only to you. A synced folder protects your post copy; a complete cortex backup is not available yet.
+Your workspace includes them, and ohm holds your workspace. ohm serves this private data only to you. A synced folder keeps a copy of your posts with you.
 
 <a id="not"></a>
 
