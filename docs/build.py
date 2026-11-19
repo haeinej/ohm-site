@@ -1281,7 +1281,7 @@ git diff --check
 ```
 For the vault folder format and the index alone, `node --test test/node.test.mjs` and `node --experimental-sqlite --test test/indexer.test.mjs` run against real temporary folders. They do not prove a real Google Drive mount.
 The capability reference must match its registered tables. The docs build checks HTML page links and anchors; tests also check Markdown/LLM outbound fragments, static-page IDs, the six-route SEO contract, offline script routing and MCP initialization from an extracted package with only locked runtime dependencies. The broader tests exercise service boundaries, member isolation, versions and tool composition using local fixtures. Passing them is not evidence of a successful live member sign-in or deployment.
-For a local public-site preview, run `npm run home:dev` or `npm run docs:dev` from the root (loopback ports 8790 and 8791). Run `npm run home:seo -- http://127.0.0.1:8790` against the home preview, not production, to check this checkout. [Public site ownership](https://github.com/haeinej/ohm-vault/blob/main/public/README.md) explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.
+For a local public-site preview, run `npm run home:dev` or `npm run docs:dev` from the root of haeinej/ohm-site (loopback ports 8790 and 8791). Run `npm run home:seo -- http://127.0.0.1:8790` against the home preview, not production, to check this checkout. [Public site ownership](https://github.com/haeinej/ohm-vault/blob/main/public/README.md) explains what each folder deploys. Edit this generator rather than its HTML, Markdown and LLM outputs; regenerate, inspect the diff, and fix the source then rerun if generation stops partway. Existing HTML bookmarks and the header-free docs layout must remain stable.
 Use the bundled `document-work` skill for each coherent completed outcome. Update the canonical human guide with purpose, dependency reasons and recognizable first use; update this guide or the precise reference with contracts and recovery. Regenerate outputs from their source. Use synthetic examples and keep private member material out of public docs. Report implementation, local test evidence and live verification separately. [Status and limits](/docs/limits) records the remaining product boundaries.
 """)
 
@@ -2287,11 +2287,16 @@ def head(path, title, description):
     <meta property="og:title" content="{title}">
     <meta property="og:description" content="{description}">
     <meta property="og:url" content="{DOCS_ORIGIN}{path}">
-    <meta property="og:image" content="{HOME_ORIGIN}/assets/og-image.png">
+    <meta property="og:image" content="{DOCS_ORIGIN}/assets/og-docs-v2.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="ohm — An agentic social network">
+    <meta property="og:image:alt" content="ohm docs — Your workspace, step by step">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{title}">
+    <meta name="twitter:description" content="{description}">
+    <meta name="twitter:image" content="{DOCS_ORIGIN}/assets/og-docs-v2.png">
+    <meta name="twitter:image:alt" content="ohm docs — Your workspace, step by step">
+    <meta property="og:image:type" content="image/png">
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
     <link rel="preload" href="/assets/fonts/coconat-regular.woff2" as="font" type="font/woff2" crossorigin>

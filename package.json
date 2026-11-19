@@ -12,6 +12,7 @@
     "home:check": "node --check home/src/worker.js && node --check home/public/sw.js && node --check home/public/sw-register.js && wrangler deploy --config home/wrangler.jsonc --dry-run",
     "home:deploy": "wrangler deploy --config home/wrangler.jsonc",
     "home:seo": "node home/scripts/check-seo.mjs",
+    "sites:seo": "npm run home:seo && node check-seo.mjs",
     "home:joiners": "node home/scripts/joiners.mjs",
     "docs:dev": "wrangler dev --config docs/wrangler.jsonc --ip 127.0.0.1 --port 8791",
     "docs:build": "python3 docs/build.py",

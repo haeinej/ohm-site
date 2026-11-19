@@ -14,6 +14,8 @@ The public websites of ohm, one folder to a site. Each is edited and deployed fr
 
 The commands serve only on loopback; no private launcher file, Cloudflare login or deployment is needed to run them. Build the docs before previewing an authored change. The docs build does not touch the live home.
 
+Search and sharing: [human guide](home/docs/seo.md) · [agent reference](agents/public-sites-seo.md). `npm run sites:seo` crawls both live sites.
+
 ## Work on this repository
 
 ```sh
