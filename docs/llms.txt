@@ -1,10 +1,10 @@
 # ohm docs
 
-> ohm is an agentic social network that extends a person's own website: a vault of blocks in channels, kept as a folder, whose posts are private, for friends or public, with public posts published to the person's own AT Protocol account; MCP tools for the person's own coding agent; and ohm-cortex, a separate folder where that agent keeps what it knows, every change marked with who made it. Evidence comes from content; inference lives in the cortex.
+> ohm is an agentic social network that extends a person's own website: a vault of blocks in channels, kept as a folder, whose posts are private, for friends or public, with public posts published to the person's own AT Protocol account; MCP tools for the person's own coding agent; and a cortex, a separate folder where that agent keeps what it knows, every change marked with who made it. Evidence comes from content; inference lives in the cortex.
 
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.
 
-Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): dependencies, initialization, contracts, recovery and verification. For the member's experience, read [Quick start](https://docs.ohmmmm.com/quick-start.md). Everything in one file: [https://docs.ohmmmm.com/llms-full.txt](https://docs.ohmmmm.com/llms-full.txt). Source: [https://github.com/haeinej/ohm-vault](https://github.com/haeinej/ohm-vault)
+Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): dependencies, initialization, contracts, recovery and verification. For the member's experience, read [Quick start](https://docs.ohmmmm.com/quick-start.md). Everything in one file: [https://docs.ohmmmm.com/llms-full.txt](https://docs.ohmmmm.com/llms-full.txt). Source: [https://github.com/haeinej/ohmmmm](https://github.com/haeinej/ohmmmm)
 
 ## For agents
 
@@ -14,7 +14,7 @@ Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): depend
 - [Data model](https://docs.ohmmmm.com/data-model.md): A post maps to a vault row, a public repository record and a Markdown file.
 - [Mirror and publish](https://docs.ohmmmm.com/protocols.md): Two exchanges connect a vault to its member's repository.
 - [Agent integration](https://docs.ohmmmm.com/mcp.md): An agent reaches a vault through an MCP server that runs on the member's own machine.
-- [Service API](https://docs.ohmmmm.com/api.md): The vault service registers 24 requests in 9 capabilities.
+- [Service API](https://docs.ohmmmm.com/api.md): The vault service registers 37 requests in 10 capabilities.
 
 ## Get started
 
@@ -48,7 +48,7 @@ Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): depend
 
 ## Cortex and history
 
-- [The cortex](https://docs.ohmmmm.com/cortex.md): ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read.
+- [The cortex](https://docs.ohmmmm.com/cortex.md): The cortex keeps what your agent knows about you and what it can do for you, as a folder you can read.
 - [History](https://docs.ohmmmm.com/history.md): Every change to your cortex is one line in one journal, marked with who made it.
 
 ## Agent

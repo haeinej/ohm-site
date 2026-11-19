@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.">
+    <meta name="description" content="The cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate from the vault: it points at your blocks and never changes them.">
     <link rel="canonical" href="https://docs.ohmmmm.com/cortex">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="The cortex · ohm docs">
-    <meta property="og:description" content="ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.">
+    <meta property="og:description" content="The cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate from the vault: it points at your blocks and never changes them.">
     <meta property="og:url" content="https://docs.ohmmmm.com/cortex">
     <meta property="og:image" content="https://docs.ohmmmm.com/assets/og-docs-v2.png">
     <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
     <meta property="og:image:alt" content="ohm docs — Your workspace, step by step">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="The cortex · ohm docs">
-    <meta name="twitter:description" content="ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.">
+    <meta name="twitter:description" content="The cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate from the vault: it points at your blocks and never changes them.">
     <meta name="twitter:image" content="https://docs.ohmmmm.com/assets/og-docs-v2.png">
     <meta name="twitter:image:alt" content="ohm docs — Your workspace, step by step">
     <meta property="og:image:type" content="image/png">
@@ -98,7 +98,7 @@
       </ul>
       <p class="sidebar-group">Source</p>
       <ul>
-        <li><a href="https://github.com/haeinej/ohm-vault">GitHub</a></li>
+        <li><a href="https://github.com/haeinej/ohmmmm">GitHub</a></li>
       </ul>
     </nav>
 
@@ -107,7 +107,7 @@
         <header>
           <p class="group">Cortex and history</p>
           <h1 id="title">The cortex</h1>
-          <p class="introduction">ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.</p>
+          <p class="introduction">The cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate from the vault: it points at your blocks and never changes them.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
@@ -126,7 +126,7 @@
                 <tr><th>You need</th><th>Why</th></tr>
               </thead>
               <tbody>
-                <tr><th scope="row">A checkout of ohm-cortex and Node</th><td>It runs on your own computer. Its tests run on Node 20 and 22. Its repository is not public yet</td></tr>
+                <tr><th scope="row">Node, and <a href="https://github.com/haeinej/ohmmmm/tree/main/cortex">haeinej/ohmmmm</a></th><td>It runs on your own computer, on Node 20 or later. It is the <code>cortex/</code> folder of that public repository, formerly ohm-cortex</td></tr>
                 <tr><th scope="row">A folder for the cortex</th><td>The cortex is the folder. <code>~/cortex</code> unless you name another</td></tr>
                 <tr><th scope="row">A coding agent that speaks MCP</th><td>It reads and writes the cortex through twenty <code>cortex_*</code> tools. Claude Code and Codex can also run its hooks</td></tr>
                 <tr><th scope="row">A vault folder</th><td>Optional. It lets memories point at your blocks, and tells the agent what each channel means</td></tr>
@@ -172,10 +172,11 @@
 
         <section aria-labelledby="first-use">
           <h2 id="first-use">Your first use</h2>
-          <p>From your checkout of ohm-cortex, start a cortex:</p>
-          <pre>node bin/cortex.mjs init ~/cortex</pre>
+          <p>From a checkout of haeinej/ohmmmm, start a cortex:</p>
+          <pre>node cortex/bin/cortex.mjs init ~/cortex</pre>
           <p>Then give your agent this as an MCP server's command:</p>
-          <pre>node /path/to/cortex/bin/cortex.mjs mcp ~/cortex</pre>
+          <pre>node /path/to/ohmmmm/cortex/bin/cortex.mjs mcp ~/cortex</pre>
+          <p><code>npx github:haeinej/ohmmmm init &lt;handle&gt;</code> makes a home instead: a folder with your vault and a cortex side by side, where each finds the other by itself.</p>
           <p>When it connects, the agent is told to call <code>cortex_start</code>, which hands it the rules, your identity, its memories and what is waiting for you. Ask it something about yourself, then ask it to remember one thing. Run <code>cortex history</code> and you see the memory it wrote, under its name.</p>
           <p><code>cortex status</code> lists everything waiting for you or broken, and how to clear each. For a client that connects to a server rather than starting one, <code>cortex serve</code> offers the same tools over HTTP on your own machine, with a token from <code>cortex token</code>.</p>
         </section>
@@ -223,7 +224,7 @@
 
         <section aria-labelledby="evidence">
           <h2 id="evidence">Evidence</h2>
-          <p>A note or a memory says what it was drawn from, as a list of pointers: a node at the version read, such as a block in your vault or another memory, or a session.</p>
+          <p>An observation or a memory says what it was drawn from, as a list of pointers: a node at the version read, such as a block in your vault or another memory, or a session.</p>
           <ul>
             <li><strong>Something you said</strong> rests on the session you said it in, and becomes a memory at once.</li>
             <li><strong>Something inferred about you</strong> rests on two or more sessions.</li>
@@ -236,7 +237,7 @@
         <section aria-labelledby="vault">
           <h2 id="vault">Connecting a vault</h2>
           <p><code>cortex vault connect &lt;folder&gt;</code> connects a vault kept in a folder and writes <code>vault.md</code>, where the agent records what each channel means and how blocks there are filed. Each session, cortex brings <code>vault.md</code> in step: counts, what moved or left, and memories pointing at blocks no longer there.</p>
-          <p>Cortex's own folder reader is simpler than the vault format: it reads each Markdown file as a block in the one channel of its folder. Reading a vault's blocks in many channels, through the vault's index, is planned.</p>
+          <p>In a home, there is nothing to connect: the cortex reads the vault beside it through the vault's own reader, unless you connected another. Both readers are simpler than the vault format: they read each Markdown file as a block in the one channel of its folder. Reading a vault's blocks in many channels, through the vault's index, is planned.</p>
         </section>
 
         <section aria-labelledby="not">

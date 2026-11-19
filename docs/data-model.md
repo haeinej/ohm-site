@@ -102,7 +102,7 @@ The database enforces unique keys and conditional updates.
 
 ## Vault folder nodes
 
-A vault folder is read as four kinds of node by [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs), which is pure: callers pass `{ path, text }` and write what they get back. The lexicons in `lexicons/com/ohmmmm/vault/` (`block`, `channel`, `entity`, `source`, all keyed by TID) describe file contents; none is written to a PDS.
+A vault folder is read as four kinds of node by [vault/vault/node.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/node.mjs), which is pure: callers pass `{ path, text }` and write what they get back. The lexicons in `lexicons/com/ohmmmm/vault/` (`block`, `channel`, `entity`, `source`, all keyed by TID) describe file contents; none is written to a PDS.
 
 | Node | Path | Fields |
 | --- | --- | --- |
@@ -145,23 +145,23 @@ A block's folder is its home channel. A file with `kind: post`, or with no `kind
 
 ## The index
 
-`.vault/index.sqlite`, written only by `scan` in [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs), holds the tables `meta`, `files`, `nodes`, `edges`, `terms` and `problems`. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a `reference` root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. [The agent reference](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) has the full contract.
+`.vault/index.sqlite`, written only by `scan` in [vault/vault/indexer.mjs](https://github.com/haeinej/ohmmmm/blob/main/vault/vault/indexer.mjs), holds the tables `meta`, `files`, `nodes`, `edges`, `terms` and `problems`. It is derived data: a different index version drops and recreates it, a damaged file is set aside and recreated, and nothing in it is the only copy of anything. A file is reread only when its inode, size, modified time or changed time moves, and addressed by a CIDv1 of its bytes; a `reference` root is never opened and has no address. Search uses its own word table with character bigrams for Korean, Japanese and Chinese. [The agent reference](https://github.com/haeinej/ohmmmm/blob/main/vault/docs/agents/vault-format.md) has the full contract.
 
 <a id="journal"></a>
 
 ## The cortex journal
 
-ohm-cortex keeps one append-only file, `.cortex/journal.jsonl`. Every line has `seq`, a unique `id`, `at`, `actor` (`{kind: "human" or "agent", name}`), sometimes `session`, and a `type`.
+The cortex keeps one append-only file, `.cortex/journal.jsonl`. Every line has `seq`, a unique `id`, `at`, `actor` (`{kind: "human" or "agent", name}`), sometimes `session`, and a `type`.
 
 | `type` | Holds |
 | --- | --- |
 | `change` | `node`, `op` (create, update, remove, restore), `before` and `after` versions, `reason`, `evidence`; `proposedBy` for a confirmed identity fact or an approved skill |
-| `note` | One observation, with `evidence`. Changes no file |
-| `settled` | What became of a note |
+| `observation` | One observation, with `evidence`. Changes no file |
+| `settled` | What became of an observation: kept, dropped, or a memory's name |
 | `session` | `summary`, `outcome`, `made` (change IDs), `project`, `deadEnds` (`tried`, `why`, `check`), `resolved` |
 | `save` | A name and a note. Changes nothing |
 
-Nodes are named `identity`, `playbook`, `memory/<name>`, `working/<agent>`, `skill/<name>`, `tool/<name>` and `channel/<path>`. Earlier versions are kept in `.cortex/history/` by version hash. Evidence pointers are `{node, version}` or `{session}`. Lines are ordered by time, then ID, so two machines' journals join by union. Older `proposal` and `decision` lines are read and change nothing. No line records what an agent read.
+Nodes are named `identity`, `playbook`, `memory/<name>`, `working/<agent>`, `skill/<name>`, `tool/<name>` and `channel/<path>`. Earlier versions are kept in `.cortex/history/` by version hash. Evidence pointers are `{node, version}` or `{session}`. Lines are ordered by time, then ID, so two machines' journals join by union. Older `note` lines read as observations, `stamp` lines as saves, and `proposal` and `decision` lines are read and change nothing. No line records what an agent read.
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.

@@ -28,7 +28,7 @@ Each one is a **root**, and its files appear as blocks in a channel of their own
 **Start the configuration,** from inside your vault folder:
 
 ```
-npx github:haeinej/ohm-vault vault init
+npx github:haeinej/ohmmmm vault init
 ```
 
 **Name the folders it should read,** in `.vault/config.json`:
@@ -46,14 +46,14 @@ npx github:haeinej/ohm-vault vault init
 **Read everything,** and keep what was found:
 
 ```
-npx github:haeinej/ohm-vault vault index
+npx github:haeinej/ohmmmm vault index
 ```
 
 **Look for something,** and look at one block closely:
 
 ```
-npx github:haeinej/ohm-vault vault search 서울 rain
-npx github:haeinej/ohm-vault vault inspect churn-query
+npx github:haeinej/ohmmmm vault search 서울 rain
+npx github:haeinej/ohmmmm vault inspect churn-query
 ```
 
 You have succeeded when `vault search` finds a file from one of your roots. Each command prints what it did as JSON, and says in a sentence what it could not do.

@@ -124,9 +124,9 @@ You do not need an account to begin. A vault folder is a folder of Markdown file
 From inside the folder you want as your vault, run:
 
 ```
-npx github:haeinej/ohm-vault vault init
-npx github:haeinej/ohm-vault vault index
-npx github:haeinej/ohm-vault vault search rain
+npx github:haeinej/ohmmmm vault init
+npx github:haeinej/ohmmmm vault index
+npx github:haeinej/ohmmmm vault search rain
 ```
 
 The first makes `.vault/config.json`, where you can name other folders to read. The second reads everything and keeps an index beside it, in `.vault/index.sqlite`. The third finds blocks by their words. Nothing here signs in, reaches ohm, or publishes anything. [Other folders and the index](https://docs.ohmmmm.com/roots-and-index.md)

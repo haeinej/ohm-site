@@ -1,6 +1,6 @@
 # The cortex
 
-ohm-cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate software from the vault: it points at your blocks and never changes them.
+The cortex keeps what your agent knows about you and what it can do for you, as a folder you can read. It is separate from the vault: it points at your blocks and never changes them.
 
 <a id="why"></a>
 
@@ -18,7 +18,7 @@ It holds no content of yours. Your writing stays in your vault; the cortex point
 
 | You need | Why |
 | --- | --- |
-| A checkout of ohm-cortex and Node | It runs on your own computer. Its tests run on Node 20 and 22. Its repository is not public yet |
+| Node, and [haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/cortex) | It runs on your own computer, on Node 20 or later. It is the `cortex/` folder of that public repository, formerly ohm-cortex |
 | A folder for the cortex | The cortex is the folder. `~/cortex` unless you name another |
 | A coding agent that speaks MCP | It reads and writes the cortex through twenty `cortex_*` tools. Claude Code and Codex can also run its hooks |
 | A vault folder | Optional. It lets memories point at your blocks, and tells the agent what each channel means |
@@ -61,17 +61,19 @@ For you it is three folders: what your agent has learned, what it knows how to d
 
 ## Your first use
 
-From your checkout of ohm-cortex, start a cortex:
+From a checkout of haeinej/ohmmmm, start a cortex:
 
 ```
-node bin/cortex.mjs init ~/cortex
+node cortex/bin/cortex.mjs init ~/cortex
 ```
 
 Then give your agent this as an MCP server's command:
 
 ```
-node /path/to/cortex/bin/cortex.mjs mcp ~/cortex
+node /path/to/ohmmmm/cortex/bin/cortex.mjs mcp ~/cortex
 ```
+
+`npx github:haeinej/ohmmmm init <handle>` makes a home instead: a folder with your vault and a cortex side by side, where each finds the other by itself.
 
 When it connects, the agent is told to call `cortex_start`, which hands it the rules, your identity, its memories and what is waiting for you. Ask it something about yourself, then ask it to remember one thing. Run `cortex history` and you see the memory it wrote, under its name.
 
@@ -122,7 +124,7 @@ A dead end is what it tried and dropped, why, and a command that would show whet
 
 ## Evidence
 
-A note or a memory says what it was drawn from, as a list of pointers: a node at the version read, such as a block in your vault or another memory, or a session.
+An observation or a memory says what it was drawn from, as a list of pointers: a node at the version read, such as a block in your vault or another memory, or a session.
 
 - **Something you said** rests on the session you said it in, and becomes a memory at once.
 - **Something inferred about you** rests on two or more sessions.
@@ -137,7 +139,7 @@ Cortex checks that each pointer is well formed and that what it cites exists. Ho
 
 `cortex vault connect <folder>` connects a vault kept in a folder and writes `vault.md`, where the agent records what each channel means and how blocks there are filed. Each session, cortex brings `vault.md` in step: counts, what moved or left, and memories pointing at blocks no longer there.
 
-Cortex's own folder reader is simpler than the vault format: it reads each Markdown file as a block in the one channel of its folder. Reading a vault's blocks in many channels, through the vault's index, is planned.
+In a home, there is nothing to connect: the cortex reads the vault beside it through the vault's own reader, unless you connected another. Both readers are simpler than the vault format: they read each Markdown file as a block in the one channel of its folder. Reading a vault's blocks in many channels, through the vault's index, is planned.
 
 <a id="not"></a>
 

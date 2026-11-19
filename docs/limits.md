@@ -48,12 +48,12 @@ Each piece is one of: **Built**; **Built, not verified**, where tests pass but i
 
 | Area | Status | Notes |
 | --- | --- | --- |
-| The cortex folder, its MCP server over standard input and over HTTP | Built | Separate software, ohm-cortex; 119 tests, on Node 20 and 22 |
+| The cortex folder, its MCP server over standard input and over HTTP | Built | `cortex/` in haeinej/ohmmmm, formerly ohm-cortex; 126 tests, run in CI on Node 22 |
 | The journal: changes marked with who made them, history, as-of, save, restore, revert | Built | |
 | Sessions and dead ends | Built | Shown at session start near the folder they were recorded in |
-| Evidence on notes and memories | Built | Checked for shape and existence; how much is enough is guidance |
+| Evidence on observations and memories | Built | Checked for shape and existence; how much is enough is guidance |
 | Hooks for Claude Code and Codex | Built, not verified | Tested with synthetic inputs; not yet tried in a real session |
-| Reading a vault folder | Built | Through cortex's own folder reader: one channel per file |
+| Reading a vault folder | Built | Through the vault's own reader in a home, or cortex's folder reader: one channel per file |
 | Reading the vault's full format through its index | Planned | |
 | Memories marked out of date when their blocks change | Planned | |
 | ChatGPT and Claude web connectors | Not built | They need OAuth |
@@ -69,7 +69,7 @@ These are drawn in the ohm-ux wireframe with sample data. None is in the live ed
 | Connecting words, whole blocks and pulling a line; the connections card | Planned | [Connections](https://docs.ohmmmm.com/connections.md#designed) |
 | The graph, with evidence and inference | Planned | [The graph](https://docs.ohmmmm.com/graph.md#designed) |
 | Version history: Dates, You and Agents; revert, restore, save | Planned | [History](https://docs.ohmmmm.com/history.md#designed) |
-| Daily autosaves | Planned | ohm-cortex does not write them yet |
+| Daily autosaves | Planned | The cortex does not write them yet |
 
 <a id="for-good"></a>
 
