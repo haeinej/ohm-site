@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="The vault service registers 15 requests in 8 capabilities. This reference is generated from the tables the service runs on.">
+    <meta name="description" content="The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.">
     <link rel="canonical" href="https://docs.ohmmmm.com/api">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Service API · ohm docs">
-    <meta property="og:description" content="The vault service registers 15 requests in 8 capabilities. This reference is generated from the tables the service runs on.">
+    <meta property="og:description" content="The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.">
     <meta property="og:url" content="https://docs.ohmmmm.com/api">
     <meta property="og:image" content="https://ohmmmm.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -90,7 +90,7 @@
         <header>
           <p class="group">For agents</p>
           <h1 id="title">Service API</h1>
-          <p class="introduction">The vault service registers 15 requests in 8 capabilities. This reference is generated from the tables the service runs on.</p>
+          <p class="introduction">The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
@@ -188,6 +188,146 @@
                 <tr><th scope="row">Access</th><td>Member</td></tr>
                 <tr><th scope="row">Parameters</th><td><code>id</code>: the post's ID<br><code>replaces</code>: the version being removed</td></tr>
                 <tr><th scope="row">Returns</th><td><code>id</code>, <code>removed</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="friends">
+          <h2 id="friends">Friends</h2>
+          <p>The friends layer: friends-only blocks, kept readable so the friends a member chose can read them, and the friend list that says who they are. A friend reads friends-only posts and blocks alike. Private blocks are never kept here.</p>
+          <h3><code>com.ohmmmm.vault.listBlocks</code></h3>
+          <p>Every friends-only block that is not a post, with the version it is at. With <code>since</code>, a point an earlier list returned, only what changed after it, removals included.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>since</code>: optional: the <code>cursor</code> of an earlier list</td></tr>
+                <tr><th scope="row">Returns</th><td><code>blocks</code> (id, version, path, kind, title), <code>cursor</code>, and <code>more</code> when there is another page</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.getBlock</code></h3>
+          <p>One friends-only block, as the file it is in the member's folder, and its version.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the block's ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>block</code> (id, path, text), <code>version</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.putBlock</code></h3>
+          <p>Saves one friends-only block, as its file: its path in the folder and its text, which must say <code>visibility: friends</code>. A private or public block, or a post, is refused. <code>replaces</code> is the version being replaced and is left out for a new block. Sent twice, it ends the same as sent once. From then on the friends on the list can read it.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>block</code>: <code>id</code>, <code>path</code> and <code>text</code><br><code>replaces</code>: optional: the version it replaces</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>version</code>, and <code>unchanged</code> when nothing differed</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.deleteBlock</code></h3>
+          <p>Removes one friends-only block from this layer, for good. Friends can no longer read it.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the block's ID<br><code>replaces</code>: the version being removed</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>removed</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listFriends</code></h3>
+          <p>Who may read the member's friends layer.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td>None</td></tr>
+                <tr><th scope="row">Returns</th><td><code>friends</code> (did, added)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.addFriend</code></h3>
+          <p>Lets one more DID read the member's friends layer: every friends-only post and block, now and later. Only the member, signed in to ohm, can add a friend; an agent cannot.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>did</code>: the friend's DID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>did</code>, and <code>unchanged</code> when they were a friend already</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.removeFriend</code></h3>
+          <p>Stops one DID reading the member's friends layer. What they read before cannot be taken back.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>did</code>: the friend's DID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>did</code>, <code>removed</code>, and <code>unchanged</code> when they were not a friend</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listShared</code></h3>
+          <p>What another member shares with the asker: their friends-only blocks and posts, when the asker is on their friend list. To anyone else it answers NotFound, whether or not anything is there.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Any authenticated account</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>owner</code>: the DID whose friends layer to read</td></tr>
+                <tr><th scope="row">Returns</th><td><code>owner</code>, <code>blocks</code> (id, version, path, kind, title)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.getShared</code></h3>
+          <p>One friends-only block or post another member shares with the asker, as its file.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Any authenticated account</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>owner</code>: the DID whose friends layer to read<br><code>id</code>: the block's or post's ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>block</code> (id, path, text), <code>version</code></td></tr>
               </tbody>
             </table>
           </div>
@@ -415,10 +555,12 @@
                 <tr><th scope="row"><code>WrongMethod</code></th><td>405</td><td>The request is the other of GET and POST</td></tr>
                 <tr><th scope="row"><code>InvalidRequest</code></th><td>400</td><td>The request is not JSON, or something it says is not what that request takes</td></tr>
                 <tr><th scope="row"><code>InvalidPost</code></th><td>400</td><td>The post is not one the vault can hold. The message lists every reason</td></tr>
+                <tr><th scope="row"><code>InvalidBlock</code></th><td>400</td><td>The block is not one the friends layer can hold: it is private or public, a post, or its file has problems. The message lists every reason</td></tr>
                 <tr><th scope="row"><code>InvalidCursor</code></th><td>400</td><td><code>since</code> is not a value an earlier list returned</td></tr>
-                <tr><th scope="row"><code>NotFound</code></th><td>404</td><td>There is no such post or saved version</td></tr>
-                <tr><th scope="row"><code>Changed</code></th><td>409</td><td>The post has changed since the version the request names. The answer carries the current version</td></tr>
+                <tr><th scope="row"><code>NotFound</code></th><td>404</td><td>There is no such post, block or saved version, or nothing there is shared with the asker</td></tr>
+                <tr><th scope="row"><code>Changed</code></th><td>409</td><td>The post or block has changed since the version the request names. The answer carries the current version</td></tr>
                 <tr><th scope="row"><code>SlugTaken</code></th><td>409</td><td>Another post in the vault already has that slug</td></tr>
+                <tr><th scope="row"><code>PathTaken</code></th><td>409</td><td>Another block in the friends layer is already at that path</td></tr>
                 <tr><th scope="row"><code>TooLarge</code></th><td>413</td><td>The post is more than 600 KB of text, or a file it places is empty or larger than 25 MB</td></tr>
                 <tr><th scope="row"><code>FileUnreachable</code></th><td>502</td><td>A file a post places could not be fetched from where the post says it is</td></tr>
                 <tr><th scope="row"><code>AccountNotFound</code></th><td>404</td><td>No AT Protocol account answers to that handle or DID</td></tr>
@@ -472,6 +614,7 @@
       <ul>
         <li><a href="#conventions">Conventions</a></li>
         <li><a href="#posts">Posts</a></li>
+        <li><a href="#friends">Friends</a></li>
         <li><a href="#structure">Structure</a></li>
         <li><a href="#search">Search</a></li>
         <li><a href="#mirror">Mirror</a></li>

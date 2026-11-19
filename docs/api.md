@@ -1,6 +1,6 @@
 # Service API
 
-The vault service registers 15 requests in 8 capabilities. This reference is generated from the tables the service runs on.
+The vault service registers 24 requests in 9 capabilities. This reference is generated from the tables the service runs on.
 
 <a id="conventions"></a>
 
@@ -75,6 +75,111 @@ Removes one post, for good.
 | Access | Member |
 | Parameters | `id`: the post's ID<br>`replaces`: the version being removed |
 | Returns | `id`, `removed` |
+
+<a id="friends"></a>
+
+## Friends
+
+The friends layer: friends-only blocks, kept readable so the friends a member chose can read them, and the friend list that says who they are. A friend reads friends-only posts and blocks alike. Private blocks are never kept here.
+
+### `com.ohmmmm.vault.listBlocks`
+
+Every friends-only block that is not a post, with the version it is at. With `since`, a point an earlier list returned, only what changed after it, removals included.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `since`: optional: the `cursor` of an earlier list |
+| Returns | `blocks` (id, version, path, kind, title), `cursor`, and `more` when there is another page |
+
+### `com.ohmmmm.vault.getBlock`
+
+One friends-only block, as the file it is in the member's folder, and its version.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | `id`: the block's ID |
+| Returns | `block` (id, path, text), `version` |
+
+### `com.ohmmmm.vault.putBlock`
+
+Saves one friends-only block, as its file: its path in the folder and its text, which must say `visibility: friends`. A private or public block, or a post, is refused. `replaces` is the version being replaced and is left out for a new block. Sent twice, it ends the same as sent once. From then on the friends on the list can read it.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `block`: `id`, `path` and `text`<br>`replaces`: optional: the version it replaces |
+| Returns | `id`, `version`, and `unchanged` when nothing differed |
+
+### `com.ohmmmm.vault.deleteBlock`
+
+Removes one friends-only block from this layer, for good. Friends can no longer read it.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `id`: the block's ID<br>`replaces`: the version being removed |
+| Returns | `id`, `removed` |
+
+### `com.ohmmmm.vault.listFriends`
+
+Who may read the member's friends layer.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Member |
+| Parameters | None |
+| Returns | `friends` (did, added) |
+
+### `com.ohmmmm.vault.addFriend`
+
+Lets one more DID read the member's friends layer: every friends-only post and block, now and later. Only the member, signed in to ohm, can add a friend; an agent cannot.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member, with an ohm session |
+| Parameters | `did`: the friend's DID |
+| Returns | `did`, and `unchanged` when they were a friend already |
+
+### `com.ohmmmm.vault.removeFriend`
+
+Stops one DID reading the member's friends layer. What they read before cannot be taken back.
+
+| | |
+| --- | --- |
+| Method | `POST` |
+| Access | Member |
+| Parameters | `did`: the friend's DID |
+| Returns | `did`, `removed`, and `unchanged` when they were not a friend |
+
+### `com.ohmmmm.vault.listShared`
+
+What another member shares with the asker: their friends-only blocks and posts, when the asker is on their friend list. To anyone else it answers NotFound, whether or not anything is there.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Any authenticated account |
+| Parameters | `owner`: the DID whose friends layer to read |
+| Returns | `owner`, `blocks` (id, version, path, kind, title) |
+
+### `com.ohmmmm.vault.getShared`
+
+One friends-only block or post another member shares with the asker, as its file.
+
+| | |
+| --- | --- |
+| Method | `GET` |
+| Access | Any authenticated account |
+| Parameters | `owner`: the DID whose friends layer to read<br>`id`: the block's or post's ID |
+| Returns | `block` (id, path, text), `version` |
 
 <a id="structure"></a>
 
@@ -260,10 +365,12 @@ A refusal is JSON with an `error` code from the table below and a `message` writ
 | `WrongMethod` | 405 | The request is the other of GET and POST |
 | `InvalidRequest` | 400 | The request is not JSON, or something it says is not what that request takes |
 | `InvalidPost` | 400 | The post is not one the vault can hold. The message lists every reason |
+| `InvalidBlock` | 400 | The block is not one the friends layer can hold: it is private or public, a post, or its file has problems. The message lists every reason |
 | `InvalidCursor` | 400 | `since` is not a value an earlier list returned |
-| `NotFound` | 404 | There is no such post or saved version |
-| `Changed` | 409 | The post has changed since the version the request names. The answer carries the current version |
+| `NotFound` | 404 | There is no such post, block or saved version, or nothing there is shared with the asker |
+| `Changed` | 409 | The post or block has changed since the version the request names. The answer carries the current version |
 | `SlugTaken` | 409 | Another post in the vault already has that slug |
+| `PathTaken` | 409 | Another block in the friends layer is already at that path |
 | `TooLarge` | 413 | The post is more than 600 KB of text, or a file it places is empty or larger than 25 MB |
 | `FileUnreachable` | 502 | A file a post places could not be fetched from where the post says it is |
 | `AccountNotFound` | 404 | No AT Protocol account answers to that handle or DID |

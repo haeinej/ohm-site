@@ -14,7 +14,7 @@ Start with [Agent working guide](https://docs.ohmmmm.com/agent-guide.md): depend
 - [Data model](https://docs.ohmmmm.com/data-model.md): A post maps to a vault row, a public repository record and a Markdown file.
 - [Mirror and publish](https://docs.ohmmmm.com/protocols.md): Two exchanges connect a vault to its member's repository.
 - [Agent integration](https://docs.ohmmmm.com/mcp.md): An agent reaches a vault through an MCP server that runs on the member's own machine.
-- [Service API](https://docs.ohmmmm.com/api.md): The vault service registers 15 requests in 8 capabilities.
+- [Service API](https://docs.ohmmmm.com/api.md): The vault service registers 24 requests in 9 capabilities.
 
 ## Get started
 
