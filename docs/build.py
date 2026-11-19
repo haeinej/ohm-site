@@ -934,7 +934,7 @@ It holds no content of yours. Your writing stays in your vault; the cortex point
 ## What you need, and why {#need}
 | You need | Why |
 | --- | --- |
-| A checkout of [ohm-cortex](https://github.com/haeinej/ohm-cortex) and Node | It runs on your own computer. Its tests run on Node 20 and 22 |
+| A checkout of ohm-cortex and Node | It runs on your own computer. Its tests run on Node 20 and 22. Its repository is not public yet |
 | A folder for the cortex | The cortex is the folder. `~/cortex` unless you name another |
 | A coding agent that speaks MCP | It reads and writes the cortex through twenty `cortex_*` tools. Claude Code and Codex can also run its hooks |
 | A vault folder | Optional. It lets memories point at your blocks, and tells the agent what each channel means |
@@ -1261,7 +1261,7 @@ These are the authoritative sources in [haeinej/ohm-vault](https://github.com/ha
 - [vault/node.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/node.mjs): the vault folder format, its checks and its evidence edges. [docs/agents/vault-format.md](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/vault-format.md) is its contract.
 - [vault/roots.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/roots.mjs) and [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs): `.vault/config.json` roots and `.vault/index.sqlite`; [scripts/vault.mjs](https://github.com/haeinej/ohm-vault/blob/main/scripts/vault.mjs) is the command.
 - [plans/vault.md](https://github.com/haeinej/ohm-vault/blob/main/plans/vault.md): the split between vault and cortex, and the steps not yet built.
-The cortex is a separate repository, [haeinej/ohm-cortex](https://github.com/haeinej/ohm-cortex). Its `src/tools.mjs` defines the `cortex_*` tools and `docs/guide.md` explains the journal. The vault never imports cortex, and cortex never imports the vault.
+The cortex is a separate repository, haeinej/ohm-cortex, not public yet. Its `src/tools.mjs` defines the `cortex_*` tools and `docs/guide.md` explains the journal. The vault never imports cortex, and cortex never imports the vault.
 
 ## Verify and document a change {#verify}
 For module ownership, dependency reasons and state transitions, read the [human repository guide](https://github.com/haeinej/ohm-vault/blob/main/docs/repository-map.md) and [agent repository map](https://github.com/haeinej/ohm-vault/blob/main/docs/agents/repository-map.md). They explain retained compatibility paths, account and draft guards, mirror checkpoints, renderer sidecars and recovery at each boundary.
@@ -1543,7 +1543,7 @@ doc("architecture", "System overview",
 | Holds | Blocks, channels, sources, entities; posts among them | Identity, memories, working memory, notes, skills, tools, the journal | Public `com.ohmmmm.post` records, identity, files |
 | Edges | Evidence only: what the content shows | Inference: cortex nodes pointing at vault blocks (`grounds`, `observes`, `learned`, `acts`) | None of ohm's |
 | Kept as | A folder on the member's machine, and for posts, the vault service's working copy | A folder on the member's machine | A repository at the member's host |
-| Repository | [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault) | [haeinej/ohm-cortex](https://github.com/haeinej/ohm-cortex) | External |
+| Repository | [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault) | haeinej/ohm-cortex (not public yet) | External |
 The vault never imports cortex, and cortex never imports the vault. Cortex refers to blocks by ID and version only, through a small read-only vault contract: today its own folder reader, and planned, a reader over the vault's index. The cortex is not synced with ohm or stored by the vault service.
 
 ## How it works {#how}

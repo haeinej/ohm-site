@@ -100,7 +100,7 @@ These are the authoritative sources in [haeinej/ohm-vault](https://github.com/ha
 - [vault/roots.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/roots.mjs) and [vault/indexer.mjs](https://github.com/haeinej/ohm-vault/blob/main/vault/indexer.mjs): `.vault/config.json` roots and `.vault/index.sqlite`; [scripts/vault.mjs](https://github.com/haeinej/ohm-vault/blob/main/scripts/vault.mjs) is the command.
 - [plans/vault.md](https://github.com/haeinej/ohm-vault/blob/main/plans/vault.md): the split between vault and cortex, and the steps not yet built.
 
-The cortex is a separate repository, [haeinej/ohm-cortex](https://github.com/haeinej/ohm-cortex). Its `src/tools.mjs` defines the `cortex_*` tools and `docs/guide.md` explains the journal. The vault never imports cortex, and cortex never imports the vault.
+The cortex is a separate repository, haeinej/ohm-cortex, not public yet. Its `src/tools.mjs` defines the `cortex_*` tools and `docs/guide.md` explains the journal. The vault never imports cortex, and cortex never imports the vault.
 
 <a id="verify"></a>
 

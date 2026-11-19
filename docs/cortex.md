@@ -18,7 +18,7 @@ It holds no content of yours. Your writing stays in your vault; the cortex point
 
 | You need | Why |
 | --- | --- |
-| A checkout of [ohm-cortex](https://github.com/haeinej/ohm-cortex) and Node | It runs on your own computer. Its tests run on Node 20 and 22 |
+| A checkout of ohm-cortex and Node | It runs on your own computer. Its tests run on Node 20 and 22. Its repository is not public yet |
 | A folder for the cortex | The cortex is the folder. `~/cortex` unless you name another |
 | A coding agent that speaks MCP | It reads and writes the cortex through twenty `cortex_*` tools. Claude Code and Codex can also run its hooks |
 | A vault folder | Optional. It lets memories point at your blocks, and tells the agent what each channel means |

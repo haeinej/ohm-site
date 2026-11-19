@@ -11,7 +11,7 @@ ohm has three parts. ohm-vault holds what a member knows and makes, ohm-cortex h
 | Holds | Blocks, channels, sources, entities; posts among them | Identity, memories, working memory, notes, skills, tools, the journal | Public `com.ohmmmm.post` records, identity, files |
 | Edges | Evidence only: what the content shows | Inference: cortex nodes pointing at vault blocks (`grounds`, `observes`, `learned`, `acts`) | None of ohm's |
 | Kept as | A folder on the member's machine, and for posts, the vault service's working copy | A folder on the member's machine | A repository at the member's host |
-| Repository | [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault) | [haeinej/ohm-cortex](https://github.com/haeinej/ohm-cortex) | External |
+| Repository | [haeinej/ohm-vault](https://github.com/haeinej/ohm-vault) | haeinej/ohm-cortex (not public yet) | External |
 
 The vault never imports cortex, and cortex never imports the vault. Cortex refers to blocks by ID and version only, through a small read-only vault contract: today its own folder reader, and planned, a reader over the vault's index. The cortex is not synced with ohm or stored by the vault service.
 
