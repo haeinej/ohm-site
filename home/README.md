@@ -16,6 +16,9 @@ ohm (organisation)                          sidebar, top of the left column — 
 ├── About  /about                           in the sidebar: the full ohm explanation
 │     The problem · What ohm is · What ohm does · More than keeping in touch
 ├── Blog   /blog                            in the sidebar: essays, newest first
+│     Layout: the docs' column and reader (public/docs.css, an exact copy of
+│     ../docs/styles.css, kept equal by a test, then public/blog.css), beside this site's
+│     own sidebar (the ohm dot, About, Blog, Docs), as on every other page
 │     └── a post  /blog/<slug>             the reader (body.reader): Blog and the number, title,
 │                                          subtitle, the writer's pill (assets/people/) and date, the
 │                                          cover (assets/blog/<slug>.png, the ohm cover:

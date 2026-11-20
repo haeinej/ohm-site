@@ -47,3 +47,20 @@ test('local docs previews use repo-owned paths, not private launchers', async ()
     assert.doesNotMatch(await readFile(new URL(path, root), 'utf8'), /\.claude\/launch\.json/);
   }
 });
+
+test('blog pages: the docs column (an exact copy of the docs stylesheet) beside the home site\'s own sidebar', async () => {
+  const docs = await readFile(new URL('../../docs/styles.css', import.meta.url), 'utf8');
+  const copy = await readFile(new URL('../public/docs.css', import.meta.url), 'utf8');
+  assert.equal(copy, docs, 'home/public/docs.css must equal docs/styles.css; copy it again after changing the docs');
+  const pages = ['blog.html', ...(await readdir(new URL('../public/blog/', import.meta.url))).map(name => `blog/${name}`)];
+  for (const page of pages) {
+    const html = await readFile(new URL(`../public/${page}`, import.meta.url), 'utf8');
+    assert.match(html, /<link rel="stylesheet" href="\/docs\.css">\s*<link rel="stylesheet" href="\/blog\.css">/, `${page}: docs.css, then blog.css`);
+    assert.doesNotMatch(html, /href="\/styles\.css"/, `${page}: not the home stylesheet`);
+    assert.match(html, /<body class="blog( reader)?">/, `${page}: body.blog`);
+    assert.match(html, /<header class="site-header">[\s\S]*<nav class="site-sections" aria-label="Site">/, `${page}: the home sidebar`);
+    assert.doesNotMatch(html, /class="site-sidebar"/, `${page}: not the docs sidebar`);
+    assert.equal(html.match(/<main/g)?.length, 1, `${page}: one main`);
+    assert.equal(html.match(/<\/main>/g)?.length, 1, `${page}: main closed once`);
+  }
+});

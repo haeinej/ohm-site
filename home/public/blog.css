@@ -1,0 +1,223 @@
+/* The blog, on the docs' layout. Blog pages load /docs.css first, a byte-identical copy of
+   docs.ohmmmm.com's styles.css (a test keeps them equal), so the sidebar, the column, the type
+   and "On this page" are the docs'. What is the blog's own is only here: the post's header (the
+   kicker, the writer's pill, the date), the home site's own sidebar in place of the docs', covers,
+   the list of posts, and pictures in the essay.
+   Change the shared look in docs/styles.css, then copy it to home/public/docs.css. */
+
+:root {
+  --ohm-cover-ratio: 1200 / 630; /* the ohm cover (design.ohmmmm.com/cover) */
+  --ohm-avatar: 24px;
+  --ohm-pill: var(--ohm-wash);
+  --ohm-pill-hover: #ebebeb;
+}
+
+/* ---------- The site's sidebar ---------- */
+/* The home site's sidebar, the same as on every other page of ohmmmm.com (styles.css): the ohm
+   dot, then About, Blog and Docs under it; on phones, the dot and two lines that open the list
+   full screen in forest. Copied rules, scoped to the blog, beside the docs' column. */
+body.blog {
+  --ohm-ink-quiet: #4c6e61;
+  --ohm-paper-editorial: #fafaf9;
+  --ohm-on-forest: var(--ohm-paper-editorial);
+  --ohm-on-forest-rule: rgb(250 250 249 / 0.14);
+  --ohm-menu-size: 400 34px/1.15 var(--ohm-font-serif);
+  --ohm-menu-motion: 320ms cubic-bezier(.23, 1, .32, 1);
+  --ohm-frame: 40px;
+  --ohm-mark: 20px;
+  --ohm-home-rail: 160px;
+  --ohm-home-leading: 1.65;
+  padding: max(var(--ohm-frame), env(safe-area-inset-top)) max(var(--ohm-frame), env(safe-area-inset-right)) 0 max(var(--ohm-frame), env(safe-area-inset-left));
+  grid-template-columns: var(--ohm-home-rail) minmax(0, 1fr);
+  grid-template-rows: auto;
+  column-gap: var(--ohm-gap);
+  background: var(--ohm-paper-editorial); /* the paper of every other page here */
+}
+html:has(body.blog) { background: var(--ohm-paper-editorial); }
+.blog main { grid-column: 2; grid-row: 1; padding-top: 0; }
+@media (min-width: 1240px) {
+  body.blog { grid-template-columns: var(--ohm-home-rail) minmax(0, 1fr) var(--ohm-toc); }
+  .blog .site-toc { grid-column: 3; grid-row: 1; padding-top: 0; top: var(--ohm-frame); }
+}
+
+.blog .site-header { grid-column: 1; grid-row: 1; align-self: start; }
+@media (min-width: 761px) and (min-height: 480px) {
+  .blog .site-header { position: sticky; top: max(var(--ohm-frame), env(safe-area-inset-top)); }
+}
+.blog .site-mark {
+  display: block;
+  width: var(--ohm-mark);
+  height: var(--ohm-mark);
+  margin-top: calc((var(--ohm-size) * var(--ohm-home-leading) - var(--ohm-mark)) / 2);
+  border-radius: 50%;
+}
+.blog .site-mark img { display: block; width: 100%; height: 100%; }
+.blog .site-header .menu-button,
+.blog .site-sections .menu-only { display: none; }
+.blog .site-sections { margin-top: 40px; }
+.blog .site-sections ul { list-style: none; padding: 0; margin: 0; }
+.blog .site-sections li + li { margin-top: 2px; }
+.blog .site-sections a {
+  position: relative;
+  display: inline-block;
+  color: var(--ohm-ink-quiet);
+  font: 400 var(--ohm-size)/var(--ohm-home-leading) var(--ohm-font-sans);
+  letter-spacing: -0.015em;
+  text-decoration: none;
+}
+.blog .site-sections a:hover,
+.blog .site-sections a[aria-current] { color: var(--ohm-forest); }
+.blog .site-sections a[aria-current]::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 5px;
+  bottom: 5px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--ohm-forest);
+}
+
+@media (max-width: 760px) {
+  body.blog { display: block; padding: env(safe-area-inset-top) 20px max(32px, env(safe-area-inset-bottom)); }
+  .blog .site-header {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .blog .site-mark { margin-top: 0; }
+  .blog .menu-toggle { display: block; position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; }
+  .blog .site-header .menu-button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: 0 -11px 0 0;
+    padding: 0;
+    color: var(--ohm-forest);
+    cursor: pointer;
+    transition: color var(--ohm-menu-motion);
+  }
+  .blog .menu-lines { position: relative; width: 22px; height: 8px; }
+  .blog .menu-lines::before,
+  .blog .menu-lines::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    border-radius: 1px;
+    background: currentColor;
+    transition: transform var(--ohm-menu-motion), top var(--ohm-menu-motion);
+  }
+  .blog .menu-lines::before { top: 0; }
+  .blog .menu-lines::after { top: 6.5px; }
+  .blog .menu-toggle:checked ~ .site-header .menu-button { color: var(--ohm-on-forest); }
+  .blog .menu-toggle:checked ~ .site-header .menu-lines::before { top: 3.25px; transform: rotate(45deg); }
+  .blog .menu-toggle:checked ~ .site-header .menu-lines::after { top: 3.25px; transform: rotate(-45deg); }
+  .blog .menu-toggle:focus-visible ~ .site-header .menu-button { outline: 2px solid currentColor; outline-offset: -4px; border-radius: 4px; }
+  .blog .site-sections {
+    display: none;
+    position: fixed;
+    inset: calc(60px + env(safe-area-inset-top)) 0 0;
+    z-index: 3;
+    margin: 0;
+    padding: 24px 20px max(32px, env(safe-area-inset-bottom));
+    background: var(--ohm-forest);
+    overflow-y: auto;
+  }
+  .blog .menu-toggle:checked ~ .site-header .site-sections { display: block; }
+  .blog .menu-toggle:checked ~ .site-header::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: calc(env(safe-area-inset-top) * -1) -20px 0 -20px;
+    background: var(--ohm-forest);
+  }
+  .blog .menu-toggle:checked ~ .site-header .site-mark img { filter: brightness(0) invert(0.98); }
+  body.blog:has(.menu-toggle:checked) { overflow: hidden; }
+  .blog .site-sections .menu-only { display: list-item; }
+  .blog .site-sections li + li { margin-top: 0; }
+  .blog .site-sections a {
+    display: flex;
+    padding: 18px 0 16px;
+    border-bottom: 1px solid var(--ohm-on-forest-rule);
+    color: var(--ohm-on-forest);
+    font: var(--ohm-menu-size);
+    letter-spacing: -0.02em;
+  }
+  .blog .site-sections a:hover,
+  .blog .site-sections a[aria-current] { color: var(--ohm-on-forest); }
+  .blog .site-sections a:not([aria-current]) { opacity: .72; }
+  .blog .site-sections a[aria-current]::before { display: none; }
+  .blog main { padding-top: 12px; }
+}
+
+/* With no headings there is nothing to list: the reader column stays hidden. */
+.site-toc[hidden] { display: none !important; }
+
+/* ---------- A post's header ---------- */
+
+.post-kicker {
+  display: flex;
+  gap: 12px;
+  color: var(--ohm-muted);
+  font-size: var(--ohm-size-small);
+  font-variant-numeric: tabular-nums;
+}
+.post-kicker a { color: inherit; }
+article > header > .post-kicker + h1 { margin-top: 8px; }
+.introduction { color: var(--ohm-muted); }
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  color: var(--ohm-muted);
+  font-size: var(--ohm-size-small);
+}
+
+.writer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border-radius: 999px;
+  background: var(--ohm-pill);
+  color: var(--ohm-ink);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 180ms cubic-bezier(.23, 1, .32, 1);
+}
+.writer:hover { background: var(--ohm-pill-hover); }
+.writer img { width: var(--ohm-avatar); height: var(--ohm-avatar); border-radius: 50%; object-fit: cover; }
+
+/* ---------- Covers and the list of posts ---------- */
+
+.cover { margin: 32px 0 0; }
+.cover img,
+.posts > li > a > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--ohm-cover-ratio);
+  border-radius: var(--ohm-radius-item);
+}
+
+.posts { list-style: none; padding: 0; }
+.posts > li + li { margin-top: 48px; }
+.posts > li > a { display: block; color: inherit; text-decoration: none; }
+.posts .post-title { display: block; margin-top: 16px; font: var(--ohm-section); letter-spacing: var(--ohm-section-tracking); }
+.posts a:hover .post-title { text-decoration: underline; text-decoration-thickness: 1px; }
+.posts li > p { margin-top: 8px; color: var(--ohm-muted); }
+.posts .post-meta { margin-top: 12px; }
+
+/* ---------- The essay ---------- */
+
+.reader section img { display: block; width: 100%; height: auto; border-radius: var(--ohm-radius-item); }
+.reader blockquote { margin: var(--ohm-paragraph) 0 0; padding-left: 1.2em; color: var(--ohm-muted); }
+.reader blockquote p { color: inherit; }
