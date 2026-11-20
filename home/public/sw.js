@@ -13,11 +13,14 @@
  *
  * Bump VERSION when PRECACHE changes (a page or asset added, renamed or removed): the new
  * worker installs a fresh cache and deletes the old one. Ordinary edits need no bump. */
-const VERSION = "11";
+const VERSION = "13";
 const CACHE = `ohm-site-${VERSION}`;
 const PRECACHE = [
   "/",
   "/about",
+  "/blog",
+  "/blog/where-is-your-home-address-on-the-internet",
+  "/assets/blog/where-is-your-home-address-on-the-internet.png",
   "/support",
   "/delete-account",
   "/terms",
@@ -26,6 +29,8 @@ const PRECACHE = [
   "/landing.js",
   "/join.js",
   "/sw-register.js",
+  "/reader.js",
+  "/assets/people/haein-jung-2.jpg",
   "/manifest.webmanifest",
   "/assets/fonts/coconat-regular.woff2",
   "/favicon.ico?v=2",
@@ -108,7 +113,7 @@ self.addEventListener("fetch", event => {
     event.respondWith(page(event));
   } else if (url.pathname.startsWith("/assets/fonts/")) {
     event.respondWith(asset(event, false));
-  } else if (["/styles.css", "/landing.js", "/join.js", "/sw-register.js", "/manifest.webmanifest"].includes(url.pathname) || url.pathname.startsWith("/assets/")) {
+  } else if (["/styles.css", "/landing.js", "/join.js", "/reader.js", "/sw-register.js", "/manifest.webmanifest"].includes(url.pathname) || url.pathname.startsWith("/assets/")) {
     event.respondWith(asset(event, true));
   }
 });

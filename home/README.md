@@ -15,6 +15,16 @@ ohm (organisation)                          sidebar, top of the left column — 
 ├── Home   /                                landing: one statement on a WebGL field (landing.js), one button
 ├── About  /about                           in the sidebar: the full ohm explanation
 │     The problem · What ohm is · What ohm does · More than keeping in touch
+├── Blog   /blog                            in the sidebar: essays, newest first
+│     └── a post  /blog/<slug>             the reader (body.reader): Blog and the number, title,
+│                                          subtitle, the writer's pill (assets/people/) and date, the
+│                                          cover (assets/blog/<slug>.png, the ohm cover:
+│                                          design.ohmmmm.com/cover), the essay; "On this page" in a
+│                                          third column on wide screens, marked by reader.js (the
+│                                          docs' reader), the site's third script
+│                                          The essay's text is Markdown in posts/<slug>.md;
+│                                          `npm run home:posts` writes it between the page's
+│                                          post:/toc: marks. Edit the text there, not in the HTML
 ├── Docs   https://docs.ohmmmm.com/         its own site, in the sidebar on every page.
 │     Source: `../docs` (Worker ohm-docs). /docs here redirects to it
 │
@@ -29,6 +39,7 @@ ohm (organisation)                          sidebar, top of the left column — 
 | Information | Home | Not here |
 | --- | --- | --- |
 | Mission, product description, story | `/about` sections; one statement on `/` | legal pages |
+| Essays | `/blog/<slug>`, one page each, listed on `/blog` newest first; the cover is the share card | `/about` |
 | Contact address | `support@collisions.co`, linked as Contact in the directory | do not add a contact page or other addresses without updating this table |
 | How-to and troubleshooting for the app | `/support` (one `<section>` per question) | `/terms`, `/privacy` |
 | Account deletion steps | `/delete-account` | duplicated text in `/support` (link instead) |
@@ -105,10 +116,10 @@ Rules:
 ## 3. Look
 
 - One stylesheet, `public/styles.css`. All values are custom properties at the top; rules use only those.
-- One ink: Fatale forest green `--ohm-forest` #013220 on editorial paper #fafaf9. Only "Last updated" uses the quiet tone #4c6e61. No other colours, no borders or dividers (DESIGN.md §5.6).
+- One ink: Fatale forest green `--ohm-forest` #013220 on editorial paper #fafaf9. Only "Last updated" and post dates use the quiet tone #4c6e61. No other colours, no borders or dividers (DESIGN.md §5.6).
 - The page title (`<h1>`, one per page) is large Coconat 400 (`assets/fonts/coconat-regular.woff2`, SIL OFL), 40–60px.
-- Everything else is one size (16px / 1.65), rail and page alike: introduction, section headings, body, lists, dates. Section headings are set apart by weight (600) and space, never by size. Do not add other sizes.
-- Desktop (> 760px): the sidebar on the left (the dot, then About and Docs, the current page marked with a bar) stays in view; the page is on the right. Narrow: a bar with the dot and Menu; Menu opens Home, About and Docs full screen (a checkbox holds it open; no script). On the landing page the opening section fills the first screen.
+- Everything else is one size (16px / 1.65), rail and page alike: introduction, section headings, body, lists, dates. Section headings are set apart by weight (600) and space, never by size. The one exception is the reader's "On this page" column on blog posts, at the docs' 14px. Do not add other sizes.
+- Desktop (> 760px): the sidebar on the left (the dot, then About and Docs, the current page marked with a bar) stays in view; the page is on the right. Narrow: a bar with the dot and two thin lines; they open Home, About, Blog and Docs full screen on forest green, in large Coconat on faint paper rules, and cross into a close mark (a checkbox holds it open; no script). This sheet is the one place the green fills. On the landing page the opening section fills the first screen.
 - Phones: pages draw edge to edge (`viewport-fit=cover`) and the page padding keeps clear of the notch, corners and home indicator (`--ohm-pad-*` in `styles.css`, from `env(safe-area-inset-*)`). Every page carries the install tags for iPhone (`apple-mobile-web-app-capable`, `-title`, `-status-bar-style` default, so the clock stays dark on the paper).
 - The landing page's field is WebGL, drawn by `public/landing.js` (the site's second script). It is mostly paper, fades out with no edge, bends toward the pointer, pauses off screen, draws one still frame with reduced motion, and falls back to a still CSS field without WebGL.
 - Install (PWA): `public/manifest.webmanifest` names the site `ohm` and uses `assets/icon-192.png`, `assets/icon-512.png` (the favicon circle on paper) and `assets/icon-maskable-512.png` (smaller circle, inside the maskable safe zone). `public/sw.js` keeps the site readable offline: everything is saved when it installs; pages come from the network first, started while the worker wakes (navigation preload), with the saved copy only when offline or after 4 s; `styles.css`, the scripts, the manifest and images from the cache with a background refresh; the font from the cache. Offline, a page that was never saved shows `/`. **When you add, rename or remove a page or asset, update `PRECACHE` in `sw.js` and bump its `VERSION`.** Ordinary edits need no bump. The worker gets its own CSP (`connect-src 'self'`) and `Cache-Control: no-cache` in `src/worker.js`.
