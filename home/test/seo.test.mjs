@@ -8,7 +8,7 @@ import test from 'node:test';
 import worker from '../src/worker.js';
 
 const run = promisify(execFile);
-test('the SEO command checks all six sitemap routes, their aliases and static metadata', { timeout: 10000 }, async () => {
+test('the SEO command checks all eight sitemap routes, their aliases and static metadata', { timeout: 10000 }, async () => {
   const assets = new URL('../public/', import.meta.url);
   const server = createServer(async (incoming, outgoing) => {
     try {
@@ -32,7 +32,7 @@ test('the SEO command checks all six sitemap routes, their aliases and static me
     const { stdout } = await run(process.execPath, [fileURLToPath(new URL('../scripts/check-seo.mjs', import.meta.url)),
       `http://127.0.0.1:${server.address().port}`]);
     assert.match(stdout, /PASS \/about:/);
-    assert.equal((stdout.match(/crawlable, canonical/g) ?? []).length, 6);
+    assert.equal((stdout.match(/crawlable, canonical/g) ?? []).length, 8);
     assert.match(stdout, /PASS sitemap, robots/);
   } finally {
     await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));

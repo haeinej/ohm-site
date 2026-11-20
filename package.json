@@ -14,6 +14,7 @@
     "home:seo": "node home/scripts/check-seo.mjs",
     "sites:seo": "npm run home:seo && node check-seo.mjs",
     "home:joiners": "node home/scripts/joiners.mjs",
+    "home:posts": "node home/scripts/posts.mjs",
     "docs:dev": "wrangler dev --config docs/wrangler.jsonc --ip 127.0.0.1 --port 8791",
     "docs:build": "python3 docs/build.py",
     "docs:deploy": "wrangler deploy --config docs/wrangler.jsonc"

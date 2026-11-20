@@ -28,6 +28,11 @@
   --ohm-paper-editorial: #fafaf9;
   --ohm-ink-quiet: #4c6e61; /* forest at 70% on paper, 5.4:1 */
   --ohm-selection: rgb(161 214 174 / 0.42);
+  /* The phone menu is the one place the green fills: paper type on forest. */
+  --ohm-on-forest: var(--ohm-paper-editorial);
+  --ohm-on-forest-rule: rgb(250 250 249 / 0.14);
+  --ohm-menu-size: 400 34px/1.15 var(--ohm-font-serif);
+  --ohm-menu-motion: 320ms cubic-bezier(.23, 1, .32, 1);
 
   /* One size for everything except the page title. Headings differ by weight. */
   --ohm-size: 16px;
@@ -54,6 +59,14 @@
   --ohm-pad-bottom: max(var(--ohm-frame), env(safe-area-inset-bottom));
   --ohm-paragraph: 1em;
   --ohm-section-gap: 2.5em;
+  --ohm-cover-ratio: 1200 / 630; /* the blog's covers: the ohm cover (design.ohmmmm.com/cover) */
+  --ohm-cover-gap: 16px;
+  /* The reader (blog posts): a third column for "On this page", as on docs.ohmmmm.com. */
+  --ohm-reader: 200px;
+  --ohm-reader-small: 14px;
+  --ohm-pill: rgb(1 50 32 / 0.06);
+  --ohm-pill-hover: rgb(1 50 32 / 0.1);
+  --ohm-avatar: 24px;
   --ohm-subsection-gap: 1.75em;
 
   font-family: var(--ohm-font-sans);
@@ -160,7 +173,7 @@ main {
 
 .site-mark:focus-visible { outline-offset: 3px; }
 
-/* The Menu button, its checkbox, Home and the Docs arrow are for the phone menu only. */
+/* The menu lines, their checkbox, Home and the Docs arrow are for the phone menu only. */
 .menu-toggle,
 .menu-button,
 .site-sections .menu-only,
@@ -195,6 +208,87 @@ main {
   width: 2px;
   border-radius: 1px;
   background: var(--ohm-forest);
+}
+
+/* ---------- Blog ---------- */
+/* A post's cover is its own picture: drawn edge to edge, no frame. Dates are quiet, like "Last updated". */
+.posts { list-style: none; padding: 0; }
+.posts > li + li { margin-top: var(--ohm-section-gap); }
+.posts a { display: block; color: inherit; text-decoration: none; }
+.posts .post-title { display: block; margin-top: var(--ohm-cover-gap); font-weight: var(--ohm-strong); }
+.posts a:hover .post-title { text-decoration: underline; }
+.posts li > p { margin-top: 0; }
+.posts .post-meta { margin-top: 12px; }
+.posts a.writer { display: inline-flex; }
+.posts img,
+.cover img { display: block; width: 100%; height: auto; aspect-ratio: var(--ohm-cover-ratio); }
+.cover { margin: var(--ohm-section-gap) 0 0; }
+.post-date { color: var(--ohm-ink-quiet); }
+.post-date a { color: inherit; }
+
+/* ---------- The reader: a blog post ---------- */
+/* The kicker (Blog, the number), the title, the subtitle, then the writer's pill and the date.
+   On wide screens "On this page" sits in a third column, as in the docs, the section being read
+   in full ink (reader.js). */
+.post-kicker { display: flex; gap: 12px; color: var(--ohm-ink-quiet); font-variant-numeric: tabular-nums; }
+.post-kicker a { color: inherit; }
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  color: var(--ohm-ink-quiet);
+}
+
+.writer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border-radius: 999px;
+  background: var(--ohm-pill);
+  color: var(--ohm-forest);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 180ms cubic-bezier(.23, 1, .32, 1);
+}
+.writer:hover { background: var(--ohm-pill-hover); }
+.writer img { width: var(--ohm-avatar); height: var(--ohm-avatar); border-radius: 50%; object-fit: cover; }
+
+.reader blockquote { margin: var(--ohm-paragraph) 0 0; padding-left: 1.2em; color: var(--ohm-ink-quiet); }
+.reader blockquote p { color: inherit; }
+
+.site-toc { display: none; }
+
+@media (min-width: 1100px) {
+  body.reader { grid-template-columns: var(--ohm-rail) minmax(0, var(--ohm-measure)) var(--ohm-reader); }
+  .reader .site-toc {
+    display: block;
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
+    position: sticky;
+    top: var(--ohm-pad-top);
+    font-size: var(--ohm-reader-small);
+  }
+  .site-toc > p { color: var(--ohm-ink-quiet); }
+  .site-toc ul { list-style: none; padding: 0; margin-top: 10px; }
+  .site-toc a {
+    display: block;
+    padding: 4px 0;
+    color: var(--ohm-ink-quiet);
+    font-size: var(--ohm-reader-small);
+    line-height: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 180ms cubic-bezier(.23, 1, .32, 1);
+  }
+  .site-toc a:hover,
+  .site-toc a[aria-current] { color: var(--ohm-forest); }
+  .site-toc a[aria-current] { font-weight: 500; }
 }
 
 /* ---------- Directory ---------- */
@@ -248,7 +342,7 @@ pre {
 
 section ol { margin: 0; padding-left: 1.2em; }
 
-/* ---------- Narrow screens: a bar with the dot and Menu, then the page ---------- */
+/* ---------- Narrow screens: a bar with the dot and the menu lines, then the page ---------- */
 
 @media (max-width: 760px) {
   :root { --ohm-frame: calc(var(--ohm-gutter) / 2); }
@@ -270,7 +364,7 @@ section ol { margin: 0; padding-left: 1.2em; }
 
   .site-mark { margin-top: 0; }
 
-  /* Menu, on the right. The checkbox stays focusable; the label is what shows. */
+  /* The menu, on the right. The checkbox stays focusable (named "Menu"); the label is what shows. */
   .menu-toggle {
     display: block;
     position: absolute;
@@ -280,47 +374,71 @@ section ol { margin: 0; padding-left: 1.2em; }
     opacity: 0;
   }
 
+  /* Two thin lines on the right; they cross into a close mark while the menu is open. */
   .menu-button {
-    display: block;
-    padding: 12px 0 12px 16px; /* 44px touch target */
+    display: grid;
+    place-items: center;
+    width: 44px; /* touch target */
+    height: 44px;
+    margin-right: -11px;
+    color: var(--ohm-forest);
     cursor: pointer;
+    transition: color var(--ohm-menu-motion);
   }
 
-  .menu-close { display: none; }
+  .menu-lines { position: relative; width: 22px; height: 8px; }
 
-  .menu-toggle:checked ~ .site-header .menu-open { display: none; }
+  .menu-lines::before,
+  .menu-lines::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    border-radius: 1px;
+    background: currentColor;
+    transition: transform var(--ohm-menu-motion), top var(--ohm-menu-motion);
+  }
 
-  .menu-toggle:checked ~ .site-header .menu-close { display: inline; }
+  .menu-lines::before { top: 0; }
+  .menu-lines::after { top: 6.5px; }
+
+  .menu-toggle:checked ~ .site-header .menu-button { color: var(--ohm-on-forest); }
+  .menu-toggle:checked ~ .site-header .menu-lines::before { top: 3.25px; transform: rotate(45deg); }
+  .menu-toggle:checked ~ .site-header .menu-lines::after { top: 3.25px; transform: rotate(-45deg); }
 
   .menu-toggle:focus-visible ~ .site-header .menu-button {
     outline: 2px solid currentColor;
-    outline-offset: 4px;
-    border-radius: 2px;
+    outline-offset: -4px;
+    border-radius: 4px;
   }
 
-  /* The list: hidden until Menu, then the whole screen, large rows on thin rules. */
+  /* The list: hidden until the lines are pressed, then the whole screen in forest, large
+     Coconat rows on faint paper rules, rising in. */
   .site-sections {
     display: none;
     position: fixed;
     inset: calc(60px + env(safe-area-inset-top)) 0 0;
     z-index: 3;
     margin: 0;
-    padding: 8px var(--ohm-pad-right) max(32px, env(safe-area-inset-bottom)) var(--ohm-pad-left);
-    background: var(--ohm-paper-editorial);
+    padding: 24px var(--ohm-pad-right) max(32px, env(safe-area-inset-bottom)) var(--ohm-pad-left);
+    background: var(--ohm-forest);
     overflow-y: auto;
   }
 
   .menu-toggle:checked ~ .site-header .site-sections { display: block; }
 
-  /* While the menu is open the bar is plain paper too, up under the status bar and to both edges,
-     so bar and sheet read as one surface. */
+  /* While the menu is open the bar is forest too, up under the status bar and to both edges,
+     so bar and sheet read as one surface; the dot turns paper. */
   .menu-toggle:checked ~ .site-header::before {
     content: "";
     position: absolute;
     z-index: -1;
     inset: calc(env(safe-area-inset-top) * -1) calc(var(--ohm-pad-right) * -1) 0 calc(var(--ohm-pad-left) * -1);
-    background: var(--ohm-paper-editorial);
+    background: var(--ohm-forest);
   }
+
+  .menu-toggle:checked ~ .site-header .site-mark img { filter: brightness(0) invert(0.98); }
 
   body:has(.menu-toggle:checked) { overflow: hidden; }
 
@@ -330,20 +448,31 @@ section ol { margin: 0; padding-left: 1.2em; }
 
   .site-sections a {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid rgb(1 50 32 / 0.12);
-    color: var(--ohm-forest);
-    font-size: 22px;
-    line-height: 1.3;
+    padding: 18px 0 16px;
+    border-bottom: 1px solid var(--ohm-on-forest-rule);
+    color: var(--ohm-on-forest);
+    font: var(--ohm-menu-size);
+    letter-spacing: -0.02em;
   }
+
+  .site-sections a:hover,
+  .site-sections a[aria-current] { color: var(--ohm-on-forest); }
 
   .site-sections .icon { display: block; }
 
   .site-sections a[aria-current]::before { display: none; }
 
-  .site-sections a[aria-current] { font-weight: var(--ohm-strong); }
+  .site-sections a[aria-current] { font-style: normal; }
+  .site-sections a:not([aria-current]) { opacity: .72; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-toggle:checked ~ .site-header .site-sections li { animation: menu-rise var(--ohm-menu-motion) both; }
+    .menu-toggle:checked ~ .site-header .site-sections li:nth-child(2) { animation-delay: 30ms; }
+    .menu-toggle:checked ~ .site-header .site-sections li:nth-child(3) { animation-delay: 60ms; }
+    .menu-toggle:checked ~ .site-header .site-sections li:nth-child(4) { animation-delay: 90ms; }
+  }
 
   main { padding: 12px 0 56px; }
 }
@@ -351,6 +480,8 @@ section ol { margin: 0; padding-left: 1.2em; }
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
 }
+
+@keyframes menu-rise { from { opacity: 0; transform: translateY(10px); } }
 
 /* ---------- Landing ---------- */
 
@@ -682,3 +813,5 @@ section ol { margin: 0; padding-left: 1.2em; }
   .landing .site-footer li + li { margin-top: 0; }
 }
 
+
+.site-toc[hidden] { display: none !important; }
