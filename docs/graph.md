@@ -72,7 +72,7 @@ The workspace draws the graph centred on you, a layer at a time.
 
 ## Designed for the workspace
 
-The drawn graph is designed in the ohm-ux wireframe, with sample data, and **not built in the live editor**: you at the centre, evidence in grey and inference in green, nodes that drift and settle, hover to light one node's edges, click a block to open it, click an entity to centre the graph on them. Where evidence and inference join the same pair, evidence wins.
+The drawn graph is designed in the workspace app, with sample data, and **not built in the live editor**: you at the centre, evidence in grey and inference in green, nodes that drift and settle, hover to light one node's edges, click a block to open it, click an entity to centre the graph on them. Where evidence and inference join the same pair, evidence wins.
 
 ---
 ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.

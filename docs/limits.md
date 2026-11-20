@@ -41,7 +41,7 @@ Each piece is one of: **Built**; **Built, not verified**, where tests pass but i
 | Roots and the index: `vault init`, `index`, `status`, `inspect`, `search` | Built | Tested against real temporary folders |
 | A Google Drive root | Built, not verified | Not tried against a real Google Drive mount |
 | Two-way roots, such as an Obsidian vault | Planned | Refused until built |
-| Agent tools over the index | Planned | Search, read, neighbours, capture and collect |
+| Agent tools over the index | Built | Search, read, neighbours, capture, collect and index, through `ohm vault mcp`; tested |
 | Blocks other than posts in the vault service and the workspace | Not built | They stay in the folder |
 | Sync that knows blocks | Not built | Sync reads every Markdown file as a post |
 
@@ -62,7 +62,7 @@ Each piece is one of: **Built**; **Built, not verified**, where tests pass but i
 
 ### Designed for the workspace
 
-These are drawn in the ohm-ux wireframe with sample data. None is in the live editor.
+These are drawn in the workspace app, [`app/` in haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/app), with sample data. None is in the live editor.
 
 | Area | Status | Notes |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ These are drawn in the ohm-ux wireframe with sample data. None is in the live ed
 | Connecting words, whole blocks and pulling a line; the connections card | Planned | [Connections](https://docs.ohmmmm.com/connections.md#designed) |
 | The graph, with evidence and inference | Planned | [The graph](https://docs.ohmmmm.com/graph.md#designed) |
 | Version history: Dates, You and Agents; revert, restore, save | Planned | [History](https://docs.ohmmmm.com/history.md#designed) |
-| Daily autosaves | Planned | The cortex does not write them yet |
+| Daily autosaves | Planned | The vault will keep them for blocks and channels; not written yet |
 
 <a id="for-good"></a>
 

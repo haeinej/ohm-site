@@ -115,13 +115,13 @@ What an agent reads or searches is not recorded. History holds what was changed,
 
 ## Designed for the workspace
 
-Showing history in the workspace is designed in the ohm-ux wireframe, and **not built in the live editor**.
+Showing history in the workspace is designed in the workspace app, and **not built in the live editor**.
 
 - **Three tabs:** Dates, with one autosave per day; You, your changes and saves; Agents, their sessions, each opening into the changes it made and its dead ends.
 - **One line per change,** as a verb and a page: Created, Edited, Moved, Filed, Connected, Restored, Reverted, Deleted. An icon says whether you or an agent made it.
 - **Open a line** to see who made it, when and why, and what it touched. From there: Revert this change, Restore this version, or open the page.
 - **A page's versions,** from a clock in its toolbar.
-- **Daily autosaves:** every page as it was at the end of each day with changes. The cortex does not write these yet.
+- **Daily autosaves:** every page as it was at the end of each day with changes. The vault will keep these for blocks and channels; it does not write them yet.
 - **Edits close together join one line,** when the same person or agent types within five minutes.
 - **A page others can see** is read only here: changing what others see asks first.
 
