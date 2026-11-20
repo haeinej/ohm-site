@@ -71,7 +71,7 @@ npx github:haeinej/ohmmmm vault inspect churn-query
 
 ## Designed for the workspace
 
-Making connections in the workspace is designed in the ohm-ux wireframe and **not built in the live editor**. In the live editor today, a link is Markdown you type.
+Making connections in the workspace is designed in the workspace app, [`app/` in haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/app), and **not built in the live editor**. In the live editor today, a link is Markdown you type.
 
 - **Connect selected words.** Select words inside one paragraph, choose Connect, find a block, and the words become `[[slug|the words]]`.
 - **Connect whole blocks.** From a block's connections card, + Connect finds another block and connects the two, with an optional line on why. The vault folder's format does not yet have a place for a whole-block connection or its why.

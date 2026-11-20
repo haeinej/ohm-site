@@ -2075,7 +2075,7 @@ npx github:haeinej/ohmmmm vault inspect churn-query
 
 ### Designed for the workspace
 
-Making connections in the workspace is designed in the ohm-ux wireframe and **not built in the live editor**. In the live editor today, a link is Markdown you type.
+Making connections in the workspace is designed in the workspace app, [`app/` in haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/app), and **not built in the live editor**. In the live editor today, a link is Markdown you type.
 
 - **Connect selected words.** Select words inside one paragraph, choose Connect, find a block, and the words become `[[slug|the words]]`.
 - **Connect whole blocks.** From a block's connections card, + Connect finds another block and connects the two, with an optional line on why. The vault folder's format does not yet have a place for a whole-block connection or its why.
@@ -2159,7 +2159,7 @@ The workspace draws the graph centred on you, a layer at a time.
 
 ### Designed for the workspace
 
-The drawn graph is designed in the ohm-ux wireframe, with sample data, and **not built in the live editor**: you at the centre, evidence in grey and inference in green, nodes that drift and settle, hover to light one node's edges, click a block to open it, click an entity to centre the graph on them. Where evidence and inference join the same pair, evidence wins.
+The drawn graph is designed in the workspace app, with sample data, and **not built in the live editor**: you at the centre, evidence in grey and inference in green, nodes that drift and settle, hover to light one node's edges, click a block to open it, click an entity to centre the graph on them. Where evidence and inference join the same pair, evidence wins.
 
 ## Sync with a folder
 
@@ -3030,13 +3030,13 @@ What an agent reads or searches is not recorded. History holds what was changed,
 
 ### Designed for the workspace
 
-Showing history in the workspace is designed in the ohm-ux wireframe, and **not built in the live editor**.
+Showing history in the workspace is designed in the workspace app, and **not built in the live editor**.
 
 - **Three tabs:** Dates, with one autosave per day; You, your changes and saves; Agents, their sessions, each opening into the changes it made and its dead ends.
 - **One line per change,** as a verb and a page: Created, Edited, Moved, Filed, Connected, Restored, Reverted, Deleted. An icon says whether you or an agent made it.
 - **Open a line** to see who made it, when and why, and what it touched. From there: Revert this change, Restore this version, or open the page.
 - **A page's versions,** from a clock in its toolbar.
-- **Daily autosaves:** every page as it was at the end of each day with changes. The cortex does not write these yet.
+- **Daily autosaves:** every page as it was at the end of each day with changes. The vault will keep these for blocks and channels; it does not write them yet.
 - **Edits close together join one line,** when the same person or agent types within five minutes.
 - **A page others can see** is read only here: changing what others see asks first.
 
@@ -3348,7 +3348,7 @@ Each piece is one of: **Built**; **Built, not verified**, where tests pass but i
 | Roots and the index: `vault init`, `index`, `status`, `inspect`, `search` | Built | Tested against real temporary folders |
 | A Google Drive root | Built, not verified | Not tried against a real Google Drive mount |
 | Two-way roots, such as an Obsidian vault | Planned | Refused until built |
-| Agent tools over the index | Planned | Search, read, neighbours, capture and collect |
+| Agent tools over the index | Built | Search, read, neighbours, capture, collect and index, through `ohm vault mcp`; tested |
 | Blocks other than posts in the vault service and the workspace | Not built | They stay in the folder |
 | Sync that knows blocks | Not built | Sync reads every Markdown file as a post |
 
@@ -3369,7 +3369,7 @@ Each piece is one of: **Built**; **Built, not verified**, where tests pass but i
 
 #### Designed for the workspace
 
-These are drawn in the ohm-ux wireframe with sample data. None is in the live editor.
+These are drawn in the workspace app, [`app/` in haeinej/ohmmmm](https://github.com/haeinej/ohmmmm/tree/main/app), with sample data. None is in the live editor.
 
 | Area | Status | Notes |
 | --- | --- | --- |
@@ -3377,7 +3377,7 @@ These are drawn in the ohm-ux wireframe with sample data. None is in the live ed
 | Connecting words, whole blocks and pulling a line; the connections card | Planned | [Connections](https://docs.ohmmmm.com/connections.md#designed) |
 | The graph, with evidence and inference | Planned | [The graph](https://docs.ohmmmm.com/graph.md#designed) |
 | Version history: Dates, You and Agents; revert, restore, save | Planned | [History](https://docs.ohmmmm.com/history.md#designed) |
-| Daily autosaves | Planned | The cortex does not write them yet |
+| Daily autosaves | Planned | The vault will keep them for blocks and channels; not written yet |
 
 <a id="for-good"></a>
 
