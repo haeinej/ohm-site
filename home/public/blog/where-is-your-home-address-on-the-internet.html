@@ -73,6 +73,102 @@
 
         <!-- The essay, from posts/where-is-your-home-address-on-the-internet.md (npm run home:posts). -->
         <!-- post:start -->
+        <section aria-label="Opening">
+<p>This morning my cousin Olivia asked for my address so she could send me a wedding invitation. Me, as a digital citizen, sent her my Gmail. She wrote back, “No sis, where is your home address?”</p>
+<p><img src="/assets/blog/home-address-text.jpg" alt="A text message: “Hey girl do you have a mailing address I can send you something?” The reply is an email address. “Where you live address.”"></p>
+<p>There is something unique about an address. It is tied to you, to your human identity, and it is yours alone. And it is not only physical. Think about an email account on your own domain: someone else runs the server, every mail app can connect to it, and you can move providers without changing your address. The address is yours and the provider is replaceable.</p>
+<p>It has been a while since we became digi-web citizens. We have left footprints everywhere: Reddit, Twitter, Tinder, RedNote, personal websites, and now thousands of conversations with AI. Yet we still do not have a home for our traces. Every one of them lives in someone else’s building, under someone else’s rules.</p>
+<p>Olivia can send a card to my apartment. Where would you send something to my digital self?</p>
+        </section>
+
+        <section aria-labelledby="the-answer-is-a-home-of-your-own">
+          <h2 id="the-answer-is-a-home-of-your-own">The answer is a home of your own</h2>
+<p>The clear solution to this problem is having your own personal data server.</p>
+<p>A personal data server (PDS) is the one place on the network that is yours. It stores your records, vouches for your identity and decides which apps get in. It comes from AT Protocol, the open protocol behind Bluesky, whose own docs call it your <a href="https://atproto.com/guides/the-at-stack">home in the cloud</a>. In practice it is a hosted account that holds your identity and your data, so apps and agents connect to you, instead of each one keeping its own fragmented copy of you.</p>
+<p>And no, you do not need a server in your closet. Someone can host it for you, the same way someone hosts your email. What matters is whose name is on the door, and whether you can leave.</p>
+        </section>
+
+        <section aria-labelledby="why-now">
+          <h2 id="why-now">Why now?</h2>
+<p>This design matters now more than ever for one reason: with AI, whoever holds your accumulated context holds the switching cost.</p>
+<p>Agents changed the math. It is now easy to pour unprocessed information in (notes, chats, half-finished thoughts) and have it come out structured. It is just as easy to pull it back out and morph it into whatever you need. So your context compounds. Every month of it makes the next month more useful, for your personal life and your professional one.</p>
+<p>Models, meanwhile, are replaceable. The best one changes every few months. What it knows about you took years. So the real question of the AI era is not which model you use. It is where the “you” that every model reads from actually lives.</p>
+<p>Right now the answer is: inside whichever company you happened to type it into.</p>
+        </section>
+
+        <section aria-labelledby="we-tried-this-before-and-it-failed-for-a-good-reason">
+          <h2 id="we-tried-this-before-and-it-failed-for-a-good-reason">We tried this before, and it failed for a good reason</h2>
+<p>Big tech has attempted the personal record before, specifically with health. Microsoft launched HealthVault in 2007. Google launched Google Health in 2008. Both are dead.</p>
+<p>Google Health <a href="https://www.itnews.com.au/news/google-switches-off-health-life-support-261770">did not catch on</a> beyond tech-savvy patients, and the person who led it said why: it was just a data repository, and people did not want that. HealthVault survived until 2019, but it <a href="https://www.thefresh.co.uk/blog/microsofts-healthvault-what-was-it-and-why-did-it-fail/">stayed browser-based</a>, with no mobile app and no connection to wearables, so the data never arrived on its own. Among people who gave up on these records, a common reason was simple. They <a href="https://www.informationweek.com/electronic-health-records/5-reasons-why-google-health-failed">did not want to spend time typing their data in</a>.</p>
+<p>The lesson is pretty clear. A store is only as valuable as what uses it. A filing cabinet means nothing when no one is opening the drawers.</p>
+<p>Apple understood this. When it launched health records in 2018, the phone and the watch were already collecting data continuously, with no effort of typing anything in. So the store that wins is the one that fills itself and sits where people already are. A PDS has to live where people actually live.</p>
+<p>That is exactly the part that changed. An agent turns stored context into something useful every day, so the drawers finally have someone opening them. And on AT Protocol the store fills itself, since your repository grows as a side effect of posting, following and writing in apps you already use.</p>
+        </section>
+
+        <section aria-labelledby="big-tech-sees-the-same-prize">
+          <h2 id="big-tech-sees-the-same-prize">Big tech sees the same prize</h2>
+<p>Do not think the platforms missed this. They are building their version right now, around their existing ecosystems.</p>
+<p>Google connected Gmail, Photos, Search and YouTube to Gemini in <a href="https://www.androidauthority.com/google-gemini-personal-intelligence-rollout-3632287">January 2026</a> and called it Personal Intelligence. Apple <a href="https://techjournal.org/siri-ai-third-party-apps">opened Siri to third-party apps</a> on November 3rd, 2026, through App Intents, where apps describe their content in <a href="https://developer.apple.com/videos/play/wwdc2026/240/">schemas that Apple defines</a>.</p>
+<p>So everyone agrees. Context across all your apps is the prize. The only disagreement is who gets to hold it.</p>
+<p>And their answer is always the same: them.</p>
+<p>On a platform, the assistant that sees across your whole life is the platform’s own. Your context does not come with you when you switch ecosystems. The format is theirs. The rules are theirs. To be fair, this model does protect you from apps. It does not protect you from the platform.</p>
+<p>But we are not bounded by one company. A platform is more or less a service that we use, and our agency should not stop where a company’s control begins.</p>
+        </section>
+
+        <section aria-labelledby="what-happens-when-the-platform-holds-your-context">
+          <h2 id="what-happens-when-the-platform-holds-your-context">What happens when the platform holds your context</h2>
+<p>None of this is hypothetical. All four happened in the last two years.</p>
+<ul>
+<li>It gets repurposed. In February 2026 OpenAI <a href="https://www.theregister.com/on-prem/2026/02/10/openai-introduces-adsfor-the-people/4820407">began testing ads in ChatGPT</a>. Ad personalization is on by default, and when it is on, your past chats and saved memories can help decide which ad you see. OpenAI says advertisers never receive your chats. Still, the context you gave in order to be helped is now also inventory.</li>
+<li>It gets swapped out. In August 2025 OpenAI replaced the model people were used to, overnight. Users said they lost a familiar voice and workflows they had built, and Sam Altman <a href="https://www.techrepublic.com/article/news-openai-reinstates-gpt4o/">admitted</a> the company had underestimated how much that mattered. Nobody asked us first.</li>
+<li>Delete does not mean delete. From May to September 2025 a <a href="https://www.malwarebytes.com/blog/news/2025/06/openai-forced-to-preserve-chatgpt-chats">court order</a> made OpenAI keep chats that users had already deleted. OpenAI objected, and the order stayed in place for months anyway. When the only copy sits with a vendor, “delete” means whatever the vendor, or a judge, says it means.</li>
+<li>It disappears. Humane sold a $700 AI Pin, then <a href="https://petapixel.com/2025/02/19/humanes-ai-pin-is-dead-and-all-devices-will-stop-working-in-10-days">shut it down</a> with about ten days of notice and permanently deleted all customer data.</li>
+</ul>
+<p>This matters because whoever holds your context also shapes your interface: what you see, what you are offered, what you come to understand. Imagine the extreme version of personalized ads, built on everything you ever told an assistant at 2am. We should be able to know what a platform knows about us, and have control over what we consume on the internet.</p>
+<p>And one more thing. If you do not own the operating system, you do not get to build the assistant that sees across apps. The platform model does not only lock users in. It locks out everyone else who might build something better.</p>
+        </section>
+
+        <section aria-labelledby="what-does-it-look-like">
+          <h2 id="what-does-it-look-like">What does it look like?</h2>
+<p><img src="/assets/blog/home-address-pds.png" alt="Your PDS: you, your identity and handle, point at it; it holds records (public, signed), media, private data and keys. Apps write with permission, agents read and act for you, feeds read what is public. Change your host and everything moves with you."></p>
+<p>Your entire digital identity points at the PDS, and the PDS holds four things:</p>
+<ul>
+<li><strong>Records.</strong> Your repository: public records, signed with your key. Posts, follows, documents, one folder per app.</li>
+<li><strong>Media.</strong> The photos, audio and video those records point to.</li>
+<li><strong>Private data.</strong> Preferences and settings today, shared private spaces next.</li>
+<li><strong>Keys.</strong> Your signature, your login, and the consent screen that appears when an app asks to come in.</li>
+</ul>
+<p>Three kinds of things connect to it: the apps you use, your agents, and the feeds and search built from whatever is public. If you change hosts, the whole box moves and your identity is re-pointed. The apps and agents keep working. Like moving apartments and keeping your name.</p>
+<p>To a normal user, honestly, it looks like almost nothing. You sign in with your handle and you see a consent screen. I assume that invisibility is one of the reasons this is not mainstream yet. The best version of it is infrastructure you never think about, like email.</p>
+        </section>
+
+        <section aria-labelledby="why-this-is-the-stronger-position">
+          <h2 id="why-this-is-the-stronger-position">Why this is the stronger position</h2>
+<p>Context in a PDS is a stronger position than context in a vendor, for three reasons.</p>
+<p><strong>It is wider.</strong> A vendor’s memory covers only what you did inside that vendor. A PDS collects what you do across every app that writes to it, so the whole is larger than any one silo. That also means a better experience inside each platform, when the platform reads from you instead of holding you.</p>
+<p><strong>It lasts.</strong> Vendor memory gets rewritten or reset when the product changes. A PDS persists across model generations, so the compounding never restarts.</p>
+<p><strong>It is connected.</strong> Your records link to other people’s records. That gives an agent your network, not just your profile, which no single assistant holds.</p>
+        </section>
+
+        <section aria-labelledby="what-is-not-solved-yet">
+          <h2 id="what-is-not-solved-yet">What is not solved yet</h2>
+<p>There still are few things are still missing.</p>
+<ul>
+<li>There is no mainstream agent product or infrastructure that reads from a PDS today.</li>
+<li>Everything in the repository is public. Private data on AT Protocol only reached <a href="https://atproto.com/blog/atproto-spaces-alpha">alpha in August 2026</a>, and it is access control, not encryption. Your host can still read it.</li>
+<li>Almost everyone is still on one company’s servers. The exit door exists, but few people have walked through it.</li>
+<li>Today your phone knows far more about you than your PDS does.</li>
+</ul>
+<p>So this is an argument about structure and direction, not about what works perfectly this afternoon. Owning your context gives you control and an exit. Privacy is a separate fight, and it is the next one.</p>
+        </section>
+
+        <section aria-labelledby="we-are-still-not-late">
+          <h2 id="we-are-still-not-late">We are still not late</h2>
+<p>The platforms are early in building their version. So are we.</p>
+<p>This is the layer <a href="https://ohmmmm.com/">ohm</a> is working towards: a hybrid of personal encrypted spaces, a layer for friends, and a public layer, so that your digital identity can surface across the agentic web, and web applications and platforms become what they should have been all along. Mere interfaces.</p>
+<p>Olivia’s card will reach my apartment next week, because my address is mine no matter who delivers the mail.</p>
+<p>My digital self deserves the same.</p>
+        </section>
 
 
         <!-- post:end -->
@@ -80,10 +176,19 @@
     </main>
 
     <!-- The reader, on wide screens: this essay's sections, the one being read marked (reader.js). -->
-    <aside class="site-toc" hidden aria-label="On this page">
+    <aside class="site-toc" aria-label="On this page">
       <p>On this page</p>
       <ul>
         <!-- toc:start -->
+        <li><a href="#the-answer-is-a-home-of-your-own">The answer is a home of your own</a></li>
+        <li><a href="#why-now">Why now?</a></li>
+        <li><a href="#we-tried-this-before-and-it-failed-for-a-good-reason">We tried this before, and it failed for a good reason</a></li>
+        <li><a href="#big-tech-sees-the-same-prize">Big tech sees the same prize</a></li>
+        <li><a href="#what-happens-when-the-platform-holds-your-context">What happens when the platform holds your context</a></li>
+        <li><a href="#what-does-it-look-like">What does it look like?</a></li>
+        <li><a href="#why-this-is-the-stronger-position">Why this is the stronger position</a></li>
+        <li><a href="#what-is-not-solved-yet">What is not solved yet</a></li>
+        <li><a href="#we-are-still-not-late">We are still not late</a></li>
 
 
         <!-- toc:end -->

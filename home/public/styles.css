@@ -256,6 +256,7 @@ main {
 .writer:hover { background: var(--ohm-pill-hover); }
 .writer img { width: var(--ohm-avatar); height: var(--ohm-avatar); border-radius: 50%; object-fit: cover; }
 
+.reader section img { display: block; width: 100%; height: auto; }
 .reader blockquote { margin: var(--ohm-paragraph) 0 0; padding-left: 1.2em; color: var(--ohm-ink-quiet); }
 .reader blockquote p { color: inherit; }
 
