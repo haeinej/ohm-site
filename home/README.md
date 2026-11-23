@@ -14,6 +14,8 @@ ohm (organisation)                          sidebar, top of the left column — 
 │
 ├── Home   /                                landing: one statement on a WebGL field (landing.js), one button
 ├── About  /about                           in the sidebar: the full ohm explanation
+│     Layout: the blog's, so the page sits in the same centred column: docs.css, then blog.css
+│     (body.blog.reader), with its four sections in "On this page" on wide screens (reader.js)
 │     The problem · What ohm is · What ohm does · More than keeping in touch
 ├── Blog   /blog                            in the sidebar: essays, newest first
 │     Layout: the docs' column and reader (public/docs.css, an exact copy of
@@ -27,7 +29,9 @@ ohm (organisation)                          sidebar, top of the left column — 
 │                                          docs' reader), the site's third script
 │                                          The essay's text is Markdown in posts/<slug>.md;
 │                                          `npm run home:posts` writes it between the page's
-│                                          post:/toc: marks. Edit the text there, not in the HTML
+│                                          post:/toc: marks, and the links to the posts before
+│                                          and after it (the docs' pager) between the pager: marks.
+│                                          Edit the text there, not in the HTML
 ├── Docs   https://docs.ohmmmm.com/         its own site, in the sidebar on every page.
 │     Source: `../docs` (Worker ohm-docs). /docs here redirects to it
 │
