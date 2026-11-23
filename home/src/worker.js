@@ -14,7 +14,7 @@ const REDIRECTS = new Map([
 ]);
 
 // Keep permanent links, sitemap entries and canonical tags on the same URL.
-for (const page of ["about", "blog", "blog/where-is-your-home-address-on-the-internet", "privacy", "terms", "support", "delete-account", "joined", "join-problem"]) {
+for (const page of ["about", "blog", "blog/apple-can-win-at-ai-and-still-build-the-wrong-phone", "blog/where-is-your-home-address-on-the-internet", "privacy", "terms", "support", "delete-account", "joined", "join-problem"]) {
   REDIRECTS.set(`/${page}.html`, `/${page}`);
   REDIRECTS.set(`/${page}/`, `/${page}`);
   REDIRECTS.set(`/${page}/index.html`, `/${page}`);

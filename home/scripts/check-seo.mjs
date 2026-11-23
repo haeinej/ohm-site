@@ -4,7 +4,7 @@ import {parse} from 'parse5';
 
 const origin = process.argv[2] || 'https://ohmmmm.com';
 const canonicalOrigin = 'https://ohmmmm.com';
-const pages = ['/', '/about', '/blog', '/blog/where-is-your-home-address-on-the-internet', '/support', '/privacy', '/terms', '/delete-account'];
+const pages = ['/', '/about', '/blog', '/blog/apple-can-win-at-ai-and-still-build-the-wrong-phone', '/blog/where-is-your-home-address-on-the-internet', '/support', '/privacy', '/terms', '/delete-account'];
 const titles = new Set();
 const descriptions = new Set();
 const resources = new Set();

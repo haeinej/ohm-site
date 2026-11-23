@@ -13,12 +13,14 @@
  *
  * Bump VERSION when PRECACHE changes (a page or asset added, renamed or removed): the new
  * worker installs a fresh cache and deletes the old one. Ordinary edits need no bump. */
-const VERSION = "14";
+const VERSION = "15";
 const CACHE = `ohm-site-${VERSION}`;
 const PRECACHE = [
   "/",
   "/about",
   "/blog",
+  "/blog/apple-can-win-at-ai-and-still-build-the-wrong-phone",
+  "/assets/blog/apple-can-win-at-ai-and-still-build-the-wrong-phone.png",
   "/blog/where-is-your-home-address-on-the-internet",
   "/assets/blog/where-is-your-home-address-on-the-internet.png",
   "/support",

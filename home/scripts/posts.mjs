@@ -1,6 +1,8 @@
 // Sets each blog post's full text from its Markdown: home/posts/<slug>.md into
 // public/blog/<slug>.html, between the <!-- post:start --> and <!-- post:end --> marks, and its
 // "On this page" list between <!-- toc:start --> and <!-- toc:end -->. One <section> per ## heading.
+// Between <!-- pager:start --> and <!-- pager:end --> go the links to the posts on either side, by
+// number: the older one before (Blog, for the first), the newer one after, as the docs do.
 //   npm run home:posts
 // The page around the text (head, header, cover) is edited by hand; only the marked parts are written.
 import {readFileSync, readdirSync, writeFileSync} from 'node:fs';
@@ -38,15 +40,30 @@ const between = (html, name, inner, file) => {
   return html.replace(pattern, `$1\n${inner}$2`);
 };
 
-for (const name of readdirSync(join(HOME, 'posts')).filter(f => f.endsWith('.md'))) {
-  const slug = name.replace(/\.md$/, '');
+const ARROW_LEFT = '<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>';
+const ARROW_RIGHT = '<svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+
+// A front-matter value, without its quotes.
+const field = (source, name) => source.match(new RegExp(`^${name}:\\s*"?(.*?)"?\\s*$`, 'm'))?.[1] ?? '';
+
+const posts = readdirSync(join(HOME, 'posts')).filter(f => f.endsWith('.md')).map(name => {
+  const source = readFileSync(join(HOME, 'posts', name), 'utf8');
+  return {slug: name.replace(/\.md$/, ''), source, title: field(source, 'title'), number: field(source, 'number')};
+}).sort((a, b) => a.number.localeCompare(b.number));
+
+posts.forEach(({slug, source}, n) => {
   const page = join(HOME, 'public/blog', `${slug}.html`);
-  const {sections, toc} = render(readFileSync(join(HOME, 'posts', name), 'utf8'));
+  const {sections, toc} = render(source);
+  const older = posts[n - 1];
+  const newer = posts[n + 1];
+  const pager = [`          <a rel="prev" href="${older ? `/blog/${older.slug}` : '/blog'}">${ARROW_LEFT}${older ? escape(older.title) : 'Blog'}</a>`];
+  if (newer) pager.push(`          <a rel="next" href="/blog/${newer.slug}">${escape(newer.title)}${ARROW_RIGHT}</a>`);
   let html = readFileSync(page, 'utf8');
   html = between(html, 'post', sections, page);
   html = between(html, 'toc', toc, page);
+  html = between(html, 'pager', pager.join('\n'), page);
   // With no headings there is nothing to list: the reader column stays hidden.
   html = html.replace(/<aside class="site-toc"( hidden)?/, toc ? '<aside class="site-toc"' : '<aside class="site-toc" hidden');
   writeFileSync(page, html);
   console.log(`${slug}: ${toc ? toc.split('\n').length : 0} sections`);
-}
+});
