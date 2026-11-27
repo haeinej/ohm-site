@@ -1,0 +1,39 @@
+name: check
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # The docs are generated from haeinej/ohmmmm's vault, so they can drift without a change here.
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      # Outside the workspace, so `node --test` here does not also find ohmmmm's own tests.
+      OHM_VAULT_DIR: ${{ runner.temp }}/ohmmmm/vault
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: haeinej/ohmmmm
+          ref: main
+          path: _ohmmmm
+      - run: mv _ohmmmm "$RUNNER_TEMP/ohmmmm"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      # The docs test imports the vault's service capabilities and agent tools.
+      - run: npm ci --prefix "$RUNNER_TEMP/ohmmmm/vault"
+      - run: npm ci --prefix "$RUNNER_TEMP/ohmmmm/vault/service"
+      - run: node --check home/src/worker.js && node --check home/public/sw.js && node --check home/public/sw-register.js
+      - run: npm test
+      - name: Docs are up to date with the vault
+        run: |
+          python3 docs/build.py
+          git diff --exit-code -- docs || { echo "::error::docs/ is out of date with haeinej/ohmmmm main. Run python3 docs/build.py and commit."; exit 1; }
