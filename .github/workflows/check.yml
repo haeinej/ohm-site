@@ -10,9 +10,6 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    env:
-      # Outside the workspace, so `node --test` here does not also find ohmmmm's own tests.
-      OHM_VAULT_DIR: ${{ runner.temp }}/ohmmmm/vault
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -20,7 +17,10 @@ jobs:
           repository: haeinej/ohmmmm
           ref: main
           path: _ohmmmm
-      - run: mv _ohmmmm "$RUNNER_TEMP/ohmmmm"
+      # Moved outside the workspace, so `node --test` here does not also find ohmmmm's own tests.
+      - run: |
+          mv _ohmmmm "$RUNNER_TEMP/ohmmmm"
+          echo "OHM_VAULT_DIR=$RUNNER_TEMP/ohmmmm/vault" >> "$GITHUB_ENV"
       - uses: actions/setup-node@v4
         with:
           node-version: 22
