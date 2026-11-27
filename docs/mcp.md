@@ -6,7 +6,7 @@ An agent reaches a vault through an MCP server that runs on the member's own mac
 
 ## Overview
 
-ohm does not run a background agent. It ships a Model Context Protocol (MCP) server, `ohm-vault`, that a member runs on their own machine and connects to the agent they already use. The server exposes 18 vault tools, composed from authenticated service requests made as that member.
+ohm does not run a background agent. It ships a Model Context Protocol (MCP) server, `ohm-vault`, that a member runs on their own machine and connects to the agent they already use. The server exposes 21 vault tools, composed from authenticated service requests made as that member.
 
 Diagram: the path of one tool call.
 1. Agent → MCP server: tools/call
@@ -98,7 +98,7 @@ The server holds one credential: the app password, in its own environment on the
 | `vault_read` | Read | None | `getTree`, `getPost` |
 | `vault_search` | Read | None | `searchPosts` |
 | `vault_save` | Change | Always | `getTree`, `getPost`, `putPost` |
-| `vault_set_visibility` | Change | Always | `getTree`, `getPost`, `putPost` |
+| `vault_set_visibility` | Change | Always | `getTree`, `getPost`, `getBlock`, `previewMove`, `hideBlock`, `requestMove` |
 | `vault_status` | Read | None | `getPublishPlan` |
 | `vault_publish` | Change | Always | `getPublishPlan`, `getAttachment` |
 | `vault_mirror` | Change | Always | `importPublished` |
@@ -109,6 +109,9 @@ The server holds one credential: the app password, in its own environment on the
 | `vault_friends_delete` | Change | Always | `deleteBlock` |
 | `vault_friends_who` | Read | None | `listFriends` |
 | `vault_friends_remove` | Change | Always | `listFriends`, `removeFriend` |
+| `vault_connections` | Read | None | `listFriends`, `listFriendOf`, `listAsked` |
+| `vault_friends_ask` | Change | None | `listAsked`, `askFriend` |
+| `vault_mail_ask` | Change | None |  |
 | `vault_shared_list` | Read | None | `listShared` |
 | `vault_shared_read` | Read | None | `getShared` |
 
@@ -128,6 +131,16 @@ A tool has no capability of its own. Anything a tool can do, the service API can
 | `vault_capture` | Change | Proposes a block from a web address or a file in a root, marked as proposed by the agent |
 | `vault_collect` | Change | Files a block in a channel, or moves it within the channel's order |
 | `vault_index` | Change | Scans the folder and its roots, and reports what changed |
+| `vault_where` | Read | Where the member's knowledge and data live: the channels, and each root with its folder, what it keeps and the member's note on how to use it |
+| `vault_lint` | Read | Candidates for a check: reported problems, links to nothing, orphan blocks, related blocks with no link, and blocks with the same title |
+| `vault_history` | Read | What happened to one file, newest first, with the address of each version kept |
+| `vault_write` | Change | Makes or replaces a block, channel or entity file where the member granted write, from the version that was read |
+| `vault_remove` | Change | Removes a file where the member granted write. The removed version is kept and can be restored |
+| `vault_link` | Change | Links a block to another block or entity, with a note saying why |
+| `vault_restore` | Change | Puts a file back to a version kept in history |
+| `vault_rename` | Change | Renames or moves a block or channel, and rewrites every file that used the old name |
+| `vault_request_visibility` | Change | Asks the member to make a block private or friends-only. It waits for their answer in ohm; the agent never changes visibility itself |
+| `vault_requests` | Read | The agent's visibility requests, newest first: waiting, approved or declined |
 
 Changes are written to the folder's journal. Nothing here reaches the service or the network.
 
