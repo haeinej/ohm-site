@@ -1473,6 +1473,7 @@ ACCESS = {
     "Whoever holds a token from a PDS": "Any authenticated account",
     "The member": "Member",
     "The member, signed in to ohm": "Member, with an ohm session",
+    "Anyone, about the member `did` names": "Public, for the member `did` names (a viewer token shows more)",
 }
 
 
@@ -1518,16 +1519,20 @@ The vault service speaks XRPC, the request convention of the AT Protocol. Every 
 | Responses | JSON, sent with `Cache-Control: private, no-store`. `getAttachment` answers with the file itself |
 | Idempotency | Versioned writes name the version replaced; identical retries are safe. A multi-request tool can partially complete, so reread state before retrying after a failure |
 | Authentication | A service token from the member's PDS in `Authorization: Bearer`, or an ohm session. [Identity and access](/docs/identity) |
-The access level of each request is one of four.
+The access level of each request is one of five.
 | Access | Credential |
 | --- | --- |
 | Public | None. The response contains only public information |
 | Any authenticated account | A service token from any PDS, issued for this request |
 | Member | A service token from the member's own PDS, or an ohm session connected to that account |
 | Member, with an ohm session | An ohm session only. A change must also originate from ohm's own pages |
+| Public, for the member `did` names (a viewer token shows more) | None for what the member published. A viewer token from `content.view` says who is reading, and shows what they may see |
 """]
     for name, about, requests in capabilities:
-        out.append(f"## {name} {{#{name.lower().replace(' ', '-')}}}\n{about}")
+        anchor = name.lower().replace(' ', '-')
+        # `content` is the page's own skip-link target (<main id="content">), so this section takes another id.
+        anchor = 'content-requests' if anchor == 'content' else anchor
+        out.append(f"## {name} {{#{anchor}}}\n{about}")
         for request, summary, method, access, takes, gives in requests:
             out.append(f"### `{request}`\n{summary}\n| | |\n| --- | --- |\n| Method | `{method}` |\n| Access | {ACCESS[access]} |\n"
                        f"| Parameters | {'None' if takes == 'Nothing' else takes} |\n| Returns | {gives} |")
@@ -1956,6 +1961,16 @@ A tool has no capability of its own. Anything a tool can do, the service API can
 | `vault_capture` | Change | Proposes a block from a web address or a file in a root, marked as proposed by the agent |
 | `vault_collect` | Change | Files a block in a channel, or moves it within the channel's order |
 | `vault_index` | Change | Scans the folder and its roots, and reports what changed |
+| `vault_where` | Read | Where the member's knowledge and data live: the channels, and each root with its folder, what it keeps and the member's note on how to use it |
+| `vault_lint` | Read | Candidates for a check: reported problems, links to nothing, orphan blocks, related blocks with no link, and blocks with the same title |
+| `vault_history` | Read | What happened to one file, newest first, with the address of each version kept |
+| `vault_write` | Change | Makes or replaces a block, channel or entity file where the member granted write, from the version that was read |
+| `vault_remove` | Change | Removes a file where the member granted write. The removed version is kept and can be restored |
+| `vault_link` | Change | Links a block to another block or entity, with a note saying why |
+| `vault_restore` | Change | Puts a file back to a version kept in history |
+| `vault_rename` | Change | Renames or moves a block or channel, and rewrites every file that used the old name |
+| `vault_request_visibility` | Change | Asks the member to make a block private or friends-only. It waits for their answer in ohm; the agent never changes visibility itself |
+| `vault_requests` | Read | The agent's visibility requests, newest first: waiting, approved or declined |
 Changes are written to the folder's journal. Nothing here reaches the service or the network.
 
 ## Confirmation {{#confirmation}}

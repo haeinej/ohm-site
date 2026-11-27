@@ -113,7 +113,7 @@
 
         <section aria-labelledby="overview">
           <h2 id="overview">Overview</h2>
-          <p>ohm does not run a background agent. It ships a Model Context Protocol (MCP) server, <code>ohm-vault</code>, that a member runs on their own machine and connects to the agent they already use. The server exposes 18 vault tools, composed from authenticated service requests made as that member.</p>
+          <p>ohm does not run a background agent. It ships a Model Context Protocol (MCP) server, <code>ohm-vault</code>, that a member runs on their own machine and connects to the agent they already use. The server exposes 21 vault tools, composed from authenticated service requests made as that member.</p>
           <figure class="figure">
             <div class="figure-scroll"><svg viewBox="0 0 640 322" width="640" height="322" role="img" aria-labelledby="figure-mcp"><title id="figure-mcp">The path of one tool call</title><defs><marker id="head-mcp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 10 5 0 10z"/></marker></defs><path class="d-life" d="M80 40L80 316"/><rect class="d-box" x="8.0" y="0" width="144.0" height="40" rx="10"/><text class="d-title" x="80" y="25" text-anchor="middle">Agent</text><path class="d-life" d="M240 40L240 316"/><rect class="d-box" x="168.0" y="0" width="144.0" height="40" rx="10"/><text class="d-title" x="240" y="25" text-anchor="middle">MCP server</text><path class="d-life" d="M400 40L400 316"/><rect class="d-box" x="328.0" y="0" width="144.0" height="40" rx="10"/><text class="d-title" x="400" y="25" text-anchor="middle">Member's PDS</text><path class="d-life" d="M560 40L560 316"/><rect class="d-box" x="488.0" y="0" width="144.0" height="40" rx="10"/><text class="d-title" x="560" y="25" text-anchor="middle">Vault service</text><path class="d-arrow" d="M81 78L238 78" marker-end="url(#head-mcp)"/><text class="d-step" x="160.0" y="70" text-anchor="middle">1  tools/call</text><path class="d-arrow" d="M241 120L398 120" marker-end="url(#head-mcp)"/><text class="d-step" x="320.0" y="112" text-anchor="middle">2  getServiceAuth</text><path class="d-arrow d-dashed" d="M399 162L242 162" marker-end="url(#head-mcp)"/><text class="d-step" x="320.0" y="154" text-anchor="middle">3  Signed token</text><path class="d-arrow" d="M241 204L558 204" marker-end="url(#head-mcp)"/><text class="d-step" x="400.0" y="196" text-anchor="middle">4  Request with the token</text><path class="d-arrow d-dashed" d="M559 246L242 246" marker-end="url(#head-mcp)"/><text class="d-step" x="400.0" y="238" text-anchor="middle">5  Response</text><path class="d-arrow d-dashed" d="M239 288L82 288" marker-end="url(#head-mcp)"/><text class="d-step" x="160.0" y="280" text-anchor="middle">6  Tool result</text></svg></div>
             <figcaption>The MCP server runs on the member's machine and acts as the member. Dashed lines are responses.</figcaption>
@@ -210,7 +210,7 @@
                 <tr><th scope="row"><code>vault_read</code></th><td>Read</td><td>None</td><td><code>getTree</code>, <code>getPost</code></td></tr>
                 <tr><th scope="row"><code>vault_search</code></th><td>Read</td><td>None</td><td><code>searchPosts</code></td></tr>
                 <tr><th scope="row"><code>vault_save</code></th><td>Change</td><td>Always</td><td><code>getTree</code>, <code>getPost</code>, <code>putPost</code></td></tr>
-                <tr><th scope="row"><code>vault_set_visibility</code></th><td>Change</td><td>Always</td><td><code>getTree</code>, <code>getPost</code>, <code>putPost</code></td></tr>
+                <tr><th scope="row"><code>vault_set_visibility</code></th><td>Change</td><td>Always</td><td><code>getTree</code>, <code>getPost</code>, <code>getBlock</code>, <code>previewMove</code>, <code>hideBlock</code>, <code>requestMove</code></td></tr>
                 <tr><th scope="row"><code>vault_status</code></th><td>Read</td><td>None</td><td><code>getPublishPlan</code></td></tr>
                 <tr><th scope="row"><code>vault_publish</code></th><td>Change</td><td>Always</td><td><code>getPublishPlan</code>, <code>getAttachment</code></td></tr>
                 <tr><th scope="row"><code>vault_mirror</code></th><td>Change</td><td>Always</td><td><code>importPublished</code></td></tr>
@@ -221,6 +221,9 @@
                 <tr><th scope="row"><code>vault_friends_delete</code></th><td>Change</td><td>Always</td><td><code>deleteBlock</code></td></tr>
                 <tr><th scope="row"><code>vault_friends_who</code></th><td>Read</td><td>None</td><td><code>listFriends</code></td></tr>
                 <tr><th scope="row"><code>vault_friends_remove</code></th><td>Change</td><td>Always</td><td><code>listFriends</code>, <code>removeFriend</code></td></tr>
+                <tr><th scope="row"><code>vault_connections</code></th><td>Read</td><td>None</td><td><code>listFriends</code>, <code>listFriendOf</code>, <code>listAsked</code></td></tr>
+                <tr><th scope="row"><code>vault_friends_ask</code></th><td>Change</td><td>None</td><td><code>listAsked</code>, <code>askFriend</code></td></tr>
+                <tr><th scope="row"><code>vault_mail_ask</code></th><td>Change</td><td>None</td><td></td></tr>
                 <tr><th scope="row"><code>vault_shared_list</code></th><td>Read</td><td>None</td><td><code>listShared</code></td></tr>
                 <tr><th scope="row"><code>vault_shared_read</code></th><td>Read</td><td>None</td><td><code>getShared</code></td></tr>
               </tbody>
@@ -244,6 +247,16 @@
                 <tr><th scope="row"><code>vault_capture</code></th><td>Change</td><td>Proposes a block from a web address or a file in a root, marked as proposed by the agent</td></tr>
                 <tr><th scope="row"><code>vault_collect</code></th><td>Change</td><td>Files a block in a channel, or moves it within the channel's order</td></tr>
                 <tr><th scope="row"><code>vault_index</code></th><td>Change</td><td>Scans the folder and its roots, and reports what changed</td></tr>
+                <tr><th scope="row"><code>vault_where</code></th><td>Read</td><td>Where the member's knowledge and data live: the channels, and each root with its folder, what it keeps and the member's note on how to use it</td></tr>
+                <tr><th scope="row"><code>vault_lint</code></th><td>Read</td><td>Candidates for a check: reported problems, links to nothing, orphan blocks, related blocks with no link, and blocks with the same title</td></tr>
+                <tr><th scope="row"><code>vault_history</code></th><td>Read</td><td>What happened to one file, newest first, with the address of each version kept</td></tr>
+                <tr><th scope="row"><code>vault_write</code></th><td>Change</td><td>Makes or replaces a block, channel or entity file where the member granted write, from the version that was read</td></tr>
+                <tr><th scope="row"><code>vault_remove</code></th><td>Change</td><td>Removes a file where the member granted write. The removed version is kept and can be restored</td></tr>
+                <tr><th scope="row"><code>vault_link</code></th><td>Change</td><td>Links a block to another block or entity, with a note saying why</td></tr>
+                <tr><th scope="row"><code>vault_restore</code></th><td>Change</td><td>Puts a file back to a version kept in history</td></tr>
+                <tr><th scope="row"><code>vault_rename</code></th><td>Change</td><td>Renames or moves a block or channel, and rewrites every file that used the old name</td></tr>
+                <tr><th scope="row"><code>vault_request_visibility</code></th><td>Change</td><td>Asks the member to make a block private or friends-only. It waits for their answer in ohm; the agent never changes visibility itself</td></tr>
+                <tr><th scope="row"><code>vault_requests</code></th><td>Read</td><td>The agent's visibility requests, newest first: waiting, approved or declined</td></tr>
               </tbody>
             </table>
           </div>

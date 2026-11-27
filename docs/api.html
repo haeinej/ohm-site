@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafaf9">
-    <meta name="description" content="The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.">
+    <meta name="description" content="The vault service registers 88 requests in 16 capabilities. This reference is generated from the tables the service runs on.">
     <link rel="canonical" href="https://docs.ohmmmm.com/api">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ohm">
     <meta property="og:title" content="Service API · ohm docs">
-    <meta property="og:description" content="The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.">
+    <meta property="og:description" content="The vault service registers 88 requests in 16 capabilities. This reference is generated from the tables the service runs on.">
     <meta property="og:url" content="https://docs.ohmmmm.com/api">
     <meta property="og:image" content="https://docs.ohmmmm.com/assets/og-docs-v2.png">
     <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
     <meta property="og:image:alt" content="ohm docs — Your workspace, step by step">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Service API · ohm docs">
-    <meta name="twitter:description" content="The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.">
+    <meta name="twitter:description" content="The vault service registers 88 requests in 16 capabilities. This reference is generated from the tables the service runs on.">
     <meta name="twitter:image" content="https://docs.ohmmmm.com/assets/og-docs-v2.png">
     <meta name="twitter:image:alt" content="ohm docs — Your workspace, step by step">
     <meta property="og:image:type" content="image/png">
@@ -107,7 +107,7 @@
         <header>
           <p class="group">For agents</p>
           <h1 id="title">Service API</h1>
-          <p class="introduction">The vault service registers 37 requests in 10 capabilities. This reference is generated from the tables the service runs on.</p>
+          <p class="introduction">The vault service registers 88 requests in 16 capabilities. This reference is generated from the tables the service runs on.</p>
           <p class="alert" role="note">ohm is in development. These docs cover the implementation and the work still planned. Built does not mean verified on the live service; see Status and limits.</p>
         </header>
 
@@ -129,7 +129,7 @@
               </tbody>
             </table>
           </div>
-          <p>The access level of each request is one of four.</p>
+          <p>The access level of each request is one of five.</p>
           <div class="table">
             <table>
               <thead>
@@ -140,6 +140,7 @@
                 <tr><th scope="row">Any authenticated account</th><td>A service token from any PDS, issued for this request</td></tr>
                 <tr><th scope="row">Member</th><td>A service token from the member's own PDS, or an ohm session connected to that account</td></tr>
                 <tr><th scope="row">Member, with an ohm session</th><td>An ohm session only. A change must also originate from ohm's own pages</td></tr>
+                <tr><th scope="row">Public, for the member <code>did</code> names (a viewer token shows more)</th><td>None for what the member published. A viewer token from <code>content.view</code> says who is reading, and shows what they may see</td></tr>
               </tbody>
             </table>
           </div>
@@ -284,7 +285,7 @@
                 <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
                 <tr><th scope="row">Access</th><td>Member</td></tr>
                 <tr><th scope="row">Parameters</th><td>None</td></tr>
-                <tr><th scope="row">Returns</th><td><code>friends</code> (did, added)</td></tr>
+                <tr><th scope="row">Returns</th><td><code>friends</code> (did, added, channels: <code>*</code> or a list, name, email)</td></tr>
               </tbody>
             </table>
           </div>
@@ -318,6 +319,111 @@
               </tbody>
             </table>
           </div>
+          <h3><code>com.ohmmmm.vault.askFriend</code></h3>
+          <p>A member asks someone to be their friend, by the email of that person's ohm account or by their DID: signed in to ohm, or through their agent with a token from their own PDS, once their ohm account is connected and has signed in here. Asked by email, ohm also emails them an invite once, from its own address with the asker's name, replies going to the asker's email (at most 20 a day for each asker). The member sees the asker's name and email from their ohm account, and their DID, and answers in the cockpit. The answer is the same whether or not the email has an ohm account, whether asked once or again, and whether or not they already let the asker in.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>email</code>: the email of the person asked<br><code>owner</code>: or: their DID<br><code>message</code>: optional: a line for them</td></tr>
+                <tr><th scope="row">Returns</th><td><code>asked</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listAsked</code></h3>
+          <p>Who the member asked to be friends with, by the email they typed, newest first: <code>waiting</code> until that person lets them in, then <code>friends</code>. An email with no ohm account, and a request declined, both stay waiting.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td>None</td></tr>
+                <tr><th scope="row">Returns</th><td><code>asks</code> (email, asked, state, and <code>did</code> once friends)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listFriendOf</code></h3>
+          <p>The people who let the member into their friends layer, with their name and email from their ohm account: whose shared blocks the member reads with listShared and getShared.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td>None</td></tr>
+                <tr><th scope="row">Returns</th><td><code>people</code> (did, since, name, email)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listFriendRequests</code></h3>
+          <p>Who has asked to be the member's friend and is waiting for an answer, oldest first.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td>None</td></tr>
+                <tr><th scope="row">Returns</th><td><code>requests</code> (id, did, name, email, message, asked, state)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.approveFriend</code></h3>
+          <p>The member lets someone who asked into their friends layer, for every channel (<code>*</code>, the default) or only the channels named, each covering the channels inside it. It lasts until the member removes them. Only the member, signed in to ohm, approves; an agent cannot. The friend's own agents read with the friend's access. Sent again with the same channels, it answers the same; a request already declined, or approved for other channels, is <code>Answered</code>.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the request's ID<br><code>channels</code>: optional: <code>*</code>, or a list of channel paths</td></tr>
+                <tr><th scope="row">Returns</th><td><code>did</code>, <code>channels</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.declineFriend</code></h3>
+          <p>The member declines someone who asked. They are not told. Sent again, it answers the same; a request already approved is <code>Answered</code>.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the request's ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>declined</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.setFriendChannels</code></h3>
+          <p>Changes which channels one friend sees: <code>*</code> for every channel, or a list of channel paths. Only the member, signed in to ohm.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>friend</code>: the friend's DID<br><code>channels</code>: <code>*</code>, or a list of channel paths</td></tr>
+                <tr><th scope="row">Returns</th><td><code>did</code>, <code>channels</code></td></tr>
+              </tbody>
+            </table>
+          </div>
           <h3><code>com.ohmmmm.vault.listShared</code></h3>
           <p>What another member shares with the asker: their friends-only blocks and posts, when the asker is on their friend list. To anyone else it answers NotFound, whether or not anything is there.</p>
           <div class="table">
@@ -327,7 +433,7 @@
               </thead>
               <tbody>
                 <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
-                <tr><th scope="row">Access</th><td>Any authenticated account</td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
                 <tr><th scope="row">Parameters</th><td><code>owner</code>: the DID whose friends layer to read</td></tr>
                 <tr><th scope="row">Returns</th><td><code>owner</code>, <code>blocks</code> (id, version, path, kind, title)</td></tr>
               </tbody>
@@ -342,7 +448,7 @@
               </thead>
               <tbody>
                 <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
-                <tr><th scope="row">Access</th><td>Any authenticated account</td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
                 <tr><th scope="row">Parameters</th><td><code>owner</code>: the DID whose friends layer to read<br><code>id</code>: the block's or post's ID</td></tr>
                 <tr><th scope="row">Returns</th><td><code>block</code> (id, path, text), <code>version</code></td></tr>
               </tbody>
@@ -550,6 +656,416 @@
           </div>
         </section>
 
+        <section aria-labelledby="visibility">
+          <h2 id="visibility">Visibility</h2>
+          <p>Moves between the public, friends and private layers, by one set of rules the cockpit and the agent tools share. Every move is previewed first and journalled with who asked, who approved and why; the journal names a block by its ID only. Showing a block to more people is the member's move: an agent asks, and its request waits in the cockpit until the member answers. An agent with a write grant may start a move to private, which hides the block from friends at once; the member's device seals it when next unlocked. Public is reached only through Publish.</p>
+          <h3><code>com.ohmmmm.vault.previewMove</code></h3>
+          <p>What moving one block to another layer would do: the action, whether it shows the block to more people, the warning, who may finish it, what it still needs (a title, to be published), and any request already waiting. A private block is named by its opaque ID with <code>from=private</code>.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the block's or post's ID<br><code>to</code>: public, friends or private<br><code>from</code>: optional: <code>private</code> for a sealed block</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>from</code>, <code>to</code>, <code>action</code>, <code>widens</code>, <code>warning</code>, <code>finishes</code>, <code>via</code>, <code>needs</code>, <code>store</code>, <code>version</code>, <code>leaving</code>, <code>waiting</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.hideBlock</code></h3>
+          <p>Starts a move to private for a friends-only block or post: from now on no friend and no site reads it, and the member's device seals it into the private layer when next unlocked. The agent tools call it only with the agent's write grant on the block's channel. Sent twice, it changes nothing more.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the block's or post's ID<br><code>replaces</code>: the version read<br><code>by</code>: me, or agent:&lt;name&gt;<br><code>reason</code>: optional: why</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>hidden</code> (when), and <code>unchanged</code> when it was hidden already</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.requestMove</code></h3>
+          <p>An agent asks the member for a move it may not finish, such as showing a block to more people. The request waits in the cockpit until the member approves or declines it; nothing moves until then. One request waits per block and layer.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>block</code>: the block's ID (opaque for a private block)<br><code>store</code>: block, post or sealed<br><code>from</code>: its layer now<br><code>to</code>: the layer asked for<br><code>version</code>: optional: the version read<br><code>by</code>: agent:&lt;name&gt;<br><code>reason</code>: optional: why, shown to the member</td></tr>
+                <tr><th scope="row">Returns</th><td><code>request</code> (id, block, store, from, to, version, askedBy, reason, asked, state), and <code>unchanged</code> when one was waiting already</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listMoveRequests</code></h3>
+          <p>Agents' requests for moves, oldest first: those waiting, or those approved or declined.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>state</code>: optional: waiting (the default), approved or declined</td></tr>
+                <tr><th scope="row">Returns</th><td><code>requests</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.declineMoveRequest</code></h3>
+          <p>The member declines an agent's request. Nothing moves. Only the member, signed in to ohm, answers a request. Declining it again changes nothing more.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the request's ID<br><code>reason</code>: optional: why</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>declined</code>, and <code>unchanged</code> when it was declined already</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.recordMove</code></h3>
+          <p>The member's cockpit records a move it made, after the member approved it: a request it answers, a hidden block it sealed, or a move to or from public it handed to Publish. Only the member, signed in to ohm, records a move. Sent again with the same <code>moveId</code> (or <code>sealedAs</code>, or <code>request</code>), it changes nothing more and answers as the first time.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>block</code>: the block's ID before the move<br><code>from</code>: its layer before<br><code>to</code>: its layer after<br><code>request</code>: optional: the request this answers<br><code>sealedAs</code>: optional: its opaque ID in the private layer<br><code>cleanupPending</code>: optional: true when the old copy could not be removed<br><code>reason</code>: optional: why<br><code>moveId</code>: optional: the cockpit's own ID for this move, so sending it again records nothing more</td></tr>
+                <tr><th scope="row">Returns</th><td><code>block</code>, <code>from</code>, <code>to</code>, <code>state</code> (done, cleanup-pending, or previewed for Publish), <code>approved</code> with the request, and <code>unchanged</code> when this move was recorded already</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listMoves</code></h3>
+          <p>The journal of visibility moves, newest first: each block by its ID, from and to which layer, the action, how it stands, who asked, who approved and why. No titles or text.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>since</code>: optional: a <code>seq</code>, for only what came after it<br><code>limit</code>: optional: up to 500</td></tr>
+                <tr><th scope="row">Returns</th><td><code>moves</code> (seq, at, block, from, to, action, state, askedBy, approvedBy, reason, request)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="channels">
+          <h2 id="channels">Channels</h2>
+          <p>Channels as files: each one's <code>_channel.md</code>, with its title, kind, order and description, kept readable like the friends layer. Channels can be moved with everything filed in them, and removed when empty. Private channels are sealed and kept with the private layer, never here.</p>
+          <h3><code>com.ohmmmm.vault.listChannels</code></h3>
+          <p>Every channel kept here, with the version it is at. With <code>since</code>, a point an earlier list returned, only what changed after it, removals included.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>since</code>: optional: the <code>cursor</code> of an earlier list</td></tr>
+                <tr><th scope="row">Returns</th><td><code>channels</code> (path, version, title, kind), <code>cursor</code>, and <code>more</code> when there is another page</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.getChannel</code></h3>
+          <p>One channel, as its <code>_channel.md</code>, and its version.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>path</code>: the channel's path, such as <code>writing/collisions</code></td></tr>
+                <tr><th scope="row">Returns</th><td><code>channel</code> (path, text), <code>version</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.putChannel</code></h3>
+          <p>Saves one channel's file. A channel marked <code>visibility: private</code> is refused. <code>replaces</code> is the version being replaced and is left out for a new channel. Sent twice, it ends the same as sent once.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>channel</code>: <code>path</code> and <code>text</code><br><code>replaces</code>: optional: the version it replaces</td></tr>
+                <tr><th scope="row">Returns</th><td><code>path</code>, <code>version</code>, and <code>unchanged</code> when nothing differed</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.deleteChannel</code></h3>
+          <p>Removes one channel. Refused while a block or post is filed in it or a channel is inside it.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>path</code>: the channel's path<br><code>replaces</code>: the version being removed</td></tr>
+                <tr><th scope="row">Returns</th><td><code>path</code>, <code>removed</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.moveChannel</code></h3>
+          <p>Moves a channel to another path, with every channel inside it and every friends-only block filed in or listed under it, all at once or not at all. Refused while a published post is filed in it, because a post's address comes from its label: that changes through Publish.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>from</code>: the channel's path<br><code>to</code>: its new path<br><code>replaces</code>: the channel's version, or nothing for a folder with no <code>_channel.md</code></td></tr>
+                <tr><th scope="row">Returns</th><td><code>from</code>, <code>to</code>, and how many <code>channels</code> and <code>blocks</code> moved</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="cortex">
+          <h2 id="cortex">Cortex</h2>
+          <p>The cortex: what the member's agents know about them and can do, as files sealed on the member's devices. The service keeps and syncs them and cannot read them. Each is <code>{ id, ciphertext, version }</code> with an opaque ID; several change together or not at all; every version is kept; the journal of who changed what, and why, is sealed too. Agents reach the cortex through the member's device, never through the service.</p>
+          <h3><code>com.ohmmmm.cortex.listFiles</code></h3>
+          <p>Every cortex file, by opaque ID, with its version, size and key generation. With <code>since</code>, only what changed after an earlier list, removals included. With <code>below</code>, only files wrapped by an older generation.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>since</code>: optional: the <code>cursor</code> of an earlier list<br><code>below</code>: optional: a generation</td></tr>
+                <tr><th scope="row">Returns</th><td><code>blocks</code> (id, version, rev, generation, size), <code>cursor</code>, and <code>more</code> when there is another page</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.getFile</code></h3>
+          <p>One cortex file's ciphertext and version.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the file's opaque ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>ciphertext</code>, <code>version</code>, <code>rev</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.putFile</code></h3>
+          <p>Saves one cortex file's ciphertext, with compare-and-swap on its version. Readable text, or a file sealed under a key older than a rotation started, is refused. The journal entry says, sealed, who made the change and why.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>file</code>: <code>id</code> and <code>ciphertext</code> (the sealed file)<br><code>replaces</code>: optional: the version it replaces<br><code>journal</code>: optional: a sealed journal entry</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>version</code>, <code>rev</code>, and <code>unchanged</code> when nothing differed</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.putFiles</code></h3>
+          <p>Changes several cortex files together, all or none: each a write (<code>id</code>, <code>ciphertext</code>, <code>replaces</code>) or a removal (<code>id</code>, <code>remove: true</code>, <code>replaces</code>). <code>batchId</code> makes it safe to send again.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>changes</code>: the changes, 1 to 100<br><code>batchId</code>: a key the device makes for this batch<br><code>journal</code>: optional: a sealed journal entry</td></tr>
+                <tr><th scope="row">Returns</th><td><code>blocks</code> (id, version and rev, or removed), and <code>replayed</code> for a repeat</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.deleteFile</code></h3>
+          <p>Removes one cortex file. Its kept versions stay, for restoring.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the file's opaque ID<br><code>replaces</code>: the version being removed<br><code>journal</code>: optional: a sealed journal entry</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>removed</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.listVersions</code></h3>
+          <p>A cortex file's kept versions, newest first, each by a <code>rev</code> that never changes.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the file's opaque ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>versions</code> (rev, version, generation, size, created)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.getVersion</code></h3>
+          <p>One kept version of a cortex file, as ciphertext.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the file's opaque ID<br><code>rev</code>: the version's rev</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>rev</code>, <code>version</code>, <code>ciphertext</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.listJournal</code></h3>
+          <p>The cortex journal's sealed entries after <code>since</code>, oldest first: who changed what, and why, readable only on the member's devices.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>since</code>: optional: the <code>cursor</code> of an earlier list</td></tr>
+                <tr><th scope="row">Returns</th><td><code>entries</code> (seq, entry, created), <code>cursor</code>, and <code>more</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.listBelow</code></h3>
+          <p>What the member's key rotation to <code>target</code> still has to re-wrap in the cortex: kept versions and journal entries.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>target</code>: the generation being rotated to</td></tr>
+                <tr><th scope="row">Returns</th><td><code>target</code>, <code>versions</code> (id, rev, generation), <code>journal</code> (seq, generation), and <code>more</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.cortex.rewrap</code></h3>
+          <p>Re-wrapped copies of cortex versions and journal entries for the rotation under way. Each keeps exactly its contents; only the file key is re-wrapped. All are kept or none.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>target</code>: the generation being rotated to<br><code>versions</code>: (id, rev, ciphertext)<br><code>journal</code>: (seq, entry)</td></tr>
+                <tr><th scope="row">Returns</th><td><code>target</code>, <code>remaining</code> across the private layer and the cortex</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="media">
+          <h2 id="media">Media</h2>
+          <p>The media cache. A picture or file in a vault is a block that saves where the file is and what it is; its bytes are sent here once, so the cockpit can show them, and can always be sent again. Public and friends-only media is sent readable under its content address and can be shown smaller; private media is sealed on the member's device first and never rendered here. Nothing here is published: publishing sends a copy to the member's PDS.</p>
+          <h3><code>com.ohmmmm.media.hasMedia</code></h3>
+          <p>Which of the named media the cache already holds, so a device sends only what is missing.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>names</code>: up to 100 content addresses or sealed IDs, separated by commas</td></tr>
+                <tr><th scope="row">Returns</th><td><code>present</code>, the names held</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.media.putMedia</code></h3>
+          <p>Sends one file's bytes, whole, as the request body (not JSON), up to 25 MB. Readable media is named by its content address, which the bytes must match; sealed media by its opaque ID, as <code>application/octet-stream</code>. Sent again, it changes nothing.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>name</code>: in the address: its content address (sha256-&lt;hex&gt;) or sealed ID<br><code>body</code>: the bytes, with their type as Content-Type</td></tr>
+                <tr><th scope="row">Returns</th><td><code>name</code>, <code>size</code>, and <code>unchanged</code> when it was held already</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.media.getMedia</code></h3>
+          <p>One file's bytes, as they were sent. It answers with the file itself, not JSON.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>name</code>: its content address or sealed ID</td></tr>
+                <tr><th scope="row">Returns</th><td>The file, with its type</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.media.getRendition</code></h3>
+          <p>A smaller copy of a readable picture to show, 160, 480, 960 or 1600 pixels wide, made once and kept. Sealed media is refused: the device renders it.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>name</code>: its content address<br><code>width</code>: 160, 480, 960 or 1600</td></tr>
+                <tr><th scope="row">Returns</th><td>The picture, with its type</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
         <section aria-labelledby="structure">
           <h2 id="structure">Structure</h2>
           <p>The shape of a vault: its labels, the sublabels inside them, and a line for each post. Enough to draw it or decide where something belongs, without reading any post in full.</p>
@@ -565,6 +1081,21 @@
                 <tr><th scope="row">Access</th><td>Member</td></tr>
                 <tr><th scope="row">Parameters</th><td>None</td></tr>
                 <tr><th scope="row">Returns</th><td><code>posts</code>, <code>public</code>, <code>friends</code>, <code>private</code> (counts), and <code>labels</code>, each with its <code>posts</code> and <code>sublabels</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.getAgenda</code></h3>
+          <p>What waits for the member and their curator, as counts: posts with no label of their own (<code>other</code>) and media with no alt text. Counted from the public and friends-only layers only, without reading anything with a model; the private layer and the cortex are counted on the member's device.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td>None</td></tr>
+                <tr><th scope="row">Returns</th><td><code>unlabelled</code>, <code>mediaWithoutAlt</code>, and <code>counted</code>, the layers counted</td></tr>
               </tbody>
             </table>
           </div>
@@ -612,7 +1143,7 @@
 
         <section aria-labelledby="publish">
           <h2 id="publish">Publish</h2>
-          <p>Work out what would have to change in the member's own repository for what is published to match their vault. The service changes nothing there and holds no permission to: the member, signed in at their own PDS, makes the changes from the list. Only the shared post type is touched, and a record the vault knows nothing about is never removed.</p>
+          <p>Work out what would have to change in the member's own repository for what is published to match their vault. The service changes nothing there and holds no permission to: the member, signed in at their own PDS, makes the changes from the list. Only standard.site documents holding an ohm post are touched, with the member's publication made the first time; a record the vault knows nothing about is never removed.</p>
           <h3><code>com.ohmmmm.vault.getPublishPlan</code></h3>
           <p>What publishing would do: the posts it would publish for the first time, replace and take down, the ones that cannot be published and why, and the published records the vault knows nothing about. With <code>prepare</code>, also the changes themselves, ready to be made.</p>
           <div class="table">
@@ -623,8 +1154,8 @@
               <tbody>
                 <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
                 <tr><th scope="row">Access</th><td>Member</td></tr>
-                <tr><th scope="row">Parameters</th><td><code>prepare</code>: optional: <code>1</code> to include <code>writes</code>, the changes to make</td></tr>
-                <tr><th scope="row">Returns</th><td><code>repository</code>, <code>pds</code>, <code>collection</code>, <code>create</code>, <code>replace</code>, <code>remove</code>, <code>unchanged</code>, <code>cannot</code>, <code>notInVault</code>, <code>changes</code> (how many); and with <code>prepare</code>, <code>writes</code> and <code>plan</code>, a name for exactly these changes</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>prepare</code>: optional: <code>1</code> to include <code>writes</code>, the changes to make<br><code>only</code>: optional: one post's ID, for a preview of that post alone, as a visibility move to or from public shows it</td></tr>
+                <tr><th scope="row">Returns</th><td><code>repository</code>, <code>pds</code>, <code>collection</code> (<code>site.standard.document</code>), <code>contentType</code> (<code>com.ohmmmm.post</code>), <code>publication</code> when it is to be made, <code>create</code>, <code>replace</code>, <code>remove</code>, <code>unchanged</code>, <code>cannot</code>, <code>notInVault</code>, <code>changes</code> (how many); and with <code>prepare</code>, <code>writes</code> and <code>plan</code>, a name for exactly these changes</td></tr>
               </tbody>
             </table>
           </div>
@@ -660,6 +1191,271 @@
                 <tr><th scope="row">Access</th><td>Member</td></tr>
                 <tr><th scope="row">Parameters</th><td>None</td></tr>
                 <tr><th scope="row">Returns</th><td><code>files</code> (path, text)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="content-requests">
+          <h2 id="content-requests">Content</h2>
+          <p>Content for sites, read by the member's DID: channels become collections and blocks become entries. Anyone gets what the member published to their PDS, and nothing before they publish it. A viewer the member put on their friend list, proved by a viewer token, also gets the friends layer. A viewer who is not a friend gets exactly what anyone gets. Private content is never read. Entries leave out where a file came from and who made it. When the member's PDS cannot be reached, Friends is still served, with the last public copy and <code>publicStale</code> (when it was read), or with <code>publicUnavailable</code> when there is none.</p>
+          <h3><code>com.ohmmmm.content.listChannels</code></h3>
+          <p>The member's channels that hold something the asker may see, or a channel inside one that does, each with its title, description, and an order naming only what the asker may see.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Public, for the member <code>did</code> names (a viewer token shows more)</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>did</code>: the member's DID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>owner</code>, <code>channels</code> (path, title, description, order, count)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.content.getChannel</code></h3>
+          <p>One channel, as <code>listChannels</code> gives it. A channel with nothing the asker may see answers NotFound, as if it were not there.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Public, for the member <code>did</code> names (a viewer token shows more)</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>did</code>: the member's DID<br><code>path</code>: the channel's path</td></tr>
+                <tr><th scope="row">Returns</th><td><code>owner</code>, <code>channel</code> (path, title, description, order, count)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.content.listBlocks</code></h3>
+          <p>What the asker may see, 200 entries at a time, without their bodies. With <code>channel</code>, only what is filed in it, in the channel's order first.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Public, for the member <code>did</code> names (a viewer token shows more)</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>did</code>: the member's DID<br><code>channel</code>: optional: a channel's path<br><code>cursor</code>: optional: the <code>cursor</code> of the page before</td></tr>
+                <tr><th scope="row">Returns</th><td><code>owner</code>, <code>blocks</code> (id, layer, kind, slug, channel, channels, title, tags, created, updated, media, and <code>address</code> for a published post), and <code>cursor</code> when there is another page</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.content.getBlock</code></h3>
+          <p>One entry with its Markdown body. Something the asker may not see answers NotFound, the same as something that is not there.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Public, for the member <code>did</code> names (a viewer token shows more)</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>did</code>: the member's DID<br><code>id</code>: the entry's ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>owner</code>, <code>block</code>: as in <code>listBlocks</code>, with <code>body</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.content.getMedia</code></h3>
+          <p>The file behind a media entry the asker may see, or a smaller copy of a picture with <code>width</code>. It answers with the file itself, not JSON.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Public, for the member <code>did</code> names (a viewer token shows more)</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>did</code>: the member's DID<br><code>name</code>: the entry's <code>media.name</code><br><code>width</code>: optional: 160, 480, 960 or 1600</td></tr>
+                <tr><th scope="row">Returns</th><td>The file, with its type</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.content.view</code></h3>
+          <p>Where a site sends a viewer to be recognised. If they are signed in to ohm with an AT Protocol account connected, it posts a viewer token for this one member back to the return address, which must be one of the member's sites. Otherwise it posts back <code>error</code>. The token lasts ten minutes and proves only who the viewer is; Friends is checked against the friend list on every read.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Public</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>owner</code>: the member's DID<br><code>return</code>: the address on one of the member's sites to post back to</td></tr>
+                <tr><th scope="row">Returns</th><td>A page that posts <code>viewer</code> (the token) and <code>expires</code>, or <code>error</code>, to the return address</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.content.listSites</code></h3>
+          <p>The member's own sites: the only addresses a viewer token is posted back to.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td>None</td></tr>
+                <tr><th scope="row">Returns</th><td><code>sites</code> (origin, added)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.content.addSite</code></h3>
+          <p>Adds one of the member's sites, by its https origin, so viewers can be sent back to it with a viewer token. Only the member, signed in to ohm, can add one; an agent cannot.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>origin</code>: the site's https address</td></tr>
+                <tr><th scope="row">Returns</th><td><code>origin</code>, and <code>unchanged</code> when it was there already</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.content.removeSite</code></h3>
+          <p>Stops sending viewer tokens to one of the member's sites. Tokens it already holds run out within ten minutes.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>origin</code>: the site's https address</td></tr>
+                <tr><th scope="row">Returns</th><td><code>origin</code>, <code>removed</code>, or <code>unchanged</code> when it was not there</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="agents">
+          <h2 id="agents">Agents</h2>
+          <p>The member's coding agents: each one that used ohm's tools, what it did lately, whether the member paused or disconnected it, and the actions it waits for the member to approve in the cockpit. An agent never approves its own action.</p>
+          <h3><code>com.ohmmmm.vault.agentCheckIn</code></h3>
+          <p>ohm's agent tools call this before every tool call: the agent is seen, its call is kept among its recent ones, and it is refused when the member paused or disconnected it.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>agent</code>: agent:&lt;name&gt;<br><code>tool</code>: the tool being called</td></tr>
+                <tr><th scope="row">Returns</th><td><code>state</code> (active)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.askApproval</code></h3>
+          <p>An agent's tool asks the member to approve one exact plan. It waits in the cockpit's Agents panel, showing <code>shown</code>. The same plan asked again while it waits or is approved gives the same approval, even when asked at the same moment.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>agent</code>: agent:&lt;name&gt;<br><code>tool</code>: the tool<br><code>plan</code>: the exact plan, as JSON<br><code>shown</code>: what the member is shown, as JSON</td></tr>
+                <tr><th scope="row">Returns</th><td><code>approval</code> (id, agent, tool, shown, state, asked), and <code>unchanged</code> when it was waiting already</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.getApproval</code></h3>
+          <p>One approval and how it stands: waiting, approved, declined or used.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the approval's ID</td></tr>
+                <tr><th scope="row">Returns</th><td><code>approval</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.useApproval</code></h3>
+          <p>An agent's tool uses an approval to carry out its plan: once, and only when the member approved exactly that plan. The same agent, tool and plan sent again within 15 minutes, because the action failed or its answer was lost, answers the same with <code>unchanged</code>. Otherwise it is refused with NotApproved, saying why.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the approval's ID<br><code>agent</code>: agent:&lt;name&gt;<br><code>tool</code>: the tool<br><code>plan</code>: the plan, as JSON</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>used</code>, and <code>unchanged</code> when it was a retry</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listApprovals</code></h3>
+          <p>Agents' actions, oldest first: waiting (the default), approved, declined or used.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>state</code>: optional: waiting, approved, declined or used</td></tr>
+                <tr><th scope="row">Returns</th><td><code>approvals</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.answerApproval</code></h3>
+          <p>The member approves or declines an agent's action, in the cockpit. Only the member, signed in to ohm; never an agent.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>id</code>: the approval's ID<br><code>approve</code>: true or false</td></tr>
+                <tr><th scope="row">Returns</th><td><code>id</code>, <code>state</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.listAgents</code></h3>
+          <p>Every agent that used ohm's tools, newest seen first: its state, when it was last seen and with which tool, how many of its actions wait, and its last ten calls.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member</td></tr>
+                <tr><th scope="row">Parameters</th><td>None</td></tr>
+                <tr><th scope="row">Returns</th><td><code>agents</code> (agent, state, firstSeen, lastSeen, lastTool, waiting, recent)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3><code>com.ohmmmm.vault.setAgentState</code></h3>
+          <p>The member pauses, resumes, disconnects or allows again one agent. Disconnecting also declines what it was waiting for. Only the member, signed in to ohm.</p>
+          <div class="table">
+            <table class="facts">
+              <thead>
+                <tr><td></td><td></td></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+                <tr><th scope="row">Access</th><td>Member, with an ohm session</td></tr>
+                <tr><th scope="row">Parameters</th><td><code>agent</code>: agent:&lt;name&gt;<br><code>state</code>: active, paused or disconnected</td></tr>
+                <tr><th scope="row">Returns</th><td><code>agent</code>, <code>state</code></td></tr>
               </tbody>
             </table>
           </div>
@@ -773,20 +1569,35 @@
                 <tr><th scope="row"><code>InvalidRequest</code></th><td>400</td><td>The request is not JSON, or something it says is not what that request takes</td></tr>
                 <tr><th scope="row"><code>InvalidPost</code></th><td>400</td><td>The post is not one the vault can hold. The message lists every reason</td></tr>
                 <tr><th scope="row"><code>InvalidBlock</code></th><td>400</td><td>The block is not one the layer can hold: for the friends layer, it is private or public, a post, or its file has problems; for the private layer, it is not a sealed file under an opaque ID. The message says why</td></tr>
+                <tr><th scope="row"><code>InvalidChannel</code></th><td>400</td><td>The channel is not one the service can hold: its path is not a channel's path, it is private, or its file has problems. The message says why</td></tr>
                 <tr><th scope="row"><code>InvalidCursor</code></th><td>400</td><td><code>since</code> is not a value an earlier list returned</td></tr>
                 <tr><th scope="row"><code>NotFound</code></th><td>404</td><td>There is no such post, block or saved version, or nothing there is shared with the asker</td></tr>
-                <tr><th scope="row"><code>Changed</code></th><td>409</td><td>The post, block or private block has changed since the version the request names. The answer carries the current version</td></tr>
+                <tr><th scope="row"><code>Changed</code></th><td>409</td><td>The post, block, channel or private block has changed since the version the request names. The answer carries the current version</td></tr>
                 <tr><th scope="row"><code>SlugTaken</code></th><td>409</td><td>Another post in the vault already has that slug</td></tr>
-                <tr><th scope="row"><code>PathTaken</code></th><td>409</td><td>Another block in the friends layer is already at that path</td></tr>
+                <tr><th scope="row"><code>PathTaken</code></th><td>409</td><td>Another block in the friends layer, or another channel, is already at that path</td></tr>
+                <tr><th scope="row"><code>NotEmpty</code></th><td>409</td><td>A block or post is filed in the channel, or a channel is inside it. Move them first</td></tr>
+                <tr><th scope="row"><code>HasPosts</code></th><td>409</td><td>Published posts are filed in the channel. Their addresses come from their label, which changes through Publish</td></tr>
                 <tr><th scope="row"><code>OlderKey</code></th><td>409</td><td>The private block is sealed under an older master key than the member is rotating, or rotated, to</td></tr>
                 <tr><th scope="row"><code>NoRotation</code></th><td>409</td><td>No rotation to that generation is under way</td></tr>
                 <tr><th scope="row"><code>RotationAhead</code></th><td>409</td><td>The member already rotated to a later master key than the one asked for</td></tr>
                 <tr><th scope="row"><code>RotationRemaining</code></th><td>409</td><td>A rotation cannot finish while some kept versions or journal entries are still sealed under the older key. The answer says how many</td></tr>
-                <tr><th scope="row"><code>TooLarge</code></th><td>413</td><td>The post or block is more than 600 KB of text, a sealed private block is more than 1 MB, or a file it places is empty or larger than 25 MB</td></tr>
+                <tr><th scope="row"><code>TooLarge</code></th><td>413</td><td>The post or block is more than 600 KB of text, a channel file is more than 200 KB, media is empty or more than 25 MB, a sealed private block is more than 1 MB, or a file it places is empty or larger than 25 MB</td></tr>
                 <tr><th scope="row"><code>FileUnreachable</code></th><td>502</td><td>A file a post places could not be fetched from where the post says it is</td></tr>
                 <tr><th scope="row"><code>AccountNotFound</code></th><td>404</td><td>No AT Protocol account answers to that handle or DID</td></tr>
                 <tr><th scope="row"><code>NoRepository</code></th><td>400</td><td>The account's DID document does not say where its repository is kept</td></tr>
                 <tr><th scope="row"><code>RepositoryUnreachable</code></th><td>502</td><td>The account's PDS would not answer</td></tr>
+                <tr><th scope="row"><code>MediaUnavailable</code></th><td>503</td><td>The media cache is not set up on this service</td></tr>
+                <tr><th scope="row"><code>ViewerTokenInvalid</code></th><td>401</td><td>The viewer token is not one this service made, is for another member, or has run out</td></tr>
+                <tr><th scope="row"><code>ViewersUnavailable</code></th><td>503</td><td>Viewer tokens, and so Friends reads for sites, are not set up on this service</td></tr>
+                <tr><th scope="row"><code>NotFriendsOnly</code></th><td>409</td><td>Only a friends-only block or post is hidden on its way to private</td></tr>
+                <tr><th scope="row"><code>Answered</code></th><td>409</td><td>The move request or agent action has been approved or declined already</td></tr>
+                <tr><th scope="row"><code>NotThisMove</code></th><td>409</td><td>The move recorded is not the one the request asked for</td></tr>
+                <tr><th scope="row"><code>InvalidMove</code></th><td>400</td><td>The layer named is not public, friends or private, or the block is in it already</td></tr>
+                <tr><th scope="row"><code>NotTheirSite</code></th><td>400</td><td>The return address is not on one of the member's sites</td></tr>
+                <tr><th scope="row"><code>AgentPaused</code></th><td>409</td><td>The member paused this agent in the cockpit's Agents panel</td></tr>
+                <tr><th scope="row"><code>AgentDisconnected</code></th><td>403</td><td>The member disconnected this agent in the cockpit's Agents panel</td></tr>
+                <tr><th scope="row"><code>NotApproved</code></th><td>409</td><td>The action waits for the member, was declined, was carried out already, or is not the one the member approved</td></tr>
+                <tr><th scope="row"><code>TooManyWaiting</code></th><td>409</td><td>A hundred agent actions wait for the member already</td></tr>
                 <tr><th scope="row"><code>InternalError</code></th><td>500</td><td>Something went wrong in the service itself</td></tr>
               </tbody>
             </table>
@@ -807,7 +1618,7 @@
                 <tr><th scope="row"><code>vault_read</code></th><td>Read</td><td><code>getTree</code>, <code>getPost</code></td></tr>
                 <tr><th scope="row"><code>vault_search</code></th><td>Read</td><td><code>searchPosts</code></td></tr>
                 <tr><th scope="row"><code>vault_save</code></th><td>Change</td><td><code>getTree</code>, <code>getPost</code>, <code>putPost</code></td></tr>
-                <tr><th scope="row"><code>vault_set_visibility</code></th><td>Change</td><td><code>getTree</code>, <code>getPost</code>, <code>putPost</code></td></tr>
+                <tr><th scope="row"><code>vault_set_visibility</code></th><td>Change</td><td><code>getTree</code>, <code>getPost</code>, <code>getBlock</code>, <code>previewMove</code>, <code>hideBlock</code>, <code>requestMove</code></td></tr>
                 <tr><th scope="row"><code>vault_status</code></th><td>Read</td><td><code>getPublishPlan</code></td></tr>
                 <tr><th scope="row"><code>vault_publish</code></th><td>Change</td><td><code>getPublishPlan</code>, <code>getAttachment</code></td></tr>
                 <tr><th scope="row"><code>vault_mirror</code></th><td>Change</td><td><code>importPublished</code></td></tr>
@@ -818,6 +1629,9 @@
                 <tr><th scope="row"><code>vault_friends_delete</code></th><td>Change</td><td><code>deleteBlock</code></td></tr>
                 <tr><th scope="row"><code>vault_friends_who</code></th><td>Read</td><td><code>listFriends</code></td></tr>
                 <tr><th scope="row"><code>vault_friends_remove</code></th><td>Change</td><td><code>listFriends</code>, <code>removeFriend</code></td></tr>
+                <tr><th scope="row"><code>vault_connections</code></th><td>Read</td><td><code>listFriends</code>, <code>listFriendOf</code>, <code>listAsked</code></td></tr>
+                <tr><th scope="row"><code>vault_friends_ask</code></th><td>Change</td><td><code>listAsked</code>, <code>askFriend</code></td></tr>
+                <tr><th scope="row"><code>vault_mail_ask</code></th><td>Change</td><td></td></tr>
                 <tr><th scope="row"><code>vault_shared_list</code></th><td>Read</td><td><code>listShared</code></td></tr>
                 <tr><th scope="row"><code>vault_shared_read</code></th><td>Read</td><td><code>getShared</code></td></tr>
               </tbody>
@@ -845,11 +1659,17 @@
         <li><a href="#posts">Posts</a></li>
         <li><a href="#friends">Friends</a></li>
         <li><a href="#private">Private</a></li>
+        <li><a href="#visibility">Visibility</a></li>
+        <li><a href="#channels">Channels</a></li>
+        <li><a href="#cortex">Cortex</a></li>
+        <li><a href="#media">Media</a></li>
         <li><a href="#structure">Structure</a></li>
         <li><a href="#search">Search</a></li>
         <li><a href="#mirror">Mirror</a></li>
         <li><a href="#publish">Publish</a></li>
         <li><a href="#export">Export</a></li>
+        <li><a href="#content-requests">Content</a></li>
+        <li><a href="#agents">Agents</a></li>
         <li><a href="#account">Account</a></li>
         <li><a href="#identity">Identity</a></li>
         <li><a href="#errors">Errors</a></li>
